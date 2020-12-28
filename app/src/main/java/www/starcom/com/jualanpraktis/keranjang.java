@@ -2,14 +2,22 @@ package www.starcom.com.jualanpraktis;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,36 +58,49 @@ import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
  * Created by ADMIN on 05/02/2018.
  */
 
-public class keranjang extends Fragment implements View.OnClickListener{
+public class keranjang extends Fragment implements View.OnClickListener {
 
     keranjang activity = keranjang.this;
 
     private final String TAG = this.getClass().getName();
 
-    RecyclerView recyclerView ;
-    LinearLayoutManager linearLayoutManager ;
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
 
     TextView total;
-    Button btnSubmit,btn_belanja_lagi ;
-    loginuser user ;
+    Button btnSubmit, btn_belanja_lagi, btnTest;
+    loginuser user;
 
-    List<order>  list = new ArrayList<>();
-    ArrayList<HashMap<String,String>> dataList = new ArrayList<>();
-    ArrayList<HashMap<String,String>> cartList = new ArrayList<>();
-    ArrayList<HashMap<String,String>> isBblList = new ArrayList<>();
-    keranjangAdapter adapter ;
+    List<order> list = new ArrayList<>();
+    ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> cartList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> isBblList = new ArrayList<>();
+    keranjangAdapter adapter;
     ProgressDialog progressDialog;
+
+    CartAdapter adapterCart;
+
+    ArrayList<String> listHargaItem2 = new ArrayList<>();
+
+
     //private order order ;
 
     String totalbelanja;
 
-    int berat = 0 ;
-    www.starcom.com.jualanpraktis.IDTansaksi.idtransaksi idtransaksi ;
+    int berat = 0;
+    www.starcom.com.jualanpraktis.IDTansaksi.idtransaksi idtransaksi;
 
     String harga_dropshpper;
+    //    ArrayList<String> harga_item2 = new ArrayList<>();
     private ShimmerFrameLayout shimmer;
+    String harga_item2;
     int grandTotal = 0;
     Pref pref;
+
+    public int[] hargaItem;
+
+    public ArrayList<String> dataHarga = new ArrayList<>();
+
     public keranjang() {
 
     }
@@ -91,8 +112,8 @@ public class keranjang extends Fragment implements View.OnClickListener{
 
     @Nullable
     @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_keranjang,container,false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_keranjang, container, false);
 //        View rootView2 = inflater.inflate(R.layout.item_cart_new, container, false);
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         AndroidNetworking.initialize(getActivity().getApplicationContext());
@@ -106,10 +127,13 @@ public class keranjang extends Fragment implements View.OnClickListener{
         recyclerView.setLayoutManager(linearLayoutManager);
         total = rootView.findViewById(R.id.total);
         btnSubmit = rootView.findViewById(R.id.submitOrder);
+        btnTest = rootView.findViewById(R.id.test_button);
 
         btn_belanja_lagi = rootView.findViewById(R.id.btn_belanja_lagi);
 
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("custom-message"));
 
         //harga_dropshipper = rootView.findViewById(R.id.harga_dropshipper);
 
@@ -125,9 +149,56 @@ public class keranjang extends Fragment implements View.OnClickListener{
                 getActivity().overridePendingTransition(0, 0);
             }
         });
+
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String harga_drop;
+//                if (recyclerView.getChildCount() > 0) {
+//
+//                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+//
+//                        if (recyclerView.findViewHolderForLayoutPosition(i) instanceof CartAdapter.ViewHolder) {
+//
+//                            CartAdapter.ViewHolder holder = (CartAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(i);
+//                            harga_drop = holder.harga_dropshipper.getText().toString();
+//                            Log.d(TAG, harga_drop);
+//
+//                        }
+//
+//                    }
+//
+//                }
+
+                ArrayList<String> hargaTest = new ArrayList<>();
+                String hargaString = "";
+                for (int a = 0; a < recyclerView.getChildCount(); a++) {
+
+                    View holder = recyclerView.getChildAt(a);
+//                    hargaDropshipper = holder.harga_dropshipper.getText().toString();
+                    EditText edtHargaDropshipper = holder.findViewById(R.id.harga_dropshipper);
+                    hargaTest.add(edtHargaDropshipper.getText().toString());
+                    for (int b = 0; b < hargaTest.size(); b++) {
+                        hargaString += hargaTest.get(b);
+                        Log.d(TAG, "harga :" + hargaString);
+                    }
+                }
+
+
+            }
+        });
         return rootView;
     }
 
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            harga_item2 = intent.getStringExtra("hargaItem2");
+        }
+    };
 
 
     @Override
@@ -135,54 +206,54 @@ public class keranjang extends Fragment implements View.OnClickListener{
         super.onResume();
         total.setText(FormatText.rupiahFormat(Double.parseDouble("0")));
         getCart();
-      //  listItem(0,0);
+        //  listItem(0,0);
 
         btnSubmit.setOnClickListener(this);
     }
 
 
-    public void listItem(int Total,int Berat){
+    public void listItem(int Total, int Berat) {
         list = new Database(getContext()).getPesan();
-        adapter = new keranjangAdapter(list,getActivity(),keranjang.this,null);
+        adapter = new keranjangAdapter(list, getActivity(), keranjang.this, null);
         recyclerView.setAdapter(adapter);
 
-        for (order order:list)
-                Total += (Integer.parseInt(order.getHarga())) * (Integer.parseInt(order.getJumlah()));
-                NumberFormat nf = new DecimalFormat("#,###");
-                //total.setText(nf.format(Total));
+        for (order order : list)
+            Total += (Integer.parseInt(order.getHarga())) * (Integer.parseInt(order.getJumlah()));
+        NumberFormat nf = new DecimalFormat("#,###");
+        //total.setText(nf.format(Total));
         total.setText(FormatText.rupiahFormat(Total));
         totalbelanja = String.valueOf(Total);
-                Log.d(TAG, Integer.toString(Total));
+        Log.d(TAG, Integer.toString(Total));
 
-        for (order order:list)
-            Berat+=(Integer.parseInt(order.getBerat()));
-            berat = Berat;
-        Log.d(TAG,Integer.toString(Berat));
+        for (order order : list)
+            Berat += (Integer.parseInt(order.getBerat()));
+        berat = Berat;
+        Log.d(TAG, Integer.toString(Berat));
 
-        for (order item : list){
-            HashMap<String,String> data = new HashMap<>();
-            data.put("id",item.getID());
-            data.put("product",item.getNamaProduk());
-            data.put("quantity",item.getJumlah());
-            data.put("price",item.getHarga());
+        for (order item : list) {
+            HashMap<String, String> data = new HashMap<>();
+            data.put("id", item.getID());
+            data.put("product", item.getNamaProduk());
+            data.put("quantity", item.getJumlah());
+            data.put("price", item.getHarga());
             dataList.add(data);
         }
 
 
-
     }
 
-    public void onChangeData(){
-            int Total=0; int Berat = 0;
-            for (HashMap<String,String> item:cartList){
-                Total += (Integer.parseInt(item.get("harga"))) * (Integer.parseInt(item.get("jumlah")));
-                //  NumberFormat nf = new DecimalFormat("#,###");
-                //total.setText(nf.format(Total));
-                total.setText(FormatText.rupiahFormat(Total));
-                totalbelanja = String.valueOf(Total);
+    public void onChangeData() {
+        int Total = 0;
+        int Berat = 0;
+        for (HashMap<String, String> item : cartList) {
+            Total += (Integer.parseInt(item.get("harga"))) * (Integer.parseInt(item.get("jumlah")));
+            //  NumberFormat nf = new DecimalFormat("#,###");
+            //total.setText(nf.format(Total));
+            total.setText(FormatText.rupiahFormat(Total));
+            totalbelanja = String.valueOf(Total);
 
-                Berat+=(Integer.parseInt(item.get("berat_item")))* (Integer.parseInt(item.get("jumlah")));
-                berat = Berat;
+            Berat += (Integer.parseInt(item.get("berat_item"))) * (Integer.parseInt(item.get("jumlah")));
+            berat = Berat;
         }
     }
 
@@ -190,9 +261,9 @@ public class keranjang extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
         if (SharedPrefManager.getInstance(getActivity()).isLoggedIn() && !Objects.equals(total.getText().toString(), "Rp. 0")) {
-            if (Integer.parseInt(totalbelanja)<5000){
+            if (Integer.parseInt(totalbelanja) < 5000) {
                 new AlertDialog.Builder(getActivity())
-                       // .setTitle("Tidak bisa melanjutkan pemesanan")
+                        // .setTitle("Tidak bisa melanjutkan pemesanan")
                         .setMessage("Minimal pemesanan sejumlah Rp. 5000")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -200,11 +271,11 @@ public class keranjang extends Fragment implements View.OnClickListener{
 
                             }
                         }).show();
-            }else {
-                if (pref.getLoginMethod().equals("coorperate")){
-                    if (Integer.parseInt(totalbelanja)>Integer.parseInt(pref.getLimitBelanja())){
+            } else {
+                if (pref.getLoginMethod().equals("coorperate")) {
+                    if (Integer.parseInt(totalbelanja) > Integer.parseInt(pref.getLimitBelanja())) {
                         new AlertDialog.Builder(getActivity())
-                                 .setTitle("Perhatian")
+                                .setTitle("Perhatian")
                                 .setMessage("Limit Belanja anda tidak cukup")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
@@ -212,34 +283,37 @@ public class keranjang extends Fragment implements View.OnClickListener{
 
                                     }
                                 }).show();
-                    }else {
+                    } else {
                         proccess();
                     }
-                }else {
+                } else {
                     proccess();
                 }
             }
 
-        }else if (Objects.equals(total.getText().toString(), "Rp. 0")){
+        } else if (Objects.equals(total.getText().toString(), "Rp. 0")) {
             Toast.makeText(getActivity(), "Anda Belum Belanja", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             startActivity(new Intent(getActivity(), login.class));
             Toast.makeText(getActivity(), "Harap masuk terlebih dahulu", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void getHargaDropshipper(String test){
+    public void getHargaDropshipper(String test) {
         harga_dropshpper = test;
     }
 
+    public void getArrayHarga(ArrayList<String> hargaItem) {
+        listHargaItem2 = hargaItem;
+    }
 
-    public void getCart(){
+
+    public void getCart() {
 
         recyclerView.setVisibility(View.GONE);
         shimmer.setVisibility(View.VISIBLE);
         shimmer.startShimmerAnimation();
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String, String> param = new HashMap<>();
         param.put("customer", user.getId());
 
         AndroidNetworking.post("https://jualanpraktis.net/android/cart.php")
@@ -250,64 +324,53 @@ public class keranjang extends Fragment implements View.OnClickListener{
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                      //  progressDialog.dismiss();
+                        //  progressDialog.dismiss();
                         try {
                             cartList.clear();
 
                             shimmer.setVisibility(View.GONE);
                             shimmer.stopShimmerAnimation();
+                            int jumlah, hasil, harga;
                             JSONArray array = response.getJSONArray("data");
-                            for (int i = 0;i<array.length();i++){
+                            for (int i = 0; i < array.length(); i++) {
                                 JSONObject object = array.getJSONObject(i);
-                                HashMap<String,String> item = new HashMap<>();
-                                item.put("nomor",object.getString("nomor"));
-                                item.put("nama",object.getString("nama_produk"));
+                                HashMap<String, String> item = new HashMap<>();
+                                harga = Integer.parseInt(object.getString("harga_item"));
+                                jumlah = Integer.parseInt(object.getString("jumlah"));
+                                hasil = harga * jumlah;
+                                item.put("nomor", object.getString("nomor"));
+                                item.put("nama", object.getString("nama_produk"));
                                 item.put("id_variasi", object.getString("ket1"));
-                                item.put("variasi",object.getString("ket2"));
+                                item.put("variasi", object.getString("ket2"));
                                 item.put("nama_vendor", object.getString("nama"));
                                 item.put("id_vendor", object.getString("id_member"));
-                                item.put("gambar",object.getString("image_o"));
-                                item.put("harga",object.getString("harga_item"));
-                                item.put("jumlah",object.getString("jumlah"));
-                                item.put("berat",object.getString("berat"));
-                                item.put("berat_item",object.getString("berat_item"));
-                                item.put("stok",object.getString("stok"));
-                                item.put("fee",object.getString("fee"));
+                                item.put("gambar", object.getString("image_o"));
+                                item.put("harga", object.getString("harga_item"));
+                                item.put("jumlah", object.getString("jumlah"));
+                                item.put("berat", object.getString("berat"));
+                                item.put("berat_item", object.getString("berat_item"));
+                                item.put("stok", object.getString("stok"));
+                                item.put("fee", object.getString("fee"));
+                                item.put("total_belanja", String.valueOf(hasil));
 //                                item.put("bbl",object.getString("bbl"));
                                 cartList.add(item);
                             }
-/**
 
-                            isBblList.clear();
-                            for (HashMap<String,String> item :cartList){
-                                if (item.get("bbl")==null || item.get("bbl").equals("")|| item.get("bbl").equals("null")){
-                                    HashMap<String,String> data = new HashMap<>();
-                                    data.put("nomor",item.get("nomor"));
-                                    data.put("nama",item.get("nama"));
-                                    data.put("id_variasi",item.get("id_variasi"));
-                                    data.put("variasi",item.get("variasi"));
-                                    data.put("gambar",item.get("gambar"));
-                                    data.put("harga",item.get("harga"));
-                                    data.put("jumlah",item.get("jumlah"));
-                                    data.put("berat",item.get("berat"));
-                                    data.put("stok",item.get("stok"));
-                                  //  data.put("bbl",object.getString("bbl"));
-                                    isBblList.add(data);
-                                }
-                            } */
                             recyclerView.setVisibility(View.VISIBLE);
-                            CartAdapter adapter = new CartAdapter(getActivity(),cartList,keranjang.this);
-                            recyclerView.setAdapter(adapter);
+                            adapterCart = new CartAdapter(getActivity(), cartList, keranjang.this);
+                            recyclerView.setAdapter(adapterCart);
+                            recyclerView.setItemViewCacheSize(cartList.size());
 
-                            int Total=0; int Berat = 0;
-                            for (HashMap<String,String> item:cartList){
+                            int Total = 0;
+                            int Berat = 0;
+                            for (HashMap<String, String> item : cartList) {
                                 Total += (Integer.parseInt(item.get("harga"))) * (Integer.parseInt(item.get("jumlah")));
                                 //  NumberFormat nf = new DecimalFormat("#,###");
                                 //total.setText(nf.format(Total));
                                 total.setText(FormatText.rupiahFormat(Total));
                                 totalbelanja = String.valueOf(Total);
 
-                                Berat+=(Integer.parseInt(item.get("berat_item")));
+                                Berat += (Integer.parseInt(item.get("berat_item")));
                                 berat = Berat;
 
                             }
@@ -324,18 +387,14 @@ public class keranjang extends Fragment implements View.OnClickListener{
                         shimmer.stopShimmerAnimation();
 
                         if (anError.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just an error detail
 
                             // get parsed error object (If ApiError is your class)
                             Toast.makeText(getContext(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                         } else {
                             // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            if (anError.getErrorDetail().equals("connectionError")){
+                            if (anError.getErrorDetail().equals("connectionError")) {
                                 Toast.makeText(getContext(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(getContext(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -343,27 +402,67 @@ public class keranjang extends Fragment implements View.OnClickListener{
                     }
                 });
     }
- 
-    private void proccess(){
+
+    public void proccess() {
         progressDialog.setTitle("Melanjutkan Pemesanan");
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String test = "";
-      //  idtransaksi = Shared.getInstance(getApplicationContext()).getIdT();
+        String hargaDropshipper = "";
+        final String[] hargaDrop = {""};
+        //  idtransaksi = Shared.getInstance(getApplicationContext()).getIdT();
 
-        HashMap<String,String> param = new HashMap<>();
+
+//        if (recyclerView.getChildCount() > 0) {
+//
+//            for (int b = 0; b < recyclerView.getChildCount(); b++) {
+//
+//                if (recyclerView.findViewHolderForLayoutPosition(b) instanceof CartAdapter.ViewHolder) {
+//
+//                    View holder = recyclerView.getChildAt(b);
+//                    EditText edtHargaDropship = holder.findViewById(R.id.harga_dropshipper);
+//
+//                    getHargaDropshipper(edtHargaDropship.getText().toString());
+//
+//                }
+//
+//            }
+//
+//        }
+
+//        Log.d(TAG, "proccess: "+harga_dropshpper);
+
+
+
+        for (int a = 0; a < adapterCart.getItemCount(); a++) {
+
+            Log.d(TAG, "proccess: "+dataHarga.get(a));
+
+        }
+
+        for (int b =0; b<dataHarga.size(); b++){
+
+            Log.d(TAG, "forHarga: "+dataHarga.get(b));
+
+        }
+//
+//        for (String harga : dataHarga){
+//            Log.d(TAG, "getHarga : "+harga);
+//            Toast.makeText(getActivity(), harga, Toast.LENGTH_SHORT).show();
+//        }
+
+        HashMap<String, String> param = new HashMap<>();
         param.put("customer", user.getId());
 
         int i = 0;
-        for (HashMap<String, String> data : cartList){
-            param.put("nomor["+i+"]", data.get("nomor"));
-            param.put("jumlah["+i+"]", data.get("jumlah"));
-            param.put("berat["+i+"]", data.get("berat_item"));
-            param.put("fee["+i+"]", data.get("fee"));
-            param.put("harga_dropshipper["+i+"]", harga_dropshpper);
-            param.put("harga_jual_item["+i+"]", data.get("harga"));
-            param.put("ket1["+i+"]", data.get("id_variasi"));
+        for (HashMap<String, String> data : cartList) {
+            param.put("nomor[" + i + "]", data.get("nomor"));
+            param.put("jumlah[" + i + "]", data.get("jumlah"));
+            param.put("berat[" + i + "]", data.get("berat_item"));
+            param.put("fee[" + i + "]", data.get("fee"));
+            param.put("harga_dropshipper[" + i + "]", dataHarga.get(i));
+            param.put("harga_jual_item[" + i + "]", data.get("harga"));
+            param.put("ket1[" + i + "]", data.get("id_variasi"));
             i++;
         }
 
@@ -379,7 +478,7 @@ public class keranjang extends Fragment implements View.OnClickListener{
                         String id_transaksi = "";
 
                         try {
-                             id_transaksi = response.getString("id_transaksi");
+                            id_transaksi = response.getString("id_transaksi");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -387,24 +486,22 @@ public class keranjang extends Fragment implements View.OnClickListener{
                         Log.d("Belanja", param.toString());
 
                         Intent intent = new Intent(getActivity(), FormTransaksiActivity.class);
-                        intent.putExtra("total",totalbelanja);
-                        intent.putExtra("berat",Integer.toString(berat));
-                        intent.putExtra("id_transaksi",id_transaksi);
-                        intent.putExtra("dataList",cartList);
+                        intent.putExtra("total", totalbelanja);
+                        intent.putExtra("berat", Integer.toString(berat));
+                        intent.putExtra("id_transaksi", id_transaksi);
+                        intent.putExtra("dataList", cartList);
                         startActivity(intent);
-                        Log.d(TAG,"Total = "+totalbelanja);
-                        Log.d(TAG,"Berat = "+Integer.toString(berat));
+                        Log.d(TAG, "Total = " + totalbelanja);
+                        Log.d(TAG, "Berat = " + Integer.toString(berat));
                     }
 
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(),"Gagal, silahkan coba beberapa saat lagi.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Gagal, silahkan coba beberapa saat lagi.", Toast.LENGTH_SHORT).show();
                         Log.d("Belanja", param.toString());
                     }
                 });
 
     }
-
-
 }
