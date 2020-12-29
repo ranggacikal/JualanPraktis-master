@@ -304,7 +304,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         private ElegantNumberButton number_button;
         private NumberPicker number_picker;
         public EditText harga_dropshipper;
-        private Button btn_harga_drop;
         private CardView cardPilihanPengiriman;
 
         public ViewHolder(View view) {
@@ -319,7 +318,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             buang = view.findViewById(R.id.buang);
             card_item_jumlah = view.findViewById(R.id.card_item_jumlah);
             harga_dropshipper = view.findViewById(R.id.harga_dropshipper);
-            btn_harga_drop = view.findViewById(R.id.btn_input_harga_dropshipper);
         }
     }
 
