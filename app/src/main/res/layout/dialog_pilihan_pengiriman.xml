@@ -50,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Kendaraan Roda Dua"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"/>
@@ -59,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RP. 10.000"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:textSize="30sp"
                 android:gravity="center"/>
@@ -67,6 +69,7 @@
                 android:id="@+id/text_perlokasi_kendaraan_roda_dua"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:text="per lokasi"
                 android:textSize="9sp"
                 android:gravity="center"/>
@@ -86,6 +89,7 @@
                 android:id="@+id/text_kendaraan_roda_empat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:text="Kendaraan Roda Empat"
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp"
@@ -95,6 +99,7 @@
                 android:id="@+id/text_harga_kendaraan_roda_empat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:text="RP. 50.000"
                 android:textStyle="bold"
                 android:textSize="30sp"
@@ -104,6 +109,7 @@
                 android:id="@+id/text_perlokasi_kendaraan_roda_empat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:text="per lokasi"
                 android:textSize="9sp"
                 android:gravity="center"/>

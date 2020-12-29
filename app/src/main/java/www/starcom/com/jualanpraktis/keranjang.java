@@ -68,7 +68,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
     LinearLayoutManager linearLayoutManager;
 
     TextView total;
-    Button btnSubmit, btn_belanja_lagi, btnTest;
+    Button btnSubmit, btn_belanja_lagi;
     loginuser user;
 
     List<order> list = new ArrayList<>();
@@ -127,7 +127,6 @@ public class keranjang extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         total = rootView.findViewById(R.id.total);
         btnSubmit = rootView.findViewById(R.id.submitOrder);
-        btnTest = rootView.findViewById(R.id.test_button);
 
         btn_belanja_lagi = rootView.findViewById(R.id.btn_belanja_lagi);
 
@@ -147,45 +146,6 @@ public class keranjang extends Fragment implements View.OnClickListener {
                 getActivity().overridePendingTransition(0, 0);
                 getActivity().startActivity(getActivity().getIntent().setFlags(getActivity().getIntent().FLAG_ACTIVITY_NO_ANIMATION));
                 getActivity().overridePendingTransition(0, 0);
-            }
-        });
-
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String harga_drop;
-//                if (recyclerView.getChildCount() > 0) {
-//
-//                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
-//
-//                        if (recyclerView.findViewHolderForLayoutPosition(i) instanceof CartAdapter.ViewHolder) {
-//
-//                            CartAdapter.ViewHolder holder = (CartAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(i);
-//                            harga_drop = holder.harga_dropshipper.getText().toString();
-//                            Log.d(TAG, harga_drop);
-//
-//                        }
-//
-//                    }
-//
-//                }
-
-                ArrayList<String> hargaTest = new ArrayList<>();
-                String hargaString = "";
-                for (int a = 0; a < recyclerView.getChildCount(); a++) {
-
-                    View holder = recyclerView.getChildAt(a);
-//                    hargaDropshipper = holder.harga_dropshipper.getText().toString();
-                    EditText edtHargaDropshipper = holder.findViewById(R.id.harga_dropshipper);
-                    hargaTest.add(edtHargaDropshipper.getText().toString());
-                    for (int b = 0; b < hargaTest.size(); b++) {
-                        hargaString += hargaTest.get(b);
-                        Log.d(TAG, "harga :" + hargaString);
-                    }
-                }
-
-
             }
         });
         return rootView;

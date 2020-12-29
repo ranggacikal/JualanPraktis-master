@@ -92,14 +92,6 @@
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:id="@+id/test_button"
-                android:layout_above="@+id/card"
-                android:text="test"
-                android:textColor="#fff"/>
-
             <TextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"

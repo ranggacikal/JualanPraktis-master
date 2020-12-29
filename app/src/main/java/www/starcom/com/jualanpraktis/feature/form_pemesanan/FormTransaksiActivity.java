@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -15,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -56,9 +58,10 @@ import www.starcom.com.jualanpraktis.adapter.PilihPengirimanAdapter;
 import www.starcom.com.jualanpraktis.databinding.ActivityFormTransaksiBinding;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
 import www.starcom.com.jualanpraktis.feature.pembayaran.PembayaranActivity;
+import www.starcom.com.jualanpraktis.interfaces.PilihPengirimanClickInterface;
 import www.starcom.com.jualanpraktis.service.ServiceTask;
 
-public class FormTransaksiActivity extends AppCompatActivity {
+public class FormTransaksiActivity extends AppCompatActivity implements PilihPengirimanClickInterface {
     Activity activity = FormTransaksiActivity.this;
     ActivityFormTransaksiBinding binding;
 
@@ -99,6 +102,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
     int harga_item2;
     int total_harga2;
 
+    PilihPengirimanAdapter adapterPengiriman;
 
     ArrayList<Integer> totalbayarArray = new ArrayList<Integer>();
     AlertDialog alertDialog;
@@ -111,6 +115,9 @@ public class FormTransaksiActivity extends AppCompatActivity {
 
     String opsi_pembayaran;
     String coorperate = "0";
+
+    String total_ongkir;
+
     Pref pref;
     boolean clicked = false;
     boolean clickedRodaEmpat = false;
@@ -118,7 +125,13 @@ public class FormTransaksiActivity extends AppCompatActivity {
     public ArrayList<Integer> dataOngkir = new ArrayList<>();
     public ArrayList<String> dataKurir = new ArrayList<>();
 
-    PilihPengirimanAdapter adapterPengiriman;
+    public String isClicked;
+
+    String validasiAdapter;
+
+    String totalOngkir2;
+
+    private static final int REQUEST_PENGIRIMAN = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +190,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(adapter);
 
         //Recyclerview Pilih Pengiriman
-        PilihPengirimanAdapter adapterPengiriman = new PilihPengirimanAdapter(activity, dataList, FormTransaksiActivity.this);
+        PilihPengirimanAdapter adapterPengiriman = new PilihPengirimanAdapter(activity, dataList, FormTransaksiActivity.this, this);
         binding.rvPilihPengiriman.setAdapter(adapterPengiriman);
         binding.rvPilihPengiriman.setLayoutManager(new LinearLayoutManager(activity));
 
@@ -277,8 +290,13 @@ public class FormTransaksiActivity extends AppCompatActivity {
 //                cekAlamat(1);
 //            }
 //        }
-
     }
+
+    public void getStatusButton(String test) {
+        validasiAdapter = test;
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -289,6 +307,26 @@ public class FormTransaksiActivity extends AppCompatActivity {
 
         );
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (dataOngkir.size()<0){
+//
+//            binding.lblNominalOngkir.setText("0");
+//
+//        }else if (dataOngkir.size()>0){
+//
+//            int total_ongkir_label = 0;
+//            for (int totalLabelOngkir : dataOngkir){
+//                total_ongkir_label = total_ongkir_label + totalLabelOngkir;
+//            }
+//
+//            binding.lblNominalOngkir.setText(total_ongkir_label);
+//
+//        }
+//    }
 
     //on activity result
     @Override
@@ -323,10 +361,11 @@ public class FormTransaksiActivity extends AppCompatActivity {
                 binding.lblKecamatan.setTextColor(getResources().getColor(android.R.color.black));
             }
         }
-//        else if (requestCode == 4) {
-//            if (resultCode == RESULT_OK) {
-//
-//
+        else if (requestCode == REQUEST_PENGIRIMAN) {
+            if (resultCode == RESULT_OK && data!=null) {
+
+                String totalOngkirIntent = data.getStringExtra("totalOngkir");
+                binding.lblNominalOngkir.setText(totalOngkirIntent);
 //                String hargalayananIntent = data.getStringExtra("harga");
 //                harga_layanan = new String[]{hargalayananIntent};
 //                String layanan = data.getStringExtra("nama");
@@ -351,8 +390,8 @@ public class FormTransaksiActivity extends AppCompatActivity {
 ////                double totalSeluruhDouble = Double.parseDouble(totalSeluruhString);
 //                binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(totalSeluruhString)));
 //                binding.cvJenisPembayaran.setVisibility(View.VISIBLE);
-//            }
-//        }
+            }
+        }
     }
 
     //set on click
@@ -788,6 +827,8 @@ public class FormTransaksiActivity extends AppCompatActivity {
         String id_member = "";
         String total_bayar3= "";
 
+        int jumlahOngkir = 0;
+
         for (int a = 0; a<dataOngkir.size(); a++){
 
             harga_ongkir2 = dataOngkir.get(a);
@@ -797,6 +838,16 @@ public class FormTransaksiActivity extends AppCompatActivity {
             totalbayarArray.add(total_harga2);
 
         }
+
+        for (int sumOngkir : dataOngkir){
+            jumlahOngkir = jumlahOngkir + sumOngkir;
+            total_ongkir = String.valueOf(jumlahOngkir);
+        }
+
+        Log.d("FormTransaksiTotal", "TotalOngkir: "+total_ongkir);
+
+        int total_seluruh = Integer.parseInt(total_belanja) + Integer.parseInt(total_ongkir);
+        total_bayar_item = String.valueOf(total_seluruh);
 
         for (int a = 0; a < idVendor1.size(); a++) {
             id_member = idVendor1.get(a);
@@ -890,8 +941,8 @@ public class FormTransaksiActivity extends AppCompatActivity {
                                 intent.putExtra("id_transaksi", idTransaksi);
                                 intent.putExtra("nama", binding.lblNamaPenerima.getText().toString());
                                 intent.putExtra("alamat", alamat);
-                                intent.putExtra("nominal_belanja", total_belanja_item);
-                                intent.putExtra("ongkos_kirim", harga_ongkir);
+                                intent.putExtra("nominal_belanja", total_belanja);
+                                intent.putExtra("ongkos_kirim", total_ongkir);
                                 intent.putExtra("berat", total_berat2);
                                 intent.putExtra("total", total_bayar_item);
                                 intent.putExtra("no_hp", binding.lblNoTelpon.getText().toString());
@@ -941,5 +992,51 @@ public class FormTransaksiActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
 
+        LinearLayout linearRodaDua = view.findViewById(R.id.linear_ekspedisi_roda_dua);
+        LinearLayout linearRodaEmpat = view.findViewById(R.id.linear_ekspedisi_roda_empat);
+
+        int harga_ongkir_adapter;
+        String nama_kurir;
+
+
+
+        if (isClicked.equals("linearRodaDua")) {
+            harga_ongkir_adapter = 10000;
+            nama_kurir = "motor";
+            dataOngkir.add(harga_ongkir_adapter);
+            dataKurir.add(nama_kurir);
+        }else if (isClicked.equals("linearRodaEmpat")){
+            harga_ongkir_adapter = 50000;
+            nama_kurir = "mobil";
+            dataOngkir.add(harga_ongkir_adapter);
+            dataKurir.add(nama_kurir);
+        }
+
+        int tambahOngkir2 = 0;
+
+        if (dataOngkir.size()>0) {
+            for (int jumlahOngkir : dataOngkir) {
+
+                tambahOngkir2 = tambahOngkir2 + jumlahOngkir;
+
+            }
+
+            binding.lblNominalOngkir.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(tambahOngkir2))));
+            int total_bayar_seluruh;
+
+            total_bayar_seluruh = Integer.parseInt(total_belanja) + tambahOngkir2;
+
+            binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_bayar_seluruh))));
+        }
+
+
+    }
+
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
 }
