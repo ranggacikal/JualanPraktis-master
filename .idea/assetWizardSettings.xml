@@ -330,11 +330,26 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/home/ranggacikal/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/notifications_none/baseline_notifications_none_24.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_icon_google_icon" />
-                            <entry key="sourceFile" value="D:\SVG\Icon Google icon.svg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_notif_white" />
+                            <entry key="sourceFile" value="$APPLICATION_HOME_DIR$/bin/D:\SVG\Icon Google icon.svg" />
                           </map>
                         </option>
                       </PersistentState>

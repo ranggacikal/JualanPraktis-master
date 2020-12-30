@@ -39,7 +39,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".feature.form_pemesanan.FormPilihEkspedisiActivity"></activity>
+        <activity android:name=".feature.akun.ProdukFavoritActivity"></activity>
+        <activity android:name=".feature.akun.RiwayatPencairanActivity" />
+        <activity android:name=".feature.akun.PenghasilanSayaActivity" />
+        <activity android:name=".feature.akun.StatusTransaksiActivity" />
+        <activity android:name=".feature.akun.PilihBankDetailRekeningActivity" />
+        <activity android:name=".feature.akun.DetailRekeningBankActivity" />
+        <activity android:name=".feature.form_pemesanan.FormPilihEkspedisiActivity" />
         <activity android:name=".feature.KonfirmasiTransferActivity" />
         <activity android:name=".feature.form_pemesanan.ResultTransferActivity" />
         <activity android:name=".feature.produk.ListProdukDiskonActivity" />
@@ -167,10 +173,10 @@
             </intent-filter>
         </activity>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider2581253162195745"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-
+            android:authorities="com.facebook.app.FacebookContentProvider2581253162195745"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -312,7 +312,7 @@
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
-                        android:id="@+id/relative_orderan_saya"
+                        android:id="@+id/relative_status_transaksi"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="15dp"

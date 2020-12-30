@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +96,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     private TextView namatoko, noktp, nonpwp, atasnama, namabank, norek;
     private ImageView imageProfile;
     private String PicturePath;
+    private RelativeLayout relativeStatusTransaksi, relativeRincianRekening;
+    private CardView cardPesananSaya;
     //public static final String URL_Image = "https://trading.my.id/files/drp/";
     public static final String URL_Update = "https://jualanpraktis.net/android/update_akun.php";
     ImageView edit ;
@@ -142,6 +146,9 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         namabank = rootView.findViewById(R.id.nama_bank);
         namatoko = rootView.findViewById(R.id.nama_toko);
         imageProfile = rootView.findViewById(R.id.image_profile);
+        relativeStatusTransaksi = rootView.findViewById(R.id.relative_status_transaksi);
+        relativeRincianRekening = rootView.findViewById(R.id.relative_rincian_rekening_saya);
+        cardPesananSaya = rootView.findViewById(R.id.card_penjualan_saya_profile);
 
         btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
         btn_ubah_password = rootView.findViewById(R.id.btn_ubah_password);
@@ -160,6 +167,30 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), login.class);
+                startActivity(intent);
+            }
+        });
+
+        cardPesananSaya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PenghasilanSayaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        relativeStatusTransaksi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), StatusTransaksiActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        relativeRincianRekening.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DetailRekeningBankActivity.class);
                 startActivity(intent);
             }
         });
