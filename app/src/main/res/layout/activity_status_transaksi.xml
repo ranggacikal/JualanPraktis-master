@@ -62,6 +62,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Semua"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="20sp"/>
@@ -71,6 +72,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Dipesan"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -81,6 +83,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Dikemas"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -91,6 +94,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Dikirim"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -101,6 +105,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Diterima"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -111,6 +116,7 @@
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:text="Dibatalkan"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -121,6 +127,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:text="Tukar"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -131,6 +138,7 @@
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:text="Dikembalikan"
+                android:textColor="@color/grayDark"
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
@@ -233,6 +241,14 @@
         android:id="@+id/recycler_status_transaksi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/garis_grey"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_status_transaksi_batal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_below="@id/garis_grey"
         android:layout_marginTop="20dp"/>
 

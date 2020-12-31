@@ -39,7 +39,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".feature.akun.ProdukFavoritActivity"></activity>
+        <activity android:name=".feature.akun.UbahKataSandiActivity"></activity>
+        <activity android:name=".feature.akun.AlasanPembatalanActivity" />
+        <activity android:name=".feature.akun.RincianStatusTransaksiActivity" />
+        <activity android:name=".feature.akun.ProdukFavoritActivity" />
         <activity android:name=".feature.akun.RiwayatPencairanActivity" />
         <activity android:name=".feature.akun.PenghasilanSayaActivity" />
         <activity android:name=".feature.akun.StatusTransaksiActivity" />

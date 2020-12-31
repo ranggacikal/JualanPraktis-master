@@ -1,5 +1,6 @@
 package www.starcom.com.jualanpraktis.feature.akun;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import www.starcom.com.jualanpraktis.R;
+import www.starcom.com.jualanpraktis.adapter.PenghasilanBatalAdapter;
+import www.starcom.com.jualanpraktis.adapter.PenghasilanSayaAdapter;
+import www.starcom.com.jualanpraktis.adapter.PenghasilanSelesaiAdapter;
 import www.starcom.com.jualanpraktis.model.ListPenghasilanSaya;
 
 public class PenghasilanSayaActivity extends AppCompatActivity {
@@ -87,6 +91,13 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
         clickPesananSelesai();
         clickPesananBatal();
 
+        btnRiwayatPencairan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PenghasilanSayaActivity.this, RiwayatPencairanActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

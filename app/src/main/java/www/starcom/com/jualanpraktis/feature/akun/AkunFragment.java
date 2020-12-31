@@ -91,12 +91,12 @@ import static www.starcom.com.jualanpraktis.alamat_pengiriman.KEY;
  */
 
 public class AkunFragment extends Fragment implements View.OnClickListener{
-    private Button btn_logout,btn_login,btn_ubah_profil,btn_ubah_password,btn_update_photo ;
+    private Button btn_login,btn_ubah_profil,btn_update_photo ;
     private TextView nama,email,nohp,jk,time,alamat,nama2,email2, nohp2;
     private TextView namatoko, noktp, nonpwp, atasnama, namabank, norek;
     private ImageView imageProfile;
     private String PicturePath;
-    private RelativeLayout relativeStatusTransaksi, relativeRincianRekening;
+    private RelativeLayout relativeStatusTransaksi, relativeRincianRekening, relativeFavorit, btn_logout, btn_ubah_password;
     private CardView cardPesananSaya;
     //public static final String URL_Image = "https://trading.my.id/files/drp/";
     public static final String URL_Update = "https://jualanpraktis.net/android/update_akun.php";
@@ -148,6 +148,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         imageProfile = rootView.findViewById(R.id.image_profile);
         relativeStatusTransaksi = rootView.findViewById(R.id.relative_status_transaksi);
         relativeRincianRekening = rootView.findViewById(R.id.relative_rincian_rekening_saya);
+        relativeFavorit = rootView.findViewById(R.id.relative_produk_favorit);
         cardPesananSaya = rootView.findViewById(R.id.card_penjualan_saya_profile);
 
         btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
@@ -195,6 +196,13 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        relativeFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
         imageProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -225,27 +233,29 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         btn_ubah_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
-                View layoutView = getLayoutInflater().inflate(R.layout.dialog_ubah_password, null);
 
-                final EditText edt_pass_lama = layoutView.findViewById(R.id.edt_password_lama);
-                final EditText edt_pass_baru= layoutView.findViewById(R.id.edt_password_baru);
-                final Button btn_submit = layoutView.findViewById(R.id.btn_submit);
-
-                dialogBuilder.setView(layoutView);
-
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCancelable(true);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                alertDialog.show();
-
-                btn_submit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ubahPassword(edt_pass_lama.getText().toString(), edt_pass_baru.getText().toString());
-                        alertDialog.dismiss();
-                    }
-                });
+                startActivity(new Intent(getActivity(), UbahKataSandiActivity.class));
+//                androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+//                View layoutView = getLayoutInflater().inflate(R.layout.dialog_ubah_password, null);
+//
+//                final EditText edt_pass_lama = layoutView.findViewById(R.id.edt_password_lama);
+//                final EditText edt_pass_baru= layoutView.findViewById(R.id.edt_password_baru);
+//                final Button btn_submit = layoutView.findViewById(R.id.btn_submit);
+//
+//                dialogBuilder.setView(layoutView);
+//
+//                AlertDialog alertDialog = dialogBuilder.create();
+//                alertDialog.setCancelable(true);
+//                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                alertDialog.show();
+//
+//                btn_submit.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        ubahPassword(edt_pass_lama.getText().toString(), edt_pass_baru.getText().toString());
+//                        alertDialog.dismiss();
+//                    }
+//                });
             }
         });
         btn_logout = rootView.findViewById(R.id.btn_logout);

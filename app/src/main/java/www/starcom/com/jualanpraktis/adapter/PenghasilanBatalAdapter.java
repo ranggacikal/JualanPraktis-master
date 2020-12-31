@@ -1,4 +1,4 @@
-package www.starcom.com.jualanpraktis.feature.akun;
+package www.starcom.com.jualanpraktis.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
