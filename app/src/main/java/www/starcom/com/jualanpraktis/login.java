@@ -100,7 +100,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     //google
     GoogleSignInClient googleSignInClient;
-    private int RC_SIGN_IN = 1;
+    private int RC_SIGN_IN = 0;
 
     //facebook
     CallbackManager callbackManager;
@@ -446,6 +446,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                           }
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -466,8 +467,12 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(login.this);
             // Signed in successfully, show authenticated UI.
-            googleUserProfile(account);
+            googleUserProfile(acct);
+
+
+//            Toast.makeText(this, "Login Sukses", Toast.LENGTH_SHORT).show();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -477,7 +482,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         }
     }
     void googleUserProfile(GoogleSignInAccount acct){
-        acct = GoogleSignIn.getLastSignedInAccount(login.this);
         if (acct != null) {
 
             Uri profile = acct.getPhotoUrl();
@@ -488,6 +492,24 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             progressDialog.dismiss();
          //   StyleableToast.makeText(getApplicationContext(), "Gagal Login melalui Google", Toast.LENGTH_LONG, R.style.error_toast).show();
         }
+    }
+
+    void googleUserProfile2(){
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(login.this);
+
+        if (acct != null){
+
+            String oauthpro = "google";
+            String id = acct.getId();
+            String email = acct.getEmail();
+            String gender = "";
+            String first_name = acct.getGivenName();
+            String last_name = acct.getFamilyName();
+
+            loginGoogleFb(oauthpro, id, email, gender, first_name, last_name);
+        }
+
     }
 
     private void loginGoogleFacebook(final String username, final String password,final String nama, final String no_hp){
@@ -704,6 +726,9 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             //     progressBar.setVisibility(View.GONE);
                             progressDialog.dismiss();
                             //storing the user in shared preferences
+                            startActivity(new Intent(login.this,MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             Toast.makeText(login.this, "Berhasil Login", Toast.LENGTH_SHORT).show();

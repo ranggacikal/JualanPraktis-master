@@ -98,7 +98,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             viewHolder.card_item_jumlah.setVisibility(View.GONE);
             viewHolder.number_picker.setVisibility(View.VISIBLE);
             viewHolder.number_button.setVisibility(View.GONE);
-            viewHolder.txt_sisa.setVisibility(View.VISIBLE);
+//            viewHolder.txt_sisa.setVisibility(View.VISIBLE);
 //            viewHolder.harga_dropshipper.setVisibility(View.VISIBLE);
             viewHolder.txt_sisa.setText("Stok tersedia " + item.get("stok"));
 

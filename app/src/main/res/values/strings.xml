@@ -2,8 +2,9 @@
     <string name="app_name">Jualan Praktis</string>
 
     <!--FAcebook-->
-    <string name="facebook_app_id">2581253162195745</string>
-    <string name="fb_login_protocol_scheme">fb2581253162195745</string>
+    <string name="facebook_app_id">2985898851643418</string>
+    <string name="fb_login_protocol_scheme">fb2985898851643418</string>
+
     <string name="title_activity_maps">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->

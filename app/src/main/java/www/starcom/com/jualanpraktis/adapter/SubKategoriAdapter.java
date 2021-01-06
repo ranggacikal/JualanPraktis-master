@@ -2,11 +2,13 @@ package www.starcom.com.jualanpraktis.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Random;
 
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.feature.produk.ListSubKategoriProdukActivity;
@@ -56,6 +59,11 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
 
         viewHolder.title.setText(item.get("subkategori"));
         viewHolder.new_indicatior.setVisibility(View.GONE);
+
+        Random rnd = new Random();
+        int currentColor2 = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+        viewHolder.linear_item_kategori.setBackgroundColor(currentColor2);
 
         String img_url = "https://trading.my.id/img2/"+item.get("gambar");
         Glide.with(activity.getApplicationContext())
@@ -169,6 +177,7 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
         private TextView title,new_indicatior;
         private ImageView image;
         private RelativeLayout ll_kategori;
+        LinearLayout linear_item_kategori;
 
         public ViewHolder(View view) {
             super(view);
@@ -176,6 +185,7 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
             new_indicatior=view.findViewById(R.id.new_indicatior);
             image=view.findViewById(R.id.image);
             ll_kategori = view.findViewById(R.id.ll_kategori);
+            linear_item_kategori = view.findViewById(R.id.linear_item_kategori);
 
         }
     }

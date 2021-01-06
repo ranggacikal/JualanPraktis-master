@@ -405,7 +405,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/bantuan"
+                            android:src="@drawable/icon_bantuan"
                             android:layout_marginLeft="20dp"/>
 
                         <TextView

@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         Katalog = new katalog();
        // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.untuk_anda_icon));
-        tabLayout.addTab(tabLayout.newTab().setText("Katalog").setIcon(R.drawable.katalog_icon__red_));
+        tabLayout.addTab(tabLayout.newTab().setText("Kategori").setIcon(R.drawable.katalog_icon__red_));
         tabLayout.addTab(tabLayout.newTab().setText("Pesanan").setIcon(R.drawable.pesanan_icon__red_));
         tabLayout.addTab(tabLayout.newTab().setText("Keranjang").setIcon(R.drawable.icon_cart));
 //        int tab = getIntent().getIntExtra("tab",0);

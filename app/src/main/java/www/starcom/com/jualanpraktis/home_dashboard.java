@@ -54,6 +54,7 @@ import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
 import www.starcom.com.jualanpraktis.SubKategori.objectsub;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
+import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukDiskonActivity;
 import www.starcom.com.jualanpraktis.model.ListProduk;
@@ -96,7 +97,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     private ShimmerFrameLayout shimmer,shimmerAllProduk,shimmer_kategori;
 
     //iklan
-    ImageView imgIklan1,imgIklan2,imgIklan3,imgIklan4;
+    ImageView imgIklan1,imgIklan2,imgIklan3,imgIklan4, imgFavorite;
     LinearLayout lllistproudk,ll_all_produk,ll_kategori;
     Button btn_see_all;
 
@@ -150,6 +151,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
         sendRequest();
 
+        imgFavorite = rootView.findViewById(R.id.img_favorite_dashboard);
         lllistproudk = rootView.findViewById(R.id.lllistproudk);
         ll_all_produk = rootView.findViewById(R.id.ll_all_produk);
         ll_kategori = rootView.findViewById(R.id.ll_kategori);
@@ -205,10 +207,17 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
-        img_contact = rootView.findViewById(R.id.img_contact);
-        img_contact.setOnClickListener(new View.OnClickListener() {
+        imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
+//        img_contact = rootView.findViewById(R.id.img_contact);
+//        img_contact.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                Uri uri = Uri.parse("http://api.whatsapp.com/send?phone=62895623458199&text= ");
 //                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 //                sendIntent.setData(uri);
@@ -241,8 +250,8 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                         alertDialog.dismiss();
                     }
                 }); **/
-            }
-        });
+//            }
+//        });
 
      //   init();
        // loadData();

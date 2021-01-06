@@ -39,7 +39,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".feature.akun.UbahKataSandiActivity"></activity>
+        <activity android:name=".WelcomePageActivity"></activity>
+        <activity android:name=".feature.chat.ChatActivity" />
+        <activity android:name=".feature.akun.BantuanActivity" />
+        <activity android:name=".feature.akun.UbahKataSandiActivity" />
         <activity android:name=".feature.akun.AlasanPembatalanActivity" />
         <activity android:name=".feature.akun.RincianStatusTransaksiActivity" />
         <activity android:name=".feature.akun.ProdukFavoritActivity" />
@@ -178,7 +181,7 @@
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider2581253162195745"
+            android:authorities="com.facebook.app.FacebookContentProvider2985898851643418"
             android:exported="true" />
     </application>
 

@@ -96,7 +96,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     private TextView namatoko, noktp, nonpwp, atasnama, namabank, norek;
     private ImageView imageProfile;
     private String PicturePath;
-    private RelativeLayout relativeStatusTransaksi, relativeRincianRekening, relativeFavorit, btn_logout, btn_ubah_password;
+    private RelativeLayout relativeStatusTransaksi, relativeRincianRekening, relativeFavorit, btn_logout, btn_ubah_password,
+            relativeBantuan;
     private CardView cardPesananSaya;
     //public static final String URL_Image = "https://trading.my.id/files/drp/";
     public static final String URL_Update = "https://jualanpraktis.net/android/update_akun.php";
@@ -149,6 +150,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         relativeStatusTransaksi = rootView.findViewById(R.id.relative_status_transaksi);
         relativeRincianRekening = rootView.findViewById(R.id.relative_rincian_rekening_saya);
         relativeFavorit = rootView.findViewById(R.id.relative_produk_favorit);
+        relativeBantuan = rootView.findViewById(R.id.relative_bantuan);
         cardPesananSaya = rootView.findViewById(R.id.card_penjualan_saya_profile);
 
         btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
@@ -200,6 +202,13 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
+        relativeBantuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), BantuanActivity.class));
             }
         });
 

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -40,11 +46,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import www.starcom.com.jualanpraktis.Login.VolleySingleton;
 import www.starcom.com.jualanpraktis.Spinner.Kecamatan;
 import www.starcom.com.jualanpraktis.Spinner.KotaKabupaten;
 import www.starcom.com.jualanpraktis.Spinner.Provinsi;
+import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
 import www.starcom.com.jualanpraktis.databinding.ActivityResultTransferBinding;
+import www.starcom.com.jualanpraktis.feature.produk.ProdukDetailActivity;
+import www.starcom.com.jualanpraktis.model_retrofit.ResponseRegister;
 
 import static www.starcom.com.jualanpraktis.alamat_pengiriman.BASE_URL;
 import static www.starcom.com.jualanpraktis.alamat_pengiriman.KEY;
@@ -61,10 +74,8 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     //ActivityResultTransferBinding binding;
 
 
-    private EditText nama,email,no_hp,password,ulangpass,input_alamat,nama_toko, no_ktp, no_npwp, atas_nama, no_rek, nama_bank;
-    //private RadioGroup jenis_kelamin;
-    //private RadioButton laki,perempuan;
-    private Button btn_daftar ;
+    private EditText edtNama, edtEmail, edtPassword;
+    private CardView btn_daftar ;
     private String mediaPath;
     private ImageView uploadPicture;
 
@@ -86,30 +97,34 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
         progressDialog  = new ProgressDialog(daftar.this);
         AndroidNetworking.initialize(getApplicationContext());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Register");
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setTitle("Register");
 
-        nama = findViewById(R.id.input_nama);
-        email = findViewById(R.id.input_email);
-        no_hp = findViewById(R.id.input_nohp);
-        password = findViewById(R.id.input_pass);
-        ulangpass = findViewById(R.id.input_ulang);
-        spinner1 = findViewById(R.id.spin_kota);
-        spinner2 = findViewById(R.id.spin_kecamatan);
-        spin_provinsi = findViewById(R.id.spin_provinsi);
-        input_alamat = findViewById(R.id.input_alamat);
-        nama_toko = findViewById(R.id.input_nama_toko);
-        no_ktp = findViewById(R.id.input_no_ktp);
-        no_npwp = findViewById(R.id.input_no_npwp);
-        atas_nama = findViewById(R.id.input_atas_nama);
-        no_rek = findViewById(R.id.input_no_rek);
-        nama_bank = findViewById(R.id.input_nama_bank);
-        uploadPicture = findViewById(R.id.upload_profile_picture);
-        btn_daftar = findViewById(R.id.btn_daftar);
+//        nama = findViewById(R.id.input_nama);
+//        email = findViewById(R.id.input_email);
+//        no_hp = findViewById(R.id.input_nohp);
+//        password = findViewById(R.id.input_pass);
+//        ulangpass = findViewById(R.id.input_ulang);
+//        spinner1 = findViewById(R.id.spin_kota);
+//        spinner2 = findViewById(R.id.spin_kecamatan);
+//        spin_provinsi = findViewById(R.id.spin_provinsi);
+//        input_alamat = findViewById(R.id.input_alamat);
+//        nama_toko = findViewById(R.id.input_nama_toko);
+//        no_ktp = findViewById(R.id.input_no_ktp);
+//        no_npwp = findViewById(R.id.input_no_npwp);
+//        atas_nama = findViewById(R.id.input_atas_nama);
+//        no_rek = findViewById(R.id.input_no_rek);
+//        nama_bank = findViewById(R.id.input_nama_bank);
+//        uploadPicture = findViewById(R.id.upload_profile_picture);
+//        btn_daftar = findViewById(R.id.btn_daftar);
 
+        edtNama = findViewById(R.id.edt_nama_daftar);
+        edtEmail = findViewById(R.id.edt_email_daftar);
+        edtPassword = findViewById(R.id.edt_password_daftar);
+        btn_daftar = findViewById(R.id.card_daftar);
 
 //        jenis_kelamin = findViewById(R.id.RG);
 //        laki = findViewById(R.id.laki);
@@ -117,95 +132,90 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 
 //        UlangPass();
         btn_daftar.setOnClickListener(this);
-        uploadPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImagePicker.Companion.with(activity)
-                        .crop(340,340)
-                        .compress(512)
-                        .start();
-            }
-        });
-       getProvinsi();
+//        uploadPicture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ImagePicker.Companion.with(activity)
+//                        .crop(340,340)
+//                        .compress(512)
+//                        .start();
+//            }
+//        });
+//       getProvinsi();
 
-        spin_provinsi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Provinsi provinsi = provinsiList.get(spin_provinsi.getSelectedItemPosition());
-                id_provinsi = provinsi.getProvince_id();
-                nama_provinsi = provinsi.getProvince();
-                if (id_provinsi != null) {
-                    // spinnerData2(id_kota);
-                    getKotaKabupaten(id_provinsi);
-                    Log.d(TAG, id_provinsi);
-                }else {
-                    Log.d(TAG,""+ id_provinsi);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //   id_kota = ((SObject1.Object1.Results) spinner1.getSelectedItem()).idKota;
-                KotaKabupaten kotaKabupaten = kotaKabupatenList.get(spinner1.getSelectedItemPosition());
-                id_kota = kotaKabupaten.getCity_id();
-                nama_kota = kotaKabupaten.getCity_name();
-                if (id_kota != null) {
-                    // spinnerData2(id_kota);
-                    getKecamatan(id_kota);
-                    Log.d(TAG, id_kota);
-                }else {
-                    Log.d(TAG,""+ id_kota);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.d(TAG, id_kota);
-            }
-        });
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Kecamatan kecamatan = kecamatanList.get(spinner2.getSelectedItemPosition());
-                id_wilayah = kecamatan.getSubdistrict_id();
-                nama_wilayah = kecamatan.getSubdistrict_name();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        spin_provinsi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Provinsi provinsi = provinsiList.get(spin_provinsi.getSelectedItemPosition());
+//                id_provinsi = provinsi.getProvince_id();
+//                nama_provinsi = provinsi.getProvince();
+//                if (id_provinsi != null) {
+//                    // spinnerData2(id_kota);
+//                    getKotaKabupaten(id_provinsi);
+//                    Log.d(TAG, id_provinsi);
+//                }else {
+//                    Log.d(TAG,""+ id_provinsi);
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                //   id_kota = ((SObject1.Object1.Results) spinner1.getSelectedItem()).idKota;
+//                KotaKabupaten kotaKabupaten = kotaKabupatenList.get(spinner1.getSelectedItemPosition());
+//                id_kota = kotaKabupaten.getCity_id();
+//                nama_kota = kotaKabupaten.getCity_name();
+//                if (id_kota != null) {
+//                    // spinnerData2(id_kota);
+//                    getKecamatan(id_kota);
+//                    Log.d(TAG, id_kota);
+//                }else {
+//                    Log.d(TAG,""+ id_kota);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                Log.d(TAG, id_kota);
+//            }
+//        });
+//        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Kecamatan kecamatan = kecamatanList.get(spinner2.getSelectedItemPosition());
+//                id_wilayah = kecamatan.getSubdistrict_id();
+//                nama_wilayah = kecamatan.getSubdistrict_name();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
 
     }
 
     @Override
     public void onClick(View v) {
 
-        if (nama.getText().toString().equals("")) {
-            nama.setError("Nama belum di isi");
-            nama.requestFocus();
-        } else if (email.getText().toString().equals("")) {
-            email.setError("Email belum di isi");
-            email.requestFocus();
-        } else if (no_hp.getText().toString().equals("")) {
-            no_hp.setError("No Hp belum di isi");
-            no_hp.requestFocus();
-        }else if (input_alamat.getText().toString().equals("")){
-            input_alamat.setError("Alamat belum di isi");
-            input_alamat.requestFocus();
-        } else if (password.getText().toString().equals("")) {
-            password.setError("Password belum di isi");
-            password.requestFocus();
+        if (edtNama.getText().toString().equals("")) {
+            edtNama.setError("Nama belum di isi");
+            edtNama.requestFocus();
+        } else if (edtEmail.getText().toString().equals("")) {
+            edtEmail.setError("Email belum di isi");
+            edtEmail.requestFocus();
+        } else if (edtPassword.getText().toString().equals("")) {
+            edtPassword.setError("Password belum di isi");
+            edtPassword.requestFocus();
         }
-        Daftar();
+        signUpRetrofit();
+//        Daftar();
 //        } else if (ulangpass.getText().toString().equals("")) {
 //            ulangpass.setError("Password belum di isi");
 //        } else if (!ulangpass.getText().toString().equals(password.getText().toString())) {
@@ -236,15 +246,9 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void KosongField(){
-        nama.setText("");
-        email.setText("");
-        no_hp.setText("");
-        password.setText("");
-        no_ktp.setText("");
-        no_npwp.setText("");
-        atas_nama.setText("");
-        no_rek.setText("");
-        nama_bank.setText("");
+        edtNama.setText("");
+        edtEmail.setText("");
+        edtPassword.setText("");
         //ulangpass.setText("");
         //jenis_kelamin.check(0);
 
@@ -273,6 +277,102 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 //        });
 //    }
 
+
+    public void signUpRetrofit(){
+
+        String email = edtEmail.getText().toString();
+        String password = edtPassword.getText().toString();
+
+        progressDialog.setTitle("Daftar");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        ConfigRetrofit.service.register(email, password).enqueue(new Callback<ResponseRegister>() {
+            @Override
+            public void onResponse(Call<ResponseRegister> call, retrofit2.Response<ResponseRegister> response) {
+                if (response.isSuccessful()){
+
+                    String pesan = response.body().getMessage();
+
+                    if (pesan.equals("Pendaftaran berhasil")){
+
+                        finish();
+                        KosongField();
+                        Toast.makeText(activity, "Berhasil Registrasi", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+
+                    }else{
+                        Toast.makeText(activity, "Gagal", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+
+                }else{
+                    Toast.makeText(activity, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseRegister> call, Throwable t) {
+                Toast.makeText(activity, t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+
+    }
+
+
+    public void signUp(){
+        StringRequest request = new StringRequest(Request.Method.POST, "https://jualanpraktis.net/android/signup.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("Data Berhasil Di Kirim")){
+                    /**   int total_berat = Integer.parseInt(numberButton.getNumber())*Integer.parseInt(getIntent().getExtras().getString(EXTRA_BERAT));
+                     new Database(getBaseContext()).addToChart(new order(
+                     "",
+                     getIntent().getExtras().getString(EXTRA_ID),
+                     getIntent().getExtras().getString(EXTRA_NAMA)+" - "+nama_variasi,
+                     extra_harga,
+                     numberButton.getNumber(),
+                     String.valueOf(total_berat)
+                     ));
+                     Log.d(TAG,getIntent().getExtras().getString(EXTRA_BERAT)); **/
+
+                    // finish();
+                    // Intent intent = new Intent(ProdukDetailActivity.this, MainActivity.class);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    // startActivity(intent);
+                    finish();
+                    KosongField();
+                    Toast.makeText(daftar.this, "Berhasil Tambah Data ", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(daftar.this, "Gagal", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(daftar.this, "Gagal", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new HashMap<>();
+
+                params.put("nama", edtNama.getText().toString());
+                params.put("email", edtEmail.getText().toString());
+                params.put("password", edtPassword.getText().toString());
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
+    }
+
     public void Daftar(){
 //        if (jenis_kelamin.getCheckedRadioButtonId()!= 0 ) {
 //            if (jenis_kelamin.getCheckedRadioButtonId() == laki.getId()) {
@@ -288,20 +388,8 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 
 
         final HashMap<String,String> postData = new HashMap<>();
-        postData.put("nama",nama.getText().toString());
-        postData.put("nama_toko",nama_toko.getText().toString());
-        postData.put("provinsi",nama_provinsi);
-        postData.put("kota",nama_kota);
-        postData.put("kecamatan",nama_wilayah);
-        postData.put("alamat",input_alamat.getText().toString());
-        postData.put("no_ktp",no_ktp.getText().toString());
-        postData.put("no_npwp",no_npwp.getText().toString());
-        postData.put("no_hp",no_hp.getText().toString());
-        postData.put("email",email.getText().toString());
-        postData.put("password",password.getText().toString());
-        postData.put("atas_nama",atas_nama.getText().toString());
-        postData.put("no_rek",no_rek.getText().toString());
-        postData.put("nama_bank", nama_bank.getText().toString());
+        postData.put("email",edtEmail.getText().toString());
+        postData.put("password",edtPassword.getText().toString());
 //        postData.put("nama_provinsi",nama_provinsi);
 //        postData.put("nama_kota",nama_kota);
 //        postData.put("nama_kecamatan",nama_wilayah);
@@ -355,187 +443,131 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
                     }
                 });
 
-
-//        postData.put("jk",jk);
-//        postData.put("provinsi",id_provinsi);
-//        postData.put("kota",id_kota);
-//        postData.put("kecamatan",id_wilayah);
-
-
-
-//        PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData, new AsyncResponse() {
-//            @Override
-//            public void processFinish(String s) {
-//                progressDialog.dismiss();
-//                if (s.contains("Pendaftaran berhasil")){
-//                    Toast.makeText(getApplicationContext(),"We've send a message to the email provided with a link to active your account. This helps us verify your identity.",Toast.LENGTH_LONG).show();
-//                    new AlertDialog.Builder(daftar.this)
-//                            .setTitle("Check Your Email")
-//                            .setMessage("We've send a message to the email provided with a link to active your account. This helps us verify your identity.")
-//                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//
-//                                    KosongField();
-//                                    finish();
-//                                }
-//                            }).show();
-//
-////            Log.d(TAG,body.toString());
-//                }else{
-//                    Toast.makeText(getApplicationContext(),"Gagal Mendaftar",Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//
-//        task.execute("https://trading.my.id/android/signup.php");
-//        task.setEachExceptionsHandler(new EachExceptionsHandler() {
-//            @Override
-//            public void handleIOException(IOException e) {
-//                Log.d(TAG,e.toString());
-//            }
-//
-//            @Override
-//            public void handleMalformedURLException(MalformedURLException e) {
-//                Log.d(TAG,e.toString());
-//            }
-//
-//            @Override
-//            public void handleProtocolException(ProtocolException e) {
-//                Log.d(TAG,e.toString());
-//            }
-//
-//            @Override
-//            public void handleUnsupportedEncodingException(UnsupportedEncodingException e) {
-//                Log.d(TAG,e.toString());
-//            }
-//        });
-
     }
-
-        private void getProvinsi(){
-        AndroidNetworking.get(BASE_URL + "province")
-                .addHeaders("key", KEY)
-                .setTag("test")
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        provinsiList.clear();
-                        try {
-                            JSONObject object = response.getJSONObject("rajaongkir");
-                            JSONArray array = object.getJSONArray("results");
-
-                            for (int i = 0; i < array.length(); i++){
-                                JSONObject obj = array.getJSONObject(i);
-                                Provinsi item = new Provinsi();
-                                item.setProvince_id(obj.getString("province_id"));
-                                item.setProvince(obj.getString("province"));
-                                provinsiList.add(item);
-                            }
-
-
-                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
-                            spin_provinsi.setVisibility(View.VISIBLE);
-                            ArrayAdapter<Provinsi> adapter = new ArrayAdapter<>(daftar.this, R.layout.support_simple_spinner_dropdown_item, provinsiList);
-                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                            //  spinner.setPrompt("Jenis Perangkat : ");
-                            spin_provinsi.setAdapter(adapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                    }
-                });
-    }
-    private void getKotaKabupaten(String id_provinsi){
-        AndroidNetworking.get(BASE_URL + "city?province="+id_provinsi)
-                .addHeaders("key", KEY)
-                .setTag("test")
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        kotaKabupatenList.clear();
-                        try {
-                            JSONObject object = response.getJSONObject("rajaongkir");
-                            JSONArray array = object.getJSONArray("results");
-
-                            for (int i = 0; i < array.length(); i++){
-                                JSONObject obj = array.getJSONObject(i);
-                                KotaKabupaten item = new KotaKabupaten();
-                                item.setCity_id(obj.getString("city_id"));
-                                item.setCity_name(obj.getString("city_name"));
-                                kotaKabupatenList.add(item);
-                            }
-
-
-                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
-                            spinner1.setVisibility(View.VISIBLE);
-                            ArrayAdapter<KotaKabupaten> adapter = new ArrayAdapter<KotaKabupaten>(daftar.this, R.layout.support_simple_spinner_dropdown_item, kotaKabupatenList);
-                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                            //  spinner.setPrompt("Jenis Perangkat : ");
-                            spinner1.setAdapter(adapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                    }
-                });
-    }
-    private void getKecamatan(String idkota){
-        AndroidNetworking.get(BASE_URL + "subdistrict?city="+idkota)
-                .addHeaders("key", KEY)
-                .setTag("test")
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        kecamatanList.clear();
-                        try {
-                            JSONObject object = response.getJSONObject("rajaongkir");
-                            JSONArray array = object.getJSONArray("results");
-
-                            for (int i = 0; i < array.length(); i++){
-                                JSONObject obj = array.getJSONObject(i);
-                                Kecamatan item = new Kecamatan();
-                                item.setSubdistrict_id(obj.getString("subdistrict_id"));
-                                item.setSubdistrict_name(obj.getString("subdistrict_name"));
-                                kecamatanList.add(item);
-                            }
-
-
-                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
-                            spinner2.setVisibility(View.VISIBLE);
-                            ArrayAdapter<Kecamatan> adapter = new ArrayAdapter<Kecamatan>(daftar.this, R.layout.support_simple_spinner_dropdown_item, kecamatanList);
-                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                            //  spinner.setPrompt("Jenis Perangkat : ");
-                            spinner2.setAdapter(adapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                    }
-                });
-    }
+//
+//        private void getProvinsi(){
+//        AndroidNetworking.get(BASE_URL + "province")
+//                .addHeaders("key", KEY)
+//                .setTag("test")
+//                .setPriority(Priority.LOW)
+//                .build()
+//                .getAsJSONObject(new JSONObjectRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        // do anything with response
+//                        provinsiList.clear();
+//                        try {
+//                            JSONObject object = response.getJSONObject("rajaongkir");
+//                            JSONArray array = object.getJSONArray("results");
+//
+//                            for (int i = 0; i < array.length(); i++){
+//                                JSONObject obj = array.getJSONObject(i);
+//                                Provinsi item = new Provinsi();
+//                                item.setProvince_id(obj.getString("province_id"));
+//                                item.setProvince(obj.getString("province"));
+//                                provinsiList.add(item);
+//                            }
+//
+//
+//                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
+//                            spin_provinsi.setVisibility(View.VISIBLE);
+//                            ArrayAdapter<Provinsi> adapter = new ArrayAdapter<>(daftar.this, R.layout.support_simple_spinner_dropdown_item, provinsiList);
+//                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+//                            //  spinner.setPrompt("Jenis Perangkat : ");
+//                            spin_provinsi.setAdapter(adapter);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    @Override
+//                    public void onError(ANError error) {
+//                        // handle error
+//                    }
+//                });
+//    }
+//    private void getKotaKabupaten(String id_provinsi){
+//        AndroidNetworking.get(BASE_URL + "city?province="+id_provinsi)
+//                .addHeaders("key", KEY)
+//                .setTag("test")
+//                .setPriority(Priority.LOW)
+//                .build()
+//                .getAsJSONObject(new JSONObjectRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        // do anything with response
+//                        kotaKabupatenList.clear();
+//                        try {
+//                            JSONObject object = response.getJSONObject("rajaongkir");
+//                            JSONArray array = object.getJSONArray("results");
+//
+//                            for (int i = 0; i < array.length(); i++){
+//                                JSONObject obj = array.getJSONObject(i);
+//                                KotaKabupaten item = new KotaKabupaten();
+//                                item.setCity_id(obj.getString("city_id"));
+//                                item.setCity_name(obj.getString("city_name"));
+//                                kotaKabupatenList.add(item);
+//                            }
+//
+//
+//                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
+//                            spinner1.setVisibility(View.VISIBLE);
+//                            ArrayAdapter<KotaKabupaten> adapter = new ArrayAdapter<KotaKabupaten>(daftar.this, R.layout.support_simple_spinner_dropdown_item, kotaKabupatenList);
+//                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+//                            //  spinner.setPrompt("Jenis Perangkat : ");
+//                            spinner1.setAdapter(adapter);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    @Override
+//                    public void onError(ANError error) {
+//                        // handle error
+//                    }
+//                });
+//    }
+//    private void getKecamatan(String idkota){
+//        AndroidNetworking.get(BASE_URL + "subdistrict?city="+idkota)
+//                .addHeaders("key", KEY)
+//                .setTag("test")
+//                .setPriority(Priority.LOW)
+//                .build()
+//                .getAsJSONObject(new JSONObjectRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        // do anything with response
+//                        kecamatanList.clear();
+//                        try {
+//                            JSONObject object = response.getJSONObject("rajaongkir");
+//                            JSONArray array = object.getJSONArray("results");
+//
+//                            for (int i = 0; i < array.length(); i++){
+//                                JSONObject obj = array.getJSONObject(i);
+//                                Kecamatan item = new Kecamatan();
+//                                item.setSubdistrict_id(obj.getString("subdistrict_id"));
+//                                item.setSubdistrict_name(obj.getString("subdistrict_name"));
+//                                kecamatanList.add(item);
+//                            }
+//
+//
+//                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
+//                            spinner2.setVisibility(View.VISIBLE);
+//                            ArrayAdapter<Kecamatan> adapter = new ArrayAdapter<Kecamatan>(daftar.this, R.layout.support_simple_spinner_dropdown_item, kecamatanList);
+//                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+//                            //  spinner.setPrompt("Jenis Perangkat : ");
+//                            spinner2.setAdapter(adapter);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    @Override
+//                    public void onError(ANError error) {
+//                        // handle error
+//                    }
+//                });
+//    }
 
 
     @Override

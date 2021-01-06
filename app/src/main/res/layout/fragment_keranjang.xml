@@ -11,43 +11,68 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/background_header"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgBackKeranjang"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_panah_kiri" />
 
                 <TextView
                     android:id="@+id/keranjang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/imgBackKeranjang"
                     android:fontFamily="@font/arialbold"
                     android:text="Keranjang Saya"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
-                    android:textSize="30sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:textSize="25sp"/>
 
-                <ImageView
-                    android:paddingTop="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="180dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/white_logo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="gone"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true">
+
+                    <ImageView
+                        android:id="@+id/img_search_keranjang"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_search_white" />
+
+                    <ImageView
+                        android:id="@+id/img_favorit_keranjang"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_favorite_white_border" />
+
+                    <ImageView
+                        android:id="@+id/img_notif_keranjang"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_notif_white" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
@@ -96,6 +121,7 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_margin="10dp"
                 android:layout_above="@+id/card"
@@ -104,8 +130,66 @@
                 android:text="Belanja 200rb FREE ONGKIR (Khusus Batam)"/>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_below="@+id/list_belanja"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/btn_belanja_lagi"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_list_gray"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/icon_plus"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tambah Lainnya"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/submitOrder"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/background_solid_red">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_keranjang"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Checkout Pesanan"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/card"
+                android:visibility="gone"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 app:cardBackgroundColor="@android:color/transparent"
@@ -150,7 +234,6 @@
                         android:layout_marginLeft="8dp"
                         android:layout_alignParentBottom="true">
                         <Button
-                            android:id="@+id/submitOrder"
                             android:text="Bayar"
                             android:textColor="@android:color/white"
                             android:background="@drawable/bg_masuk"
@@ -176,7 +259,7 @@
                             app:layout_constraintStart_toStartOf="parent"/>
 
                         <Button
-                            android:id="@+id/btn_belanja_lagi"
+
                             android:text="Belanja"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"

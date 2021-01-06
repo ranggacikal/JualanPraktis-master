@@ -18,6 +18,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.denzcoskun.imageslider.ImageSlider;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -31,9 +32,11 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.collection.ArraySet;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.provider.MediaStore;
 import android.text.Html;
@@ -79,11 +82,14 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.IDTansaksi.Shared;
 import www.starcom.com.jualanpraktis.IDTansaksi.idtransaksi;
+import www.starcom.com.jualanpraktis.Kategori.SliderUtils;
+import www.starcom.com.jualanpraktis.Kategori.ViewPagerAdapter;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.VolleySingleton;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.Spinner.Variasi;
+import www.starcom.com.jualanpraktis.adapter.ImageSliderAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukGambarAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukSejenisAdapter;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
@@ -110,19 +116,25 @@ public class ProdukDetailActivity extends AppCompatActivity {
     idtransaksi idtransaksi ;
     loginuser user ;
 
+    List<SliderUtils> sliderimg ;
+
     private ImageView gambar,main_gambar_list ;
     private TextView nama,harga,ket,harga_asli,txt_stok,txt_diskon, berat ;
     CollapsingToolbarLayout collapsingToolbarLayout ;
     ElegantNumberButton numberButton;
-    Button btn_keranjang ;
+    LinearLayout btn_keranjang ;
+    ViewPager pagerSlide;
+    ImageSlider imageSlider;
+    ArrayList<HashMap<String, String>> listGambar = new ArrayList<>();
+    ArrayList<String> listGambar2 = new ArrayList<>();
 
     String extra_harga,stok,diskon;
     String urlbase_api = "https://jualanpraktis.net/android/";
-    private RecyclerView recyclerViewImage,rv_produk_sejenis;
+    private RecyclerView recyclerViewImage,rv_produk_sejenis, rvSlider;
     private Spinner spn_variasi;
     List<Variasi> variasiList = new ArrayList<>();
     String id_variasi,nama_variasi,stok_variasi,id_sub_kategori_produk;
-    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi;
+    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit;
     CardView cvVariasi;
     ShimmerFrameLayout shimmerProdukLainnya;
 
@@ -142,6 +154,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sliderimg = new ArrayList<>();
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -171,6 +185,9 @@ public class ProdukDetailActivity extends AppCompatActivity {
         shareFb = findViewById(R.id.linear_facebook_detail_produk);
         shareWa = findViewById(R.id.linear_whatsapp_detail_produk);
         salinDeskripsi = findViewById(R.id.linear_salin_detail_produk);
+        rvSlider = findViewById(R.id.rv_slider);
+        linearFavorit = findViewById(R.id.linear_favorit_detail_produk);
+
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey(EXTRA_GAMBAR)) {
@@ -257,6 +274,18 @@ public class ProdukDetailActivity extends AppCompatActivity {
         }
 
 
+        linearFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SharedPrefManager.getInstance(ProdukDetailActivity.this).isLoggedIn()){
+                    tambahFavorit();
+                }else{
+                    Intent intent = new Intent(getApplicationContext(), login.class);
+                    startActivity(intent);
+                    Toast.makeText(ProdukDetailActivity.this,"Harap masuk terlebih dahulu",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         btn_keranjang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -339,6 +368,54 @@ public class ProdukDetailActivity extends AppCompatActivity {
         getDataProdukSejenis();
 
 
+    }
+
+    public void tambahFavorit(){
+        StringRequest request = new StringRequest(Request.Method.POST, "https://jualanpraktis.net/android/favorit.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("Data Berhasil Di Kirim")){
+                    /**   int total_berat = Integer.parseInt(numberButton.getNumber())*Integer.parseInt(getIntent().getExtras().getString(EXTRA_BERAT));
+                     new Database(getBaseContext()).addToChart(new order(
+                     "",
+                     getIntent().getExtras().getString(EXTRA_ID),
+                     getIntent().getExtras().getString(EXTRA_NAMA)+" - "+nama_variasi,
+                     extra_harga,
+                     numberButton.getNumber(),
+                     String.valueOf(total_berat)
+                     ));
+                     Log.d(TAG,getIntent().getExtras().getString(EXTRA_BERAT)); **/
+
+                    // finish();
+                    // Intent intent = new Intent(ProdukDetailActivity.this, MainActivity.class);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    // startActivity(intent);
+                    ProdukDetailActivity.this.finish();
+                    Toast.makeText(ProdukDetailActivity.this, "Berhasil Ditambahkan Ke Favorit ", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new HashMap<>();
+
+                params.put("id_produk",getIntent().getExtras().getString(EXTRA_ID));
+                params.put("customer",user.getId());
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     private void shareFacebook() {
@@ -481,6 +558,12 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
                             ProdukGambarAdapter adapter = new ProdukGambarAdapter(ProdukDetailActivity.this,hashMaps,gambar);
                             recyclerViewImage.setAdapter(adapter);
+                            ImageSliderAdapter adapter1 = new ImageSliderAdapter(hashMaps, ProdukDetailActivity.this);
+                            rvSlider.setAdapter(adapter1);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(ProdukDetailActivity.this,
+                                    LinearLayoutManager.HORIZONTAL, false);
+                            rvSlider.setLayoutManager(layoutManager);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -699,7 +782,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
              //   params.put("id_transaksi",idtransaksi.getId_transaksi());
                // params.put("berat_barang",getIntent().getExtras().getString(EXTRA_BERAT));
                 params.put("berat",String.valueOf(total_berat));
-                params.put("jumlah",numberButton.getNumber());
+                params.put("jumlah", "1");
                 params.put("harga_jual_item",extra_harga);
              //   params.put("harga_jual",extra_harga);
              //   params.put("time_limit",tomorrowAsString2);

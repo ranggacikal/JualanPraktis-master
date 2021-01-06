@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="260dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:layout_marginBottom="0.5dp"
@@ -26,71 +26,93 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
+            <ImageView
+                android:id="@+id/gambar_kategori"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter" />
+
+
+            <TextView
+                android:id="@+id/nama_produk"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="2dp"
+                android:maxLines="2"
+                android:text="Nama Produk"
+                android:textColor="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <ImageView
-                    android:id="@+id/gambar_kategori"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter" />
-
-
-                <TextView
-                    android:id="@+id/nama_produk"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="2dp"
-                    android:maxLines="2"
-                    android:text="Nama Produk"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/harga_asli"
-                        style="@style/TextAppearance.AppCompat.Caption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginEnd="1dp"
-                        android:text="Rp.20.000"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/holo_red_light"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/diskon"
-                        style="@style/TextAppearance.AppCompat.Caption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="8sp" />
-                </LinearLayout>
+                    android:id="@+id/img_rating_produk"
+                    android:layout_width="60dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ratings" />
 
                 <TextView
-                    android:id="@+id/harga_jual"
-                    style="@style/TextAppearance.AppCompat.Body2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/text_id_qty_produk_dibeli"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="373 Dibeli"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="10sp"
+                    android:layout_toRightOf="@id/img_rating_produk"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/harga_asli"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="1dp"
+                    android:text="Rp.20.000"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/diskon"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="2dp"
-                    android:text="Rp. 18.000"
+                    android:text=""
                     android:textAlignment="center"
-                    android:textColor="@android:color/holo_orange_dark"
-                    android:textSize="14sp" />
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/harga_jual"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="2dp"
+                android:text="Rp. 18.000"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,7 +120,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/share_fb_home"
@@ -115,9 +138,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="Facebook"
-                        android:layout_gravity="center"
                         android:textColor="#000"
                         android:textSize="7sp" />
 
@@ -139,9 +162,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="Whatsapp"
-                        android:layout_gravity="center"
                         android:textColor="#000"
                         android:textSize="7sp" />
 
@@ -163,9 +186,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="Salin Deskripsi"
-                        android:layout_gravity="center"
                         android:textColor="#000"
                         android:textSize="7sp" />
 

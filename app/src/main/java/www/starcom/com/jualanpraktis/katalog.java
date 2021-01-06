@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import www.starcom.com.jualanpraktis.adapter.Kategori2Adapter;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
 import www.starcom.com.jualanpraktis.dummy.DummyContent;
 
@@ -133,7 +134,7 @@ public class katalog extends Fragment {
 //                            ll_kategori.setVisibility(View.VISIBLE);
 
 
-                            KategoriAdapter adapter = new KategoriAdapter(getActivity(),kategoriList);
+                            Kategori2Adapter adapter = new Kategori2Adapter(getActivity(),kategoriList);
                             listKatalog.setAdapter(adapter);
 
 //                            getGambarIklan();

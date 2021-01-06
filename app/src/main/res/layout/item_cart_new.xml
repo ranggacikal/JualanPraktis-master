@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="10dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -74,7 +75,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="4dp"
                     android:text="Transfer Bank"
-                    android:textColor="@color/com_facebook_blue"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     android:textStyle="normal|bold"
                     android:typeface="sans"
@@ -83,28 +84,57 @@
                     app:layout_constraintTop_toTopOf="@id/gambar" />
 
                 <TextView
+                    android:id="@+id/item_variasi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="Variasi : "
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:typeface="sans"
+                    app:layout_constraintStart_toEndOf="@+id/gambar"
+                    app:layout_constraintTop_toBottomOf="@+id/card_item_nama"/>
+
+                <TextView
+                    android:id="@+id/card_item_variasi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Variasi : "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:typeface="sans"
+                    app:layout_constraintStart_toEndOf="@+id/item_variasi"
+                    app:layout_constraintTop_toTopOf="@+id/item_variasi"
+                    numberpicker:ignore="MissingConstraints" />
+
+                <TextView
                     android:id="@+id/card_item_harga"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
                     android:text="Rp. 200000"
-                    android:textColor="@android:color/holo_blue_light"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/gambar"
-                    app:layout_constraintTop_toBottomOf="@+id/card_item_nama" />
+                    app:layout_constraintTop_toBottomOf="@+id/item_variasi" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -117,24 +147,12 @@
                     android:paddingTop="2dp"
                     android:paddingRight="8dp"
                     android:paddingBottom="2dp"
+                    android:visibility="gone"
                     android:text="Tersisa 2 Produk"
                     android:textColor="@android:color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <www.starcom.com.jualanpraktis.utils.NumberPicker
-                    android:id="@+id/number_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/txt_sisa"
-                    app:layout_constraintStart_toEndOf="@id/txt_sisa"
-                    app:layout_constraintTop_toTopOf="@id/txt_sisa"
-                    numberpicker:focusable="false"
-                    numberpicker:max="20"
-                    numberpicker:min="1"
-                    numberpicker:unit="1" />
 
                 <ImageView
                     android:id="@+id/buang"
@@ -142,9 +160,8 @@
                     android:layout_height="30dp"
                     android:src="@drawable/ic_trash"
                     android:tint="#999"
-                    app:layout_constraintBottom_toBottomOf="@+id/txt_sisa"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txt_sisa" />
+                    numberpicker:ignore="MissingConstraints" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -177,25 +194,34 @@
                 app:textColor="@android:color/white"
                 app:textSize="6sp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/harga_dropshipper"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/background_border_grey"
                     android:imeOptions="actionDone"
                     android:hint="Masukkan Harga Jual"
                     android:inputType="number"
-                    android:padding="2dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/txt_sisa"
-                    app:layout_constraintBottom_toTopOf="@+id/txt_sisa"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txt_sisa" />
+                    android:paddingLeft="10dp"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            </LinearLayout>
+                <www.starcom.com.jualanpraktis.utils.NumberPicker
+                    android:id="@+id/number_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    numberpicker:focusable="false"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    numberpicker:max="20"
+                    numberpicker:min="1"
+                    numberpicker:unit="1" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

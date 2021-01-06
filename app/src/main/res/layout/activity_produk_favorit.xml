@@ -75,6 +75,8 @@
         android:id="@+id/recycler_produk_favorit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
         android:layout_marginTop="15dp"
         android:layout_below="@id/toolbarProdukFavorit"/>
 

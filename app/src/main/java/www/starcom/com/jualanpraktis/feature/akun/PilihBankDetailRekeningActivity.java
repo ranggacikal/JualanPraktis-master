@@ -1,6 +1,8 @@
 package www.starcom.com.jualanpraktis.feature.akun;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -9,10 +11,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.adapter.PilihBankAdapter;
+import www.starcom.com.jualanpraktis.interfaces.PilihBankClickInterface;
 import www.starcom.com.jualanpraktis.model.ListBank;
 
 public class PilihBankDetailRekeningActivity extends AppCompatActivity {
@@ -27,6 +32,8 @@ public class PilihBankDetailRekeningActivity extends AppCompatActivity {
     RecyclerView recyclerBankPopuler;
     @BindView(R.id.recycler_bank_lainnya)
     RecyclerView recyclerBankLainnya;
+
+    public ArrayList<String> namaBank = new ArrayList<>();
 
     public static final String ExtraNama = "extraNama";
     public static final String ExtraRekening = "extraRekening";
@@ -55,18 +62,30 @@ public class PilihBankDetailRekeningActivity extends AppCompatActivity {
             new ListBank("BJB", bjb)
     };
 
+    public String nama;
+    public String rekening;
+
+    public PilihBankDetailRekeningActivity(){
+
+    }
+
+    DetailRekeningBankActivity detailRekeningBankActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pilih_bank_detail_rekening);
         ButterKnife.bind(this);
 
+        nama = getIntent().getStringExtra(ExtraNama);
+        rekening = getIntent().getStringExtra(ExtraRekening);
+
         loadRecyclerPopulerBank();
     }
 
     private void loadRecyclerPopulerBank() {
 
-        PilihBankAdapter adapter = new PilihBankAdapter(PilihBankDetailRekeningActivity.this, listBankItem);
+        PilihBankAdapter adapter = new PilihBankAdapter(PilihBankDetailRekeningActivity.this, listBankItem, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(PilihBankDetailRekeningActivity.this, 3,
                 LinearLayoutManager.VERTICAL, false);
         recyclerBankPopuler.setHasFixedSize(true);

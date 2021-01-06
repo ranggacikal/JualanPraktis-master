@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,7 +69,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
     LinearLayoutManager linearLayoutManager;
 
     TextView total;
-    Button btnSubmit, btn_belanja_lagi;
+    LinearLayout btnSubmit, btn_belanja_lagi;
     loginuser user;
 
     List<order> list = new ArrayList<>();

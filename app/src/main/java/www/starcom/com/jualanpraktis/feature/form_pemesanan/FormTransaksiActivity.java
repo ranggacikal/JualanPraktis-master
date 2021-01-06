@@ -1,22 +1,11 @@
 package www.starcom.com.jualanpraktis.feature.form_pemesanan;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,16 +13,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,21 +38,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
-import www.starcom.com.jualanpraktis.MainActivity;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.SubKategori.order;
 import www.starcom.com.jualanpraktis.adapter.CartAdapter;
 import www.starcom.com.jualanpraktis.adapter.PilihPengirimanAdapter;
 import www.starcom.com.jualanpraktis.databinding.ActivityFormTransaksiBinding;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
-import www.starcom.com.jualanpraktis.feature.pembayaran.PembayaranActivity;
 import www.starcom.com.jualanpraktis.interfaces.PilihPengirimanClickInterface;
 import www.starcom.com.jualanpraktis.service.ServiceTask;
 

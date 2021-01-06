@@ -80,7 +80,6 @@ public class AlasanPembatalanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AlasanPembatalanActivity.this, StatusTransaksiActivity.class);
-                intent.putExtra(StatusTransaksiActivity.ExtraNamaForm, "alasanPembatalan");
                 startActivity(intent);
             }
         });

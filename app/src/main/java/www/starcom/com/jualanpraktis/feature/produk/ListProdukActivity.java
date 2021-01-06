@@ -120,7 +120,7 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
      //   binding.recyclerView.setHasFixedSize(true);
 
         //   binding.recyclerView.setNestedScrollingEnabled(false);
-        binding. rvSubKategori.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
+        binding. rvSubKategori.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
         binding.rvSubKategori.setHasFixedSize(true);
       //  binding.rvSubKategori.setNestedScrollingEnabled(false);
         //ViewCompat.setNestedScrollingEnabled(binding.recyclerView, false);

@@ -3,11 +3,13 @@ package www.starcom.com.jualanpraktis.adapter;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Random;
 
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukActivity;
@@ -51,6 +54,11 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
         HashMap<String, String> item = new HashMap<>();
         item = this.data.get(i);
 
+        Random rnd = new Random();
+        int currentColor = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+        viewHolder.linear_item_kategori.setBackgroundColor(currentColor);
+
         viewHolder.title.setText(item.get("kategori"));
 
         String img_url = "https://trading.my.id/img2/"+item.get("gambar");
@@ -67,31 +75,6 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
         cal1.add(Calendar.DATE, -1);
         final Calendar cal2 = Calendar.getInstance();
         cal2.add(Calendar.DATE, -2);
-
-        /**  String tanggalupload = "";
-        String tanggal = item.get("created_at");
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat fmtOut = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            Date date = fmt.parse(tanggal);
-             tanggalupload = fmtOut.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        String tanggalhariini = DateFormat.format("dd-MM-yyyy",cal).toString();
-        String tanggalhariminus2 = DateFormat.format("dd-MM-yyyy",cal1).toString();
-        String tanggalhariminus3 = DateFormat.format("dd-MM-yyyy",cal2).toString();
-
-        if (tanggalhariini.equals(tanggalupload)){
-            viewHolder.new_indicatior.setVisibility(View.VISIBLE);
-        }else if (tanggalhariminus2.equals(tanggalupload)){
-            viewHolder.new_indicatior.setVisibility(View.VISIBLE);
-        }/*else if (tanggalhariminus3.equals(tanggalupload)){
-            viewHolder.new_indicatior.setVisibility(View.VISIBLE);
-        } else{
-            viewHolder.new_indicatior.setVisibility(View.GONE);
-        } **/
 
         if (item.get("jumlah").equals("0")){
 
@@ -155,6 +138,7 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
         private TextView title,new_indicatior;
         private ImageView image;
         private RelativeLayout ll_kategori;
+        LinearLayout linear_item_kategori;
 
         public ViewHolder(View view) {
             super(view);
@@ -162,6 +146,7 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
             new_indicatior=view.findViewById(R.id.new_indicatior);
             image=view.findViewById(R.id.image);
             ll_kategori = view.findViewById(R.id.ll_kategori);
+            linear_item_kategori = view.findViewById(R.id.linear_item_kategori);
 
         }
     }
