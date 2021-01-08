@@ -11,6 +11,7 @@ import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataFavorite;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataVideo;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseRegister;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseUpdateRekening;
+import www.starcom.com.jualanpraktis.model_retrofit.model_bantuan.ResponseDataBantuan;
 
 public interface ApiService {
 
@@ -35,5 +36,8 @@ public interface ApiService {
                                                 @Field("atas_nama") String atas_nama,
                                                 @Field("no_rek") String no_rek,
                                                 @Field("nama_bank") String nama_bank);
+
+    @GET("list-bantuan.php")
+    Call<ResponseDataBantuan> dataBantuan();
 
 }

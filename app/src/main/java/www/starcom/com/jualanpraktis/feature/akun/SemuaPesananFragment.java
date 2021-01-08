@@ -6,28 +6,42 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
+import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.adapter.StatusTransaksiAdapter;
-import www.starcom.com.jualanpraktis.model.ListStatusTransaksi;
 
 public class SemuaPesananFragment extends Fragment {
 
-    String urlimage1 = "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//83/MTA-4603141/dettol_dettol_hand_sanitizer_50ml_full02_rae7qksc.jpg";
-    String urlimage2 = "https://ecs7.tokopedia.net/img/cache/700/VqbcmM/2020/10/6/162986da-65e8-4f00-afbf-ad8812e5a2eb.jpg";
-
-    ListStatusTransaksi[] listStatusTransaksi = new ListStatusTransaksi[]{
-
-            new ListStatusTransaksi("#ID99887732", "28 Desember 2020", "Hand Sanitizer", "Kesehatan/Medis", "Rp. 15.000", "Rp. 25.000",
-                    "Rp. 10. 000", "Dipesan", urlimage1),
-            new ListStatusTransaksi("#ID55533627", "29 Desember 2020", "Crewneck", "Pakaian", "Rp. 150.000", "Rp. 250.000",
-                    "Rp. 100. 000", "Dipesan", urlimage2)
-    };
-
     RecyclerView rvSemuaPesanan;
+    ShimmerFrameLayout shimmerSemuaPesanan;
+
+    loginuser user ;
+
+    ArrayList<HashMap<String, String>> dataSemuaPesanan = new ArrayList<>();
+//    ArrayList<JSONObject> dataProdukSemuaPesanan = new ArrayList<JSONObject>();
+    ArrayList<HashMap<String, String>> dataProdukSemuaPesanan = new ArrayList<>();
 
     public SemuaPesananFragment() {
 
@@ -45,6 +59,13 @@ public class SemuaPesananFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_semua_pesanan,container,false);
 
         rvSemuaPesanan = rootView.findViewById(R.id.recycler_status_transaksi_semua);
+        shimmerSemuaPesanan = rootView.findViewById(R.id.shimmerSemuaPesanan);
+
+        AndroidNetworking.initialize(getActivity().getApplicationContext());
+        user = SharedPrefManager.getInstance(getActivity()).getUser();
+
+        rvSemuaPesanan.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvSemuaPesanan.setHasFixedSize(true);
 
         loadRecycler();
 
@@ -53,10 +74,91 @@ public class SemuaPesananFragment extends Fragment {
 
     private void loadRecycler() {
 
-            StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(getActivity(), listStatusTransaksi);
-            rvSemuaPesanan.setHasFixedSize(true);
-            rvSemuaPesanan.setAdapter(adapter);
-            rvSemuaPesanan.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvSemuaPesanan.setVisibility(View.GONE);
+        shimmerSemuaPesanan.setVisibility(View.VISIBLE);
+        shimmerSemuaPesanan.startShimmerAnimation();
+
+        String url = "https://jualanpraktis.net/android/semua_pesanan.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("customer", user.getId())
+                .setTag(getActivity())
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        shimmerSemuaPesanan.stopShimmerAnimation();
+                        shimmerSemuaPesanan.setVisibility(View.GONE);
+
+                        dataSemuaPesanan.clear();
+                        dataProdukSemuaPesanan.clear();
+                        try {
+                            JSONArray array = response.getJSONArray("data");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String,String> data = new HashMap<>();
+                                data.put("id_transaksi",jsonObject.getString("id_transaksi"));
+                                data.put("tanggal",jsonObject.getString("tgl_transaksi"));
+                                data.put("status_pesanan",jsonObject.getString("status_pesanan"));
+
+
+
+                                JSONArray produk = jsonObject.getJSONArray("produk");
+                                for (int j = 0; j<produk.length(); j++){
+                                    JSONObject jsonObject1 = produk.getJSONObject(j);
+                                    data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("harga_produk", jsonObject1.getString("harga_produk"));
+                                    data.put("harga_jual", jsonObject1.getString("harga_jual"));
+                                    data.put("untung", jsonObject1.getString("untung"));
+//                                    dataProdukSemuaPesanan.add(data);
+                                }
+
+                                dataSemuaPesanan.add(data);
+                            }
+
+                            Log.d("dataSemuaPesanan", "onResponse: "+dataSemuaPesanan);
+                            rvSemuaPesanan.setVisibility(View.VISIBLE);
+                            StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(getActivity(), dataSemuaPesanan);
+                            rvSemuaPesanan.setAdapter(adapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        shimmerSemuaPesanan.stopShimmerAnimation();
+                        shimmerSemuaPesanan.setVisibility(View.GONE);
+                        dataSemuaPesanan.clear();
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
 
     }
 }

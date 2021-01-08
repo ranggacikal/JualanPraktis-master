@@ -63,7 +63,7 @@ public class RincianStatusTransaksiActivity extends AppCompatActivity {
         textTanggalRincianStatusTransaksi.setText(getIntent().getStringExtra(ExtraTanggal));
         textStatusRincianStatusTransaksi.setText(getIntent().getStringExtra(ExtraStatus));
 
-        loadRecycler();
+//        loadRecycler();
 
         linearBatalkanPesanan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +81,10 @@ public class RincianStatusTransaksiActivity extends AppCompatActivity {
 
     private void loadRecycler() {
 
-        StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(RincianStatusTransaksiActivity.this, listStatusTransaksi);
-        recyclerRincianTransaksi.setHasFixedSize(true);
-        recyclerRincianTransaksi.setAdapter(adapter);
-        recyclerRincianTransaksi.setLayoutManager(new LinearLayoutManager(RincianStatusTransaksiActivity.this));
+//        StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(RincianStatusTransaksiActivity.this, listStatusTransaksi);
+//        recyclerRincianTransaksi.setHasFixedSize(true);
+//        recyclerRincianTransaksi.setAdapter(adapter);
+//        recyclerRincianTransaksi.setLayoutManager(new LinearLayoutManager(RincianStatusTransaksiActivity.this));
 
     }
 }

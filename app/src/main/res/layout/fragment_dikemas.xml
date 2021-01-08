@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".feature.akun.DipesanFragment">
+    tools:context=".feature.akun.DikemasFragment">
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerDipesan"
+        android:id="@+id/shimmerDikemas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -33,11 +33,24 @@
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_status_transaksi_dipesan"
+    <TextView
+        android:id="@+id/text_kosong_dikemas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Belum Ada Data"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="15sp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_status_transaksi_dikemas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/garis_grey"
         android:layout_marginTop="20dp"/>
 
 </LinearLayout>

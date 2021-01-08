@@ -135,4 +135,15 @@
         android:textStyle="bold"
         android:textSize="25sp"/>
 
+    <Button
+        android:id="@+id/btn_edit_detail_rekening_bank"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:text="Edit"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textSize="25sp"/>
+
 </RelativeLayout>

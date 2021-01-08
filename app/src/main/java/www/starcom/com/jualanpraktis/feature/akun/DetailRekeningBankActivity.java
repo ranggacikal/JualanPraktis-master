@@ -64,7 +64,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
     @BindView(R.id.btn_simpan_detail_rekening_bank)
     Button btnSimpanDetailRekeningBank;
 
-    public ArrayList<String> dataRekening = new ArrayList<>();
+    Button btnEditDetailRekeningBank;
 
     public DetailRekeningBankActivity(){
 
@@ -77,6 +77,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
     loginuser user;
 
     ArrayList<HashMap<String, String>> responseKataSandi = new ArrayList<>();
+    ArrayList<HashMap<String, String>> dataRekening = new ArrayList<>();
 
     Dialog dialog;
 
@@ -85,6 +86,9 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_rekening_bank);
         ButterKnife.bind(this);
+
+        btnEditDetailRekeningBank = findViewById(R.id.btn_edit_detail_rekening_bank);
+
         user = SharedPrefManager.getInstance(DetailRekeningBankActivity.this).getUser();
 
         dialog = new Dialog(DetailRekeningBankActivity.this);
@@ -93,6 +97,8 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         get_nama_bank = getIntent().getStringExtra(ExtraNamaBank);
         nama = getIntent().getStringExtra("nama");
         rekening = getIntent().getStringExtra("rekening");
+
+        getDataRekeningDetail();
 
         if (get_nama_bank != null){
             txtNamaBank.setText(get_nama_bank);
@@ -119,6 +125,71 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                 validasiData();
             }
         });
+
+    }
+
+    private void getDataRekeningDetail() {
+
+        HashMap<String,String> param = new HashMap<>();
+        param.put("id_member", user.getId());
+
+        AndroidNetworking.post("https://jualanpraktis.net/android/detail_rekening.php")
+                .addBodyParameter(param)
+                .setTag(DetailRekeningBankActivity.this)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                        Toast.makeText(DetailRekeningBankActivity.this, "Password Sesuai", Toast.LENGTH_SHORT).show();
+                        //  progressDialog.dismiss();
+                        try {
+                            responseKataSandi.clear();
+                            JSONArray array = response.getJSONArray("data");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject object = array.getJSONObject(i);
+                                HashMap<String,String> item = new HashMap<>();
+                                item.put("atas_nama",object.getString("atas_nama"));
+                                item.put("no_rek",object.getString("no_rek"));
+                                item.put("nama_bank",object.getString("nama_bank"));
+                                dataRekening.add(item);
+
+                                for (int a = 0; a<dataRekening.size(); a++){
+
+                                    edtNamaBukuTabungan.setText((CharSequence) dataRekening.get(a).get("atas_nama"));
+                                    edtNoRekening.setText((CharSequence) dataRekening.get(a).get("no_rek"));
+                                    txtNamaBank.setText(dataRekening.get(a).get("nama_bank"));
+                                    btnSimpanDetailRekeningBank.setVisibility(View.GONE);
+                                    btnEditDetailRekeningBank.setVisibility(View.VISIBLE);
+
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            Toast.makeText(DetailRekeningBankActivity.this, "Gagal Ambil Data", Toast.LENGTH_SHORT).show();
+                            edtNamaBukuTabungan.setText("");
+                            edtNoRekening.setText("");
+                            txtNamaBank.setText("---");
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(DetailRekeningBankActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(DetailRekeningBankActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+                });
 
     }
 

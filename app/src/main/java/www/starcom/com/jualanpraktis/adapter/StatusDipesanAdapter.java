@@ -1,55 +1,47 @@
 package www.starcom.com.jualanpraktis.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import www.starcom.com.jualanpraktis.Login.Pref;
+import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
-import www.starcom.com.jualanpraktis.feature.akun.RincianStatusTransaksiActivity;
-import www.starcom.com.jualanpraktis.model.ListStatusTransaksi;
 
-public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksiAdapter.StatusTransaksiViewHolder> {
+public class StatusDipesanAdapter extends RecyclerView.Adapter<StatusDipesanAdapter.StatusDipesanViewHolder> {
 
     Context context;
-    ArrayList<HashMap<String, String>> listStatusTransaksi = new ArrayList<>();
+    ArrayList<HashMap<String, String>> listStatusDipesan = new ArrayList<>();
     private Pref pref;
 
-    public StatusTransaksiAdapter(Context context, ArrayList<HashMap<String, String>> listStatusTransaksi) {
+
+    public StatusDipesanAdapter(Context context, ArrayList<HashMap<String, String>> listStatusDipesan) {
         this.context = context;
-        this.listStatusTransaksi = listStatusTransaksi;
+        this.listStatusDipesan = listStatusDipesan;
     }
 
     @NonNull
     @Override
-    public StatusTransaksiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StatusDipesanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_status_transaksi, parent, false);
-        return new StatusTransaksiViewHolder(view);
+        return new StatusDipesanViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StatusTransaksiViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StatusDipesanViewHolder holder, int position) {
         HashMap<String, String> item = new HashMap<>();
-        item = this.listStatusTransaksi.get(position);
+        item = this.listStatusDipesan.get(position);
         pref = new Pref(context.getApplicationContext());
-
-//        String url = listStatusTransaksi[position].getImage();
-//        Glide.with(context)
-//                .load(url)
-//                .into(holder.imgBarang);
 
         holder.txtId.setText(item.get("id_transaksi"));
         holder.txtTanggal.setText(item.get("tanggal"));
@@ -60,35 +52,21 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
         holder.txtKeuntungan.setText(item.get("untung"));
         holder.txtStatus.setText(item.get("status_pesanan"));
 
-//        holder.linearProdukLain.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, RincianStatusTransaksiActivity.class);
-//                intent.putExtra(RincianStatusTransaksiActivity.ExtraId, listStatusTransaksi[position].getId());
-//                intent.putExtra(RincianStatusTransaksiActivity.ExtraTanggal, listStatusTransaksi[position].getTanggal());
-//                intent.putExtra(RincianStatusTransaksiActivity.ExtraStatus, listStatusTransaksi[position].getStatus_pesanan());
-//                intent.putExtra(RincianStatusTransaksiActivity.ExtraImage, listStatusTransaksi[position].getImage());
-//                intent.putExtra(RincianStatusTransaksiActivity.ExtraNama, listStatusTransaksi[position].getNama_barang());
-//                context.startActivity(intent);
-//            }
-//        });
-
     }
 
     @Override
     public int getItemCount() {
-        return (null != listStatusTransaksi ? listStatusTransaksi.size() : 0);
+        return (null != listStatusDipesan ? listStatusDipesan.size() : 0);
     }
 
-    public class StatusTransaksiViewHolder extends RecyclerView.ViewHolder {
+    public class StatusDipesanViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgBarang;
         LinearLayout linearProdukLain;
         TextView txtId, txtTanggal, txtNama, txtVariasi, txthargaProduk, txtHargaJual, txtKeuntungan, txtStatus;
 
-        public StatusTransaksiViewHolder(@NonNull View itemView) {
+        public StatusDipesanViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgBarang = itemView.findViewById(R.id.img_list_gambar_status_transaksi);
+
             linearProdukLain = itemView.findViewById(R.id.linear_list_produk_lain_status);
             txtId = itemView.findViewById(R.id.text_list_id_status_transaksi);
             txtTanggal = itemView.findViewById(R.id.text_list_tanggal_status_transaksi);

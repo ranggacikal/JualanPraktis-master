@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -30,21 +31,22 @@ import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
-import www.starcom.com.jualanpraktis.adapter.StatusDipesanAdapter;
-import www.starcom.com.jualanpraktis.adapter.StatusTransaksiAdapter;
+import www.starcom.com.jualanpraktis.adapter.StatusDikemasAdapter;
+import www.starcom.com.jualanpraktis.adapter.StatusDikirimAdapter;
 
-public class DipesanFragment extends Fragment {
+public class DikirimFragment extends Fragment {
 
-    RecyclerView rvDipesan;
-    ShimmerFrameLayout shimmerDipesan;
+    public DikirimFragment() {
+        // Required empty public constructor
+    }
+
+    RecyclerView rvDikirim;
+    ShimmerFrameLayout shimmerDikirim;
+    TextView txtKosong;
 
     loginuser user ;
 
-    ArrayList<HashMap<String, String>> dataDipesan = new ArrayList<>();
-
-    public DipesanFragment() {
-        // Required empty public constructor
-    }
+    ArrayList<HashMap<String, String>> dataDikirim = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,29 +57,28 @@ public class DipesanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_dipesan, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_dikirim, container, false);
 
-        rvDipesan = rootView.findViewById(R.id.recycler_status_transaksi_dipesan);
-        shimmerDipesan = rootView.findViewById(R.id.shimmerDipesan);
+        rvDikirim = rootView.findViewById(R.id.recycler_status_transaksi_dikirim);
+        shimmerDikirim = rootView.findViewById(R.id.shimmerDikirim);
 
         AndroidNetworking.initialize(getActivity().getApplicationContext());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
 
-        rvDipesan.setHasFixedSize(true);
-        rvDipesan.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvDikirim.setHasFixedSize(true);
+        rvDikirim.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        loadDataDipesan();
-
+        loadDataDikirim();
         return rootView;
     }
 
-    private void loadDataDipesan() {
+    private void loadDataDikirim() {
 
-        rvDipesan.setVisibility(View.GONE);
-        shimmerDipesan.setVisibility(View.VISIBLE);
-        shimmerDipesan.startShimmerAnimation();
+        rvDikirim.setVisibility(View.GONE);
+        shimmerDikirim.setVisibility(View.VISIBLE);
+        shimmerDikirim.startShimmerAnimation();
 
-        String url = "https://jualanpraktis.net/android/pesanan_masuk.php";
+        String url = "https://jualanpraktis.net/android/pesanan_dikirim.php";
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -94,10 +95,10 @@ public class DipesanFragment extends Fragment {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        shimmerDipesan.stopShimmerAnimation();
-                        shimmerDipesan.setVisibility(View.GONE);
+                        shimmerDikirim.stopShimmerAnimation();
+                        shimmerDikirim.setVisibility(View.GONE);
 
-                        dataDipesan.clear();
+                        dataDikirim.clear();
                         try {
                             JSONArray array = response.getJSONArray("data");
                             for (int i = 0;i<array.length();i++){
@@ -120,13 +121,16 @@ public class DipesanFragment extends Fragment {
 //                                    dataProdukSemuaPesanan.add(data);
                                 }
 
-                                dataDipesan.add(data);
+                                dataDikirim.add(data);
                             }
 
-                            Log.d("dataSemuaPesanan", "onResponse: "+dataDipesan);
-                            rvDipesan.setVisibility(View.VISIBLE);
-                            StatusDipesanAdapter adapter = new StatusDipesanAdapter(getActivity(), dataDipesan);
-                            rvDipesan.setAdapter(adapter);
+                            Log.d("dataSemuaPesanan", "onResponse: " + dataDikirim);
+                            rvDikirim.setVisibility(View.VISIBLE);
+                            StatusDikirimAdapter adapter = new StatusDikirimAdapter(getActivity(), dataDikirim);
+                            rvDikirim.setAdapter(adapter);
+                            if (dataDikirim.isEmpty()){
+                                txtKosong.setVisibility(View.VISIBLE);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,9 +139,9 @@ public class DipesanFragment extends Fragment {
 
                     @Override
                     public void onError(ANError anError) {
-                        shimmerDipesan.stopShimmerAnimation();
-                        shimmerDipesan.setVisibility(View.GONE);
-                        dataDipesan.clear();
+                        shimmerDikirim.stopShimmerAnimation();
+                        shimmerDikirim.setVisibility(View.GONE);
+                        dataDikirim.clear();
 
                         if (anError.getErrorCode() != 0) {
                             // received error from server

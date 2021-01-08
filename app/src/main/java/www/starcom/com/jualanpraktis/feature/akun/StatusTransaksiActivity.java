@@ -40,6 +40,10 @@ public class StatusTransaksiActivity extends AppCompatActivity {
     private SemuaPesananFragment semuaPesananFragment;
     private DipesanFragment dipesanFragment;
     private DibatalkanFragment dibatalkanFragment;
+    private DikemasFragment dikemasFragment;
+    private DikirimFragment dikirimFragment;
+    private DiterimaFragment diterimaFragment;
+    private DitukarFragment ditukarFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,10 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         semuaPesananFragment = new SemuaPesananFragment();
         dipesanFragment = new DipesanFragment();
         dibatalkanFragment = new DibatalkanFragment();
+        dikemasFragment = new DikemasFragment();
+        dikirimFragment = new DikirimFragment();
+        diterimaFragment = new DiterimaFragment();
+        ditukarFragment = new DitukarFragment();
         // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Semua"));
         tabLayout.addTab(tabLayout.newTab().setText("Dipesan"));
@@ -80,7 +88,6 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Diterima"));
         tabLayout.addTab(tabLayout.newTab().setText("Dibatalkan"));
         tabLayout.addTab(tabLayout.newTab().setText("Tukar"));
-        tabLayout.addTab(tabLayout.newTab().setText("Dikembalikan"));
 
     }
 
@@ -110,16 +117,19 @@ public class StatusTransaksiActivity extends AppCompatActivity {
                 replaceFragment(dipesanFragment);
                 break;
             case 2 :
-//                replaceFragment(listPesananFragment);
+                replaceFragment(dikemasFragment);
                 break;
             case 3 :
-//                replaceFragment(Keranjang);
+                replaceFragment(dikirimFragment);
                 break;
             case 4 :
-//                replaceFragment(AkunFragment);
+                replaceFragment(diterimaFragment);
                 break;
             case 5 :
                 replaceFragment(dibatalkanFragment);
+                break;
+            case 6 :
+                replaceFragment(ditukarFragment);
                 break;
 //            case 4 :
 //                if (pref.getLoginMethod().equals("coorperate")){
