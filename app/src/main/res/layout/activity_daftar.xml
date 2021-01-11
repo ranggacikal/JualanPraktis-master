@@ -36,6 +36,7 @@
                     android:id="@+id/edt_nama_daftar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/background_edittext_white"
                     android:hint="Nama"
                     android:inputType="text"
                     android:paddingLeft="10dp" />
@@ -58,6 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Email"
+                    android:background="@drawable/background_edittext_white"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="10dp" />
 
@@ -83,6 +85,7 @@
                         android:layout_width="280dp"
                         android:layout_height="match_parent"
                         android:hint="Password"
+                        android:background="@drawable/background_edittext_white"
                         android:inputType="textPassword"
                         android:paddingLeft="10dp" />
 

@@ -134,7 +134,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
     private Spinner spn_variasi;
     List<Variasi> variasiList = new ArrayList<>();
     String id_variasi,nama_variasi,stok_variasi,id_sub_kategori_produk;
-    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit;
+    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit, linearTambahKeranjang;
     CardView cvVariasi;
     ShimmerFrameLayout shimmerProdukLainnya;
 
@@ -187,6 +187,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
         salinDeskripsi = findViewById(R.id.linear_salin_detail_produk);
         rvSlider = findViewById(R.id.rv_slider);
         linearFavorit = findViewById(R.id.linear_favorit_detail_produk);
+        linearTambahKeranjang = findViewById(R.id.linear_tambah_keranjang);
 
 
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -312,6 +313,33 @@ public class ProdukDetailActivity extends AppCompatActivity {
                     Toast.makeText(ProdukDetailActivity.this,"Harap masuk terlebih dahulu",Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        linearTambahKeranjang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SharedPrefManager.getInstance(ProdukDetailActivity.this).isLoggedIn()){
+                    if (stok.equals("0")){
+                        Toast.makeText(ProdukDetailActivity.this,"Stok barang kosong",Toast.LENGTH_SHORT).show();
+                    }else if (Integer.parseInt(stok)<Integer.parseInt(numberButton.getNumber())){
+                        Toast.makeText(ProdukDetailActivity.this,"Pemesanan melebihi dari stok yang ada",Toast.LENGTH_SHORT).show();
+                    } else {
+                        //validasiRadio();
+                        valueJenisBelanja ="0";
+                        if (valueJenisBelanja==null){
+                            Toast.makeText(ProdukDetailActivity.this,"Pilih Jenis Belanja",Toast.LENGTH_SHORT).show();
+                        }else {
+                            pesan();
+                        }
+
+                    }
+
+                }else{
+                    Intent intent = new Intent(getApplicationContext(), login.class);
+                    startActivity(intent);
+                    Toast.makeText(ProdukDetailActivity.this,"Harap masuk terlebih dahulu",Toast.LENGTH_SHORT).show();
+                }
             }
         });
         collapsingToolbarLayout = findViewById(R.id.collap);

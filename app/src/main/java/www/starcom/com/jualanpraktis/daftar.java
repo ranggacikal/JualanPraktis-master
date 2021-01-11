@@ -1,9 +1,12 @@
 package www.starcom.com.jualanpraktis;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -15,14 +18,17 @@ import androidx.cardview.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -47,7 +53,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import www.starcom.com.jualanpraktis.Login.VolleySingleton;
@@ -56,6 +64,7 @@ import www.starcom.com.jualanpraktis.Spinner.KotaKabupaten;
 import www.starcom.com.jualanpraktis.Spinner.Provinsi;
 import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
 import www.starcom.com.jualanpraktis.databinding.ActivityResultTransferBinding;
+import www.starcom.com.jualanpraktis.feature.akun.UbahKataSandiActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ProdukDetailActivity;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseRegister;
 
@@ -78,6 +87,10 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     private CardView btn_daftar ;
     private String mediaPath;
     private ImageView uploadPicture;
+
+    AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
 
     String nama_kota,nama_wilayah,nama_provinsi ;
     Spinner spinner1,spinner2,spin_provinsi ;
@@ -204,18 +217,33 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+        String password = edtPassword.getText().toString();
+        int min_length = 6;
+
         if (edtNama.getText().toString().equals("")) {
             edtNama.setError("Nama belum di isi");
             edtNama.requestFocus();
-        } else if (edtEmail.getText().toString().equals("")) {
+            return;
+        }
+        if (edtEmail.getText().toString().equals("")) {
             edtEmail.setError("Email belum di isi");
             edtEmail.requestFocus();
-        } else if (edtPassword.getText().toString().equals("")) {
+            return;
+        }
+        if (edtPassword.getText().toString().equals("")) {
             edtPassword.setError("Password belum di isi");
             edtPassword.requestFocus();
+            return;
         }
-        signUpRetrofit();
+        if (password.length()<=min_length){
+            edtPassword.setError("Password Harus Lebih Dari 6 Karakter");
+            edtPassword.requestFocus();
+            return;
+        }
+        signUp();
+//        signUpRetrofit();
 //        Daftar();
+
 //        } else if (ulangpass.getText().toString().equals("")) {
 //            ulangpass.setError("Password belum di isi");
 //        } else if (!ulangpass.getText().toString().equals(password.getText().toString())) {
@@ -324,53 +352,76 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 
 
     public void signUp(){
-        StringRequest request = new StringRequest(Request.Method.POST, "https://jualanpraktis.net/android/signup.php", new Response.Listener<String>() {
+        String host = "https://jualanpraktis.net/android/signup.php";
+
+        ProgressDialog progressDialog = new ProgressDialog(daftar.this);
+        progressDialog.setTitle("Sign Up...");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("email", edtEmail.getText().toString());
+        params.put("password", edtPassword.getText().toString());
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+        AndroidNetworking.post(host)
+                .addBodyParameter(params)
+                .setTag(daftar.this)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        Toast.makeText(daftar.this, "Berhasil Daftar Akun", Toast.LENGTH_SHORT).show();
+                        tampilDialogCheckEmail();
+
+
+                        try {
+                            Toast.makeText(getApplicationContext(), response.getString("response"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Email Sudah Digunakan", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+    }
+
+    private void tampilDialogCheckEmail() {
+
+        Dialog alertDialog = new Dialog(this);
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        alertDialog.setContentView(R.layout.dialog_check_email);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+
+        Button btnDone = alertDialog.findViewById(R.id.btn_done_dialog_check_email);
+
+        btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(String response) {
-                if (response.equals("Data Berhasil Di Kirim")){
-                    /**   int total_berat = Integer.parseInt(numberButton.getNumber())*Integer.parseInt(getIntent().getExtras().getString(EXTRA_BERAT));
-                     new Database(getBaseContext()).addToChart(new order(
-                     "",
-                     getIntent().getExtras().getString(EXTRA_ID),
-                     getIntent().getExtras().getString(EXTRA_NAMA)+" - "+nama_variasi,
-                     extra_harga,
-                     numberButton.getNumber(),
-                     String.valueOf(total_berat)
-                     ));
-                     Log.d(TAG,getIntent().getExtras().getString(EXTRA_BERAT)); **/
-
-                    // finish();
-                    // Intent intent = new Intent(ProdukDetailActivity.this, MainActivity.class);
-                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    // startActivity(intent);
-                    finish();
-                    KosongField();
-                    Toast.makeText(daftar.this, "Berhasil Tambah Data ", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(daftar.this, "Gagal", Toast.LENGTH_SHORT).show();
-                }
-
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                finish();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(daftar.this, "Gagal", Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+        });
 
-                Map<String,String> params = new HashMap<>();
+        alertDialog.show();
 
-                params.put("nama", edtNama.getText().toString());
-                params.put("email", edtEmail.getText().toString());
-                params.put("password", edtPassword.getText().toString());
-
-                return params;
-            }
-        };
-
-        VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     public void Daftar(){
@@ -399,9 +450,8 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 //        postData.put("kecamatan",id_wilayah);
         //postData.put("files", body.toString());
 
-        AndroidNetworking.upload("https://jualanpraktis.net/android/signup.php")
-                .addMultipartParameter(postData)
-                .addMultipartFile("files",new File(mediaPath))
+        AndroidNetworking.post("https://jualanpraktis.net/android/signup.php")
+                .addBodyParameter(postData)
                 .setTag(activity)
                 .setPriority(Priority.HIGH)
                 .build()
@@ -415,31 +465,20 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
-                        if (response.contains("Pendaftaran berhasil")){
                             // progressDialog.dismiss();
 //                            Intent intent = new Intent(activity, MainActivity.class);
 //                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
 //                            finish();
-                            Toast.makeText(getApplicationContext(),"We've send a message to the email provided with a link to active your account. This helps us verify your identity.",Toast.LENGTH_LONG).show();
-                            new AlertDialog.Builder(daftar.this)
-                            .setTitle("Check Your Email")
-                            .setMessage("We've send a message to the email provided with a link to active your account. This helps us verify your identity.")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    KosongField();
-                                    finish();
-                                }
-                            }).show();
-                        }
+                            Toast.makeText(activity, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.dismiss();
-                        Toast.makeText(activity,"Put error here",Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity,anError.getErrorDetail(),Toast.LENGTH_LONG).show();
                     }
                 });
 

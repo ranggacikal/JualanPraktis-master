@@ -1,5 +1,6 @@
 package www.starcom.com.jualanpraktis.feature.akun;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import retrofit2.Response;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
+import www.starcom.com.jualanpraktis.SearchResultsActivity;
 import www.starcom.com.jualanpraktis.adapter.FavoritAdapter;
 import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
 import www.starcom.com.jualanpraktis.model.ListFavorit;
@@ -72,6 +74,21 @@ public class ProdukFavoritActivity extends AppCompatActivity {
         recyclerProdukFavorit.setLayoutManager(gridLayoutManager);
 
         user = SharedPrefManager.getInstance(ProdukFavoritActivity.this).getUser();
+
+        imgSearchFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProdukFavoritActivity.this, SearchResultsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgNotifFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProdukFavoritActivity.this, NotifikasiActivity.class));
+            }
+        });
 
 
     }

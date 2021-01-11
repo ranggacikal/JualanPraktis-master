@@ -78,7 +78,7 @@
                     app:layout_constraintTop_toTopOf="@id/cari" >
 
                     <ImageView
-                        android:id="@+id/img_search_dashboard"
+                        android:id="@+id/img_chat_dashboard"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"

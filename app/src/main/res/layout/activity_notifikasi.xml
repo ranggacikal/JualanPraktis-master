@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".feature.akun.NotifikasiActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarNotifikasi"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/background_header"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgBackNotifikasi"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_panah_kiri" />
+
+            <TextView
+                android:id="@+id/notifikasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/imgBackNotifikasi"
+                android:fontFamily="@font/arialbold"
+                android:text="Notifikasi"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_notifikasi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="17dp"
+            android:src="@drawable/profile_jualan"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JualanPraktis"
+                android:layout_marginStart="15dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 Produk Dapur ini pasti menarik buat kamu!"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="17dp"
+            android:src="@drawable/profile_jualan"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JualanPraktis"
+                android:layout_marginStart="15dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flash sale segera berakhir ni! ayoo Segera belanjakan"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="17dp"
+            android:src="@drawable/profile_jualan"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JualanPraktis"
+                android:layout_marginStart="15dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ayo ikuti tutorial gratis dari jualan praktis"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/arialrounded"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray" />
+
+</LinearLayout>

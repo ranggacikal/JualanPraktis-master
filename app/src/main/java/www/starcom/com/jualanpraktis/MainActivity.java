@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private ListPesananFragment listPesananFragment;
     private ListBelanjaBulananFragment listBelanjaBulananFragment;
     private katalog Katalog;
+    private PanduanFragment panduanFragment;
 
     private TabLayout tabLayout;
 
@@ -203,10 +204,11 @@ public class MainActivity extends AppCompatActivity {
         listPesananFragment = new ListPesananFragment();
         listBelanjaBulananFragment = new ListBelanjaBulananFragment();
         Katalog = new katalog();
+        panduanFragment = new PanduanFragment();
        // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.untuk_anda_icon));
         tabLayout.addTab(tabLayout.newTab().setText("Kategori").setIcon(R.drawable.katalog_icon__red_));
-        tabLayout.addTab(tabLayout.newTab().setText("Pesanan").setIcon(R.drawable.pesanan_icon__red_));
+        tabLayout.addTab(tabLayout.newTab().setText("Panduan").setIcon(R.drawable.pesanan_icon__red_));
         tabLayout.addTab(tabLayout.newTab().setText("Keranjang").setIcon(R.drawable.icon_cart));
 //        int tab = getIntent().getIntExtra("tab",0);
 //        if (tab==2){
@@ -248,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(Katalog);
                 break;
             case 2 :
-                replaceFragment(listPesananFragment);
+                replaceFragment(panduanFragment);
                 break;
             case 3 :
                 replaceFragment(Keranjang);

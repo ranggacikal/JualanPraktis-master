@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,7 +68,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
     Button btnEditDetailRekeningBank;
 
-    public DetailRekeningBankActivity(){
+    public DetailRekeningBankActivity() {
 
     }
 
@@ -93,6 +95,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
         dialog = new Dialog(DetailRekeningBankActivity.this);
         dialog.setContentView(R.layout.dialog_konfirmasi_password);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         get_nama_bank = getIntent().getStringExtra(ExtraNamaBank);
         nama = getIntent().getStringExtra("nama");
@@ -100,15 +103,17 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
         getDataRekeningDetail();
 
-        if (get_nama_bank != null){
+        validasiForm();
+
+        if (get_nama_bank != null) {
             txtNamaBank.setText(get_nama_bank);
         }
 
-        if (nama != null){
+        if (nama != null) {
             edtNamaBukuTabungan.setText(nama);
         }
 
-        if (rekening != null){
+        if (rekening != null) {
             edtNoRekening.setText(rekening);
         }
 
@@ -128,9 +133,23 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
     }
 
+    private void validasiForm() {
+
+        String namarekening = edtNamaBukuTabungan.getText().toString();
+        String norekening = edtNoRekening.getText().toString();
+
+        if (namarekening == null && norekening == null) {
+
+            edtNamaBukuTabungan.setText("");
+            edtNoRekening.setText("");
+            txtNamaBank.setText("---");
+
+        }
+    }
+
     private void getDataRekeningDetail() {
 
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String, String> param = new HashMap<>();
         param.put("id_member", user.getId());
 
         AndroidNetworking.post("https://jualanpraktis.net/android/detail_rekening.php")
@@ -146,23 +165,21 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                         try {
                             responseKataSandi.clear();
                             JSONArray array = response.getJSONArray("data");
-                            for (int i = 0;i<array.length();i++){
+
+                            for (int i = 0; i < array.length(); i++) {
                                 JSONObject object = array.getJSONObject(i);
-                                HashMap<String,String> item = new HashMap<>();
-                                item.put("atas_nama",object.getString("atas_nama"));
-                                item.put("no_rek",object.getString("no_rek"));
-                                item.put("nama_bank",object.getString("nama_bank"));
+                                HashMap<String, String> item = new HashMap<>();
+                                item.put("atas_nama", object.getString("atas_nama"));
+                                item.put("no_rek", object.getString("no_rek"));
+                                item.put("nama_bank", object.getString("nama_bank"));
+                                edtNamaBukuTabungan.setText(object.getString("atas_nama"));
+                                edtNoRekening.setText(object.getString("no_rek"));
+                                txtNamaBank.setText(object.getString("nama_bank"));
+                                btnEditDetailRekeningBank.setVisibility(View.VISIBLE);
+                                btnSimpanDetailRekeningBank.setVisibility(View.GONE);
                                 dataRekening.add(item);
 
-                                for (int a = 0; a<dataRekening.size(); a++){
 
-                                    edtNamaBukuTabungan.setText((CharSequence) dataRekening.get(a).get("atas_nama"));
-                                    edtNoRekening.setText((CharSequence) dataRekening.get(a).get("no_rek"));
-                                    txtNamaBank.setText(dataRekening.get(a).get("nama_bank"));
-                                    btnSimpanDetailRekeningBank.setVisibility(View.GONE);
-                                    btnEditDetailRekeningBank.setVisibility(View.VISIBLE);
-
-                                }
                             }
 
                         } catch (JSONException e) {
@@ -179,11 +196,13 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                             edtNamaBukuTabungan.setText("");
                             edtNoRekening.setText("");
                             txtNamaBank.setText("---");
+                            btnSimpanDetailRekeningBank.setVisibility(View.VISIBLE);
+                            btnEditDetailRekeningBank.setVisibility(View.GONE);
                         } else {
                             // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            if (anError.getErrorDetail().equals("connectionError")){
+                            if (anError.getErrorDetail().equals("connectionError")) {
                                 Toast.makeText(DetailRekeningBankActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(DetailRekeningBankActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -195,19 +214,19 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
     private void validasiData() {
 
-        if (edtNamaBukuTabungan.getText().toString().equals("")){
+        if (edtNamaBukuTabungan.getText().toString().equals("")) {
             edtNamaBukuTabungan.setError("Tidak Boleh Kosong");
             edtNamaBukuTabungan.requestFocus();
             return;
         }
 
-        if (edtNoRekening.getText().toString().equals("")){
+        if (edtNoRekening.getText().toString().equals("")) {
             edtNoRekening.setError("Tidak Boleh Kosong");
             edtNoRekening.requestFocus();
             return;
         }
 
-        if (get_nama_bank == null){
+        if (get_nama_bank == null) {
             Toast.makeText(this, "Siahkan Pilih Bank Terlebih Dahulu", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -224,13 +243,18 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
         dialog.show();
 
-
+        txtBatal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         txtOke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String kata_sandi = edtMasukanSandi.getText().toString();
-                HashMap<String,String> param = new HashMap<>();
+                HashMap<String, String> param = new HashMap<>();
                 param.put("id_member", user.getId());
                 param.put("password1", kata_sandi);
 
@@ -247,10 +271,10 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                                 try {
                                     responseKataSandi.clear();
                                     JSONArray array = response.getJSONArray("data");
-                                    for (int i = 0;i<array.length();i++){
+                                    for (int i = 0; i < array.length(); i++) {
                                         JSONObject object = array.getJSONObject(i);
-                                        HashMap<String,String> item = new HashMap<>();
-                                        item.put("response",object.getString("response"));
+                                        HashMap<String, String> item = new HashMap<>();
+                                        item.put("response", object.getString("response"));
                                         responseKataSandi.add(item);
                                     }
 
@@ -267,13 +291,13 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
                                 if (anError.getErrorCode() != 0) {
                                     Toast.makeText(DetailRekeningBankActivity.this, "Kata Sandi Salah.", Toast.LENGTH_SHORT).show();
-                                    Log.d("CekData", "onError: "+user.getId());
-                                    Log.d("CekData", "onError: "+kata_sandi);
+                                    Log.d("CekData", "onError: " + user.getId());
+                                    Log.d("CekData", "onError: " + kata_sandi);
                                 } else {
                                     // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                    if (anError.getErrorDetail().equals("connectionError")){
+                                    if (anError.getErrorDetail().equals("connectionError")) {
                                         Toast.makeText(DetailRekeningBankActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
-                                    }else {
+                                    } else {
                                         Toast.makeText(DetailRekeningBankActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -301,23 +325,23 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseUpdateRekening> call, Response<ResponseUpdateRekening> response) {
 
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     String pesan = response.body().getMessage();
                     progressDialog.dismiss();
 
-                    if (pesan.equals("Perubahan profile berhasil disimpan")){
+                    if (pesan.equals("Perubahan profile berhasil disimpan")) {
 
                         Toast.makeText(DetailRekeningBankActivity.this, "Berhasil Update", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         progressDialog.dismiss();
 
-                    }else{
+                    } else {
                         Toast.makeText(DetailRekeningBankActivity.this, "Gagal Update", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
 
-                }else{
+                } else {
                     Toast.makeText(DetailRekeningBankActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }

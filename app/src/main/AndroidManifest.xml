@@ -39,7 +39,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".WelcomePageActivity"></activity>
+        <activity android:name=".feature.akun.NotifikasiActivity"></activity>
+        <activity android:name=".feature.akun.SearchFavoritActivity" />
+        <activity android:name=".PanduanActivity" />
+        <activity android:name=".WelcomePageActivity" />
         <activity android:name=".feature.chat.ChatActivity" />
         <activity android:name=".feature.akun.BantuanActivity" />
         <activity android:name=".feature.akun.UbahKataSandiActivity" />

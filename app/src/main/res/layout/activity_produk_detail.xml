@@ -708,6 +708,7 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
+                android:id="@+id/linear_tambah_keranjang"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"

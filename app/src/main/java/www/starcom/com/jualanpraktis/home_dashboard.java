@@ -54,7 +54,9 @@ import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
 import www.starcom.com.jualanpraktis.SubKategori.objectsub;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
+import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
 import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
+import www.starcom.com.jualanpraktis.feature.chat.ChatActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukDiskonActivity;
 import www.starcom.com.jualanpraktis.model.ListProduk;
@@ -97,7 +99,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     private ShimmerFrameLayout shimmer,shimmerAllProduk,shimmer_kategori;
 
     //iklan
-    ImageView imgIklan1,imgIklan2,imgIklan3,imgIklan4, imgFavorite;
+    ImageView imgIklan1,imgIklan2,imgIklan3,imgIklan4, imgFavorite, imgNotif, imgChat;
     LinearLayout lllistproudk,ll_all_produk,ll_kategori;
     Button btn_see_all;
 
@@ -151,6 +153,8 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
         sendRequest();
 
+        imgChat = rootView.findViewById(R.id.img_chat_dashboard);
+        imgNotif = rootView.findViewById(R.id.img_notif_dashboard);
         imgFavorite = rootView.findViewById(R.id.img_favorite_dashboard);
         lllistproudk = rootView.findViewById(R.id.lllistproudk);
         ll_all_produk = rootView.findViewById(R.id.ll_all_produk);
@@ -211,6 +215,20 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
+        imgNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), NotifikasiActivity.class));
+            }
+        });
+
+        imgChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ChatActivity.class));
             }
         });
 
