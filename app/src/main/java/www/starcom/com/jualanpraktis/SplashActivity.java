@@ -50,22 +50,22 @@ public class SplashActivity extends AppCompatActivity {
         AndroidNetworking.initialize(SplashActivity.this.getApplicationContext());
         user = SharedPrefManager.getInstance(SplashActivity.this).getUser();
 
-//        Context pContext;
-//        pContext = this;
-//
-//        try {
-//            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                String hashKey = new String(Base64.encode(md.digest(), 0));
-//                Log.d("HashKey", "key: "+hashKey);
-//            }
-//        } catch (NoSuchAlgorithmException e) {
-//            Log.e("SplashActivity", "printHashKey()", e);
-//        } catch (Exception e) {
-//            Log.e("SplashActivity", "printHashKey()", e);
-//        }
+        Context pContext;
+        pContext = this;
+
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                Log.d("HashKey", "key: "+hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("SplashActivity", "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e("SplashActivity", "printHashKey()", e);
+        }
 
 
         new Handler().postDelayed(new Runnable() {

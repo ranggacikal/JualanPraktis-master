@@ -56,6 +56,13 @@ public class PilihBankAdapter extends RecyclerView.Adapter<PilihBankAdapter.Pili
             @Override
             public void onClick(View v) {
 
+
+            }
+        });
+
+        holder.imgBank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 String intentNama = pilihBankDetailRekeningActivity.nama;
                 String intentRekening = pilihBankDetailRekeningActivity.rekening;
                 Intent intent = new Intent(context, DetailRekeningBankActivity.class);
@@ -68,12 +75,6 @@ public class PilihBankAdapter extends RecyclerView.Adapter<PilihBankAdapter.Pili
                 ((PilihBankDetailRekeningActivity)context).startActivityForResult(intent, 0);
                 ((PilihBankDetailRekeningActivity)context).finish();
                 Log.d("PilihBankAdapter", "onClick Data: "+namaBank);
-            }
-        });
-
-        holder.imgBank.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
             }
         });
 

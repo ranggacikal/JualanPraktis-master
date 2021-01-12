@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -86,16 +88,16 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     private static final String URL_LOGIN = "https://jualanpraktis.net/android/login.php";
     private final String TAG = this.getClass().getName();
 
-    private Button btn_masuk,btn_daftar,btn_coorperate;
+    private Button btn_masuk, btn_daftar, btn_coorperate;
     private ImageView coba;
-    private EditText loginEmail,loginPass;
+    private EditText loginEmail, loginPass;
     private TextView txt_lupa_password;
     ProgressBar progressBar;
     String username, password;
 
     private AkunFragment AkunFragment;
     ProgressDialog progressDialog;
-    private TextView term_and_condition,kebijakan_privasi;
+    private TextView term_and_condition, kebijakan_privasi;
 
 
     //google
@@ -105,22 +107,23 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     //facebook
     CallbackManager callbackManager;
     private FirebaseAuth mAuth;
-    private ImageView btnFacebook,btnGoogleLogin;
+    private ImageView btnFacebook, btnGoogleLogin;
 
     Pref pref;
     CustomProgressDialog progress;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        progressDialog =new ProgressDialog(login.this);
+        progressDialog = new ProgressDialog(login.this);
         progress = new CustomProgressDialog(login.this);
         AndroidNetworking.initialize(getApplicationContext());
         pref = new Pref(getApplicationContext());
         //FirebaseApp.initializeApp(getApplicationContext());
         //facebook
-       // callbackManager = CallbackManager.Factory.create();
+        // callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
 
         progressBar = findViewById(R.id.progressBar);
@@ -147,17 +150,17 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout.LayoutParams.MATCH_PARENT
                 );
                 edt_email.setLayoutParams(lp);
-                edt_email.setPadding(16,16,16,16);
+                edt_email.setPadding(16, 16, 16, 16);
                 alertdialog.setView(edt_email);
                 alertdialog.setIcon(R.drawable.ic_baseline_email_24);
 
                 alertdialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!edt_email.getText().toString().equals("")){
+                        if (!edt_email.getText().toString().equals("")) {
                             postLupaPassword(edt_email.getText().toString());
-                        }else {
-                            Toast.makeText(login.this,"Masukan Email",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(login.this, "Masukan Email", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -186,8 +189,8 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 } else if (TextUtils.isEmpty(password)) {
                     loginPass.setError("Password Belum Di isi");
                     loginPass.requestFocus();
-                } else{
-                    userLogin(username,password);
+                } else {
+                    userLogin(username, password);
                 }
             }
         });
@@ -201,9 +204,9 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-    //   SignInButton btnGoogle = findViewById(R.id.btnGoogle);
+        //   SignInButton btnGoogle = findViewById(R.id.btnGoogle);
         btnGoogleLogin = findViewById(R.id.btnGoogleLogin);
-      //  btnGoogle.setSize(SignInButton.SIZE_STANDARD);
+        //  btnGoogle.setSize(SignInButton.SIZE_STANDARD);
         btnGoogleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +222,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         btnFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(login.this, Arrays.asList("email","public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(login.this, Arrays.asList("email", "public_profile"));
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
@@ -234,15 +237,15 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onCancel() {
                         Log.d(TAG, "facebook:onCancel");
-                        Toast.makeText(getApplicationContext(),"ke cancel",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "ke cancel", Toast.LENGTH_LONG).show();
                         // ...
                     }
 
                     @Override
                     public void onError(FacebookException error) {
-                        Log.d(TAG, "facebook:onError", error);
+                        Log.d("facebookLoginError", "facebook:onError", error);
 
-                        Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
                         // ...
                     }
                 });
@@ -252,34 +255,32 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         });
 
 
-        if(LoginManager.getInstance()!=null){
-          //  LoginManager.getInstance().logOut();
+        if (LoginManager.getInstance() != null) {
+            //  LoginManager.getInstance().logOut();
         }
 
 
-        term_and_condition.setPaintFlags(term_and_condition.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
-        kebijakan_privasi.setPaintFlags(kebijakan_privasi.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        term_and_condition.setPaintFlags(term_and_condition.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        kebijakan_privasi.setPaintFlags(kebijakan_privasi.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         term_and_condition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(login.this,WebLawActivity.class);
-                intent.putExtra("title","Term and Contitions");
-                intent.putExtra("url","file:///android_asset/term_and_condition.html");
+                Intent intent = new Intent(login.this, WebLawActivity.class);
+                intent.putExtra("title", "Term and Contitions");
+                intent.putExtra("url", "file:///android_asset/term_and_condition.html");
                 startActivity(intent);
             }
         });
         kebijakan_privasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(login.this,WebLawActivity.class);
-                intent.putExtra("title","Kebijakan Privasi");
-                intent.putExtra("url","file:///android_asset/kebijakan_privasi.html");
+                Intent intent = new Intent(login.this, WebLawActivity.class);
+                intent.putExtra("title", "Kebijakan Privasi");
+                intent.putExtra("url", "file:///android_asset/kebijakan_privasi.html");
                 startActivity(intent);
 
             }
         });
-
-
 
 
     }
@@ -292,7 +293,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }else{
+        } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
         }
@@ -302,7 +303,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     //Daftar
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(login.this,daftar.class);
+        Intent intent = new Intent(login.this, daftar.class);
         startActivity(intent);
         //getActivity().finish();
     }
@@ -322,12 +323,12 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             JSONArray jsonArray = obj.getJSONArray("response");
                             //JSONObject userJson = obj.getJSONObject("login");
 
-                            for(int i=0;i<jsonArray.length();i++) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String getObject = jsonObject.toString();
                                 JSONObject object = new JSONObject(getObject);
 
-                                if (object.getString("status").equals("1")){
+                                if (object.getString("status").equals("1")) {
                                     loginuser user = new loginuser(
                                             object.getString("id_member"),
                                             object.getString("kode"),
@@ -360,17 +361,17 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                                     //storing the user in shared preferences
                                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                                    startActivity(new Intent(login.this,MainActivity.class)
+                                    startActivity(new Intent(login.this, MainActivity.class)
                                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                     finish();
                                     Toast.makeText(login.this, "Berhasil Login", Toast.LENGTH_SHORT).show();
-                                }else {
+                                } else {
                                     Toast.makeText(login.this, "Harap lakukan verifikasi email terlebih dahulu.", Toast.LENGTH_SHORT).show();
                                 }
 
 
                             }
-                                //starting the profile activity
+                            //starting the profile activity
 
 
                         } catch (JSONException e) {
@@ -385,7 +386,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(login.this, "Gagal Login", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
-                     //   progressDialog.dismiss();
+                        //   progressDialog.dismiss();
 
                     }
                 }) {
@@ -418,32 +419,32 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             String nama = user.getDisplayName();
                             String email = user.getEmail();
                             String no_hp = user.getPhoneNumber();
-                            if (no_hp==null){
+                            if (no_hp == null) {
                                 no_hp = "";
                             }
                             Uri profile = user.getPhotoUrl();
 
 
-                          if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                              new AlertDialog.Builder(login.this)
-                                      .setTitle("Perhatian")
-                                      .setMessage("Email facebook anda tidak terdeteksi, silahkan daftar biasa atau masukkan email anda pada akun facebook anda.")
-                                      .setPositiveButton("Daftar", new DialogInterface.OnClickListener() {
-                                          @Override
-                                          public void onClick(DialogInterface dialog, int which) {
-                                              Intent intent = new Intent(login.this,daftar.class);
-                                              startActivity(intent);
-                                          }
-                                      })
-                                      .setNegativeButton("Nanti", new DialogInterface.OnClickListener() {
-                                          @Override
-                                          public void onClick(DialogInterface dialog, int which) {
-                                              progressDialog.dismiss();
-                                          }
-                                      }).show();
-                          }else {
-                              loginGoogleFb("facebook",id,email,"",user.getDisplayName(),"");
-                          }
+                            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                new AlertDialog.Builder(login.this)
+                                        .setTitle("Perhatian")
+                                        .setMessage("Email facebook anda tidak terdeteksi, silahkan daftar biasa atau masukkan email anda pada akun facebook anda.")
+                                        .setPositiveButton("Daftar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(login.this, daftar.class);
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .setNegativeButton("Nanti", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                progressDialog.dismiss();
+                                            }
+                                        }).show();
+                            } else {
+                                loginGoogleFb("facebook", id, email, "", user.getDisplayName(), "");
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             progressDialog.dismiss();
@@ -481,24 +482,25 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             // updateUI(null);
         }
     }
-    void googleUserProfile(GoogleSignInAccount acct){
+
+    void googleUserProfile(GoogleSignInAccount acct) {
         if (acct != null) {
 
             Uri profile = acct.getPhotoUrl();
 
-            loginGoogleFb("google",acct.getId(),acct.getEmail(),"",acct.getGivenName(),acct.getFamilyName());
-          //  loginGoogleFacebook(acct.getEmail(),"",acct.getDisplayName(),"");
-        }else{
+            loginGoogleFb("google", acct.getId(), acct.getEmail(), "", acct.getGivenName(), acct.getFamilyName());
+            //  loginGoogleFacebook(acct.getEmail(),"",acct.getDisplayName(),"");
+        } else {
             progressDialog.dismiss();
-         //   StyleableToast.makeText(getApplicationContext(), "Gagal Login melalui Google", Toast.LENGTH_LONG, R.style.error_toast).show();
+            //   StyleableToast.makeText(getApplicationContext(), "Gagal Login melalui Google", Toast.LENGTH_LONG, R.style.error_toast).show();
         }
     }
 
-    void googleUserProfile2(){
+    void googleUserProfile2() {
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(login.this);
 
-        if (acct != null){
+        if (acct != null) {
 
             String oauthpro = "google";
             String id = acct.getId();
@@ -512,7 +514,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    private void loginGoogleFacebook(final String username, final String password,final String nama, final String no_hp){
+    private void loginGoogleFacebook(final String username, final String password, final String nama, final String no_hp) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
                 new Response.Listener<String>() {
                     @Override
@@ -525,7 +527,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             //JSONObject userJson = obj.getJSONObject("login");
 
 
-                            for(int i=0;i<jsonArray.length();i++) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String getObject = jsonObject.toString();
                                 JSONObject object = new JSONObject(getObject);
@@ -562,7 +564,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 //                                        object.getString("nama_kota"),
 //                                        object.getString("nama_kecamatan")
                                 );
-                           //     progressBar.setVisibility(View.GONE);
+                                //     progressBar.setVisibility(View.GONE);
                                 progressDialog.dismiss();
                                 //storing the user in shared preferences
                                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
@@ -571,11 +573,11 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
 
                                 /**
-                                Intent intent = new Intent(login.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();**/
+                                 Intent intent = new Intent(login.this, MainActivity.class);
+                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                 startActivity(intent);
+                                 finish();**/
                             }
                             //starting the profile activity
 
@@ -591,11 +593,10 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                     //   Toast.makeText(login.this, "Gagal Login", Toast.LENGTH_SHORT).show();
-                      //  progressBar.setVisibility(View.GONE);
-                       // progressDialog.dismiss();
-                        daftarGoogleFacebook(username,password,nama,no_hp);
-
+                        //   Toast.makeText(login.this, "Gagal Login", Toast.LENGTH_SHORT).show();
+                        //  progressBar.setVisibility(View.GONE);
+                        // progressDialog.dismiss();
+                        daftarGoogleFacebook(username, password, nama, no_hp);
 
 
                     }
@@ -612,28 +613,29 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
 
     }
-    private void daftarGoogleFacebook(final String email, final String password,final String nama, final String no_hp){
 
-        final HashMap<String,String> postData = new HashMap<>();
-        postData.put("nama",nama);
-        postData.put("email",email);
-        postData.put("no_hp",no_hp);
-        postData.put("jk","");
-        postData.put("alamat","");
-        postData.put("provinsi","");
-        postData.put("kota","");
-        postData.put("kecamatan","");
-        postData.put("nama_provinsi","");
-        postData.put("nama_kota","");
-        postData.put("nama_kecamatan","");
-        postData.put("password",password);
+    private void daftarGoogleFacebook(final String email, final String password, final String nama, final String no_hp) {
+
+        final HashMap<String, String> postData = new HashMap<>();
+        postData.put("nama", nama);
+        postData.put("email", email);
+        postData.put("no_hp", no_hp);
+        postData.put("jk", "");
+        postData.put("alamat", "");
+        postData.put("provinsi", "");
+        postData.put("kota", "");
+        postData.put("kecamatan", "");
+        postData.put("nama_provinsi", "");
+        postData.put("nama_kota", "");
+        postData.put("nama_kecamatan", "");
+        postData.put("password", password);
 
         PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData, new AsyncResponse() {
             @Override
             public void processFinish(String s) {
-              //  progressDialog.dismiss();
-                if (s.contains("Data Berhasil Di Kirim")){
-                    loginGoogleFacebook(email,password,nama,no_hp);
+                //  progressDialog.dismiss();
+                if (s.contains("Data Berhasil Di Kirim")) {
+                    loginGoogleFacebook(email, password, nama, no_hp);
                 }
             }
         });
@@ -642,34 +644,35 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         task.setEachExceptionsHandler(new EachExceptionsHandler() {
             @Override
             public void handleIOException(IOException e) {
-                Log.d(TAG,e.toString());
+                Log.d(TAG, e.toString());
             }
 
             @Override
             public void handleMalformedURLException(MalformedURLException e) {
-                Log.d(TAG,e.toString());
+                Log.d(TAG, e.toString());
             }
 
             @Override
             public void handleProtocolException(ProtocolException e) {
-                Log.d(TAG,e.toString());
+                Log.d(TAG, e.toString());
             }
 
             @Override
             public void handleUnsupportedEncodingException(UnsupportedEncodingException e) {
-                Log.d(TAG,e.toString());
+                Log.d(TAG, e.toString());
             }
         });
 
     }
-    private void loginGoogleFb(final String oauthpro,final String oauthid,String email,String gender,String first_name,String last_name){
-        HashMap<String,String> param = new HashMap<>();
-        param.put("oauthpro",oauthpro);
-        param.put("oauthid",oauthid);
-        param.put("email",email);
-        param.put("gender",gender);
-        param.put("first_name",first_name);
-        param.put("last_name",last_name);
+
+    private void loginGoogleFb(final String oauthpro, final String oauthid, String email, String gender, String first_name, String last_name) {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("oauthpro", oauthpro);
+        param.put("oauthid", oauthid);
+        param.put("email", email);
+        param.put("gender", gender);
+        param.put("first_name", first_name);
+        param.put("last_name", last_name);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -726,7 +729,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             //     progressBar.setVisibility(View.GONE);
                             progressDialog.dismiss();
                             //storing the user in shared preferences
-                            startActivity(new Intent(login.this,MainActivity.class)
+                            startActivity(new Intent(login.this, MainActivity.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
@@ -751,9 +754,9 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                             Toast.makeText(login.this, "Login Gagal.", Toast.LENGTH_SHORT).show();
                         } else {
                             // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            if (anError.getErrorDetail().equals("connectionError")){
+                            if (anError.getErrorDetail().equals("connectionError")) {
                                 Toast.makeText(login.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(login.this, "Login Gagal.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -761,7 +764,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
-   // @Override
+    // @Override
 //   public void dialogLoginCoorperate(View v){
 //        AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(login.this);
 //        View layoutView = getLayoutInflater().inflate(R.layout.dialog_login_coorperate, null);
@@ -883,10 +886,10 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 //
 //    }
 
-    void postLupaPassword(String email){
-        progress.progress("Mengirim Email","Loading...");
+    void postLupaPassword(String email) {
+        progress.progress("Mengirim Email", "Loading...");
         AndroidNetworking.post("https://jualanpraktis.net/android/lupa_password.php")
-                .addBodyParameter("email",email)
+                .addBodyParameter("email", email)
                 .setPriority(Priority.MEDIUM)
                 .setTag(login.this)
                 .build()
@@ -910,7 +913,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onError(ANError anError) {
                         progress.dismiss();
-                        Toast.makeText(login.this,"Gagal Mengirim ke Email, Silahkan coba lagi",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(login.this, "Gagal Mengirim ke Email, Silahkan coba lagi", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

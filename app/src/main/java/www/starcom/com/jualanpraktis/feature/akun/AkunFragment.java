@@ -3,6 +3,7 @@ package www.starcom.com.jualanpraktis.feature.akun;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +47,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.bumptech.glide.Glide;
 import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -61,6 +65,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.FileSystemException;
 import java.nio.file.FileSystemNotFoundException;
@@ -70,6 +75,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
@@ -91,10 +97,11 @@ import static www.starcom.com.jualanpraktis.alamat_pengiriman.KEY;
  */
 
 public class AkunFragment extends Fragment implements View.OnClickListener{
-    private Button btn_login,btn_ubah_profil,btn_update_photo ;
+    private Button btn_login,btn_ubah_profil ;
+    private LinearLayout btn_update_photo;
     private TextView nama,email,nohp,jk,time,alamat,nama2,email2, nohp2;
     private TextView namatoko, noktp, nonpwp, atasnama, namabank, norek;
-    private ImageView imageProfile;
+    private ImageView imageEdit, imageProfile2;
     private String PicturePath;
     private RelativeLayout relativeStatusTransaksi, relativeRincianRekening, relativeFavorit, btn_logout, btn_ubah_password,
             relativeBantuan;
@@ -114,6 +121,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     String nama_kota,nama_wilayah,nama_provinsi;
     Pref pref;
     CustomProgressDialog progressDialog;
+    private static final int IMG_REQUEST = 777;
 
     public AkunFragment() {
 
@@ -129,6 +137,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_akun,container,false);
          progressDialog = new CustomProgressDialog(getActivity());
+
+        user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         pref = new Pref(getActivity().getApplicationContext());
         nama = rootView.findViewById(R.id.nama);
@@ -146,18 +156,30 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         norek = rootView.findViewById(R.id.no_rek);
         namabank = rootView.findViewById(R.id.nama_bank);
         namatoko = rootView.findViewById(R.id.nama_toko);
-        imageProfile = rootView.findViewById(R.id.image_profile);
+//        imageProfile = rootView.findViewById(R.id.image_profile);
         relativeStatusTransaksi = rootView.findViewById(R.id.relative_status_transaksi);
         relativeRincianRekening = rootView.findViewById(R.id.relative_rincian_rekening_saya);
         relativeFavorit = rootView.findViewById(R.id.relative_produk_favorit);
         relativeBantuan = rootView.findViewById(R.id.relative_bantuan);
         cardPesananSaya = rootView.findViewById(R.id.card_penjualan_saya_profile);
+        imageProfile2 = rootView.findViewById(R.id.image_profile2);
+        imageEdit = rootView.findViewById(R.id.image_edit);
 
-        btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
+//        btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
         btn_ubah_password = rootView.findViewById(R.id.btn_ubah_password);
         btn_update_photo = rootView.findViewById(R.id.btn_update_picture);
         edit = rootView.findViewById(R.id.edit);
         edit.setOnClickListener(this);
+
+//        imageProfile.setImageResource(R.drawable.icon_profile_grey);
+
+        btn_update_photo.setVisibility(View.GONE);
+
+        final String image_url = "https://jualanpraktis.net/files/drp/"+user.getKode()+"/"+user.getFoto();
+        Glide.with(getActivity())
+                .load(image_url)
+                .error(R.mipmap.ic_launcher)
+                .into(imageProfile2);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // .requestIdToken()
@@ -212,26 +234,30 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        imageProfile.setOnClickListener(new View.OnClickListener() {
+//        imageProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                    ImagePicker.Companion.with(AkunFragment.this)
+//                            .crop(340,340)
+//                            .compress(512)
+//                            .start();
+//            }
+//        });
+
+        imageProfile2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                    ImagePicker.Companion.with(AkunFragment.this)
-                            .crop(340,340)
-                            .compress(512)
-                            .start();
-            }
-        });
-        btn_ubah_profil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogModify();
+            public void onClick(View v) {
+                ImagePicker.Companion.with(AkunFragment.this)
+                        .crop(340,340)
+                        .compress(512)
+                        .start();
             }
         });
 
         btn_update_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageProfile != null) {
+                if(imageProfile2 != null) {
                     updateImage();
                 }else{
                     Toast.makeText(getContext(), "anda belum upload photo, silahkan upload terlebih dahulu", Toast.LENGTH_SHORT);
@@ -273,7 +299,6 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             public void onClick(View v) {
                 if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
                     btn_logout.setVisibility(View.GONE);
-                    btn_ubah_profil.setVisibility(View.GONE);
                     btn_ubah_password.setVisibility(View.GONE);
                     btn_login.setVisibility(View.GONE);
                     btn_update_photo.setVisibility(View.GONE);
@@ -292,8 +317,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
                     atasnama.setText("");
                     norek.setText("");
                     namabank.setText("");
-                    imageProfile.setClickable(false);
-                    imageProfile.setImageResource(R.drawable.icon_profile_grey);
+                    imageProfile2.setClickable(false);
+                    imageProfile2.setImageResource(R.drawable.icon_profile_grey);
                     Intent intent = new Intent(getActivity(), login.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -321,7 +346,10 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         try{
             if (resultCode==RESULT_OK){
                 Uri uri = data.getData();
-                imageProfile.setImageURI(uri);
+                imageProfile2.setVisibility(View.GONE);
+                imageEdit.setVisibility(View.VISIBLE);
+                btn_update_photo.setVisibility(View.VISIBLE);
+                imageEdit.setImageURI(uri);
                 PicturePath = uri.getPath();
             }else{
                 Toast.makeText(getContext(), "anda belum upload photo, silahkan upload terlebih dahulu", Toast.LENGTH_SHORT);
@@ -369,7 +397,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             String kode = user.getKode().toString();
 
             UrlImageViewHelper test = new UrlImageViewHelper();
-            test.setUrlDrawable(imageProfile, "https://jualanpraktis.net/files/drp/"+ kode +"/" + user.getFoto());
+            test.setUrlDrawable(imageProfile2, "https://jualanpraktis.net/files/drp/"+ kode +"/" + user.getFoto());
             String LinkGambar = "https://jualanpraktis.net/files/drp/"+ kode +"/" + user.getFoto();
 
             Log.d(getTag(), LinkGambar);
@@ -380,18 +408,14 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
             btn_login.setVisibility(View.GONE);
             btn_logout.setVisibility(View.VISIBLE);
-            btn_ubah_profil.setVisibility(View.VISIBLE);
             btn_ubah_password.setVisibility(View.VISIBLE);
-            btn_update_photo.setVisibility(View.VISIBLE);
-            imageProfile.setClickable(true);
+            imageProfile2.setClickable(true);
         }else {
             btn_logout.setVisibility(View.GONE);
-            btn_ubah_profil.setVisibility(View.GONE);
             btn_ubah_password.setVisibility(View.GONE);
-            btn_update_photo.setVisibility(View.GONE);
             btn_login.setVisibility(View.GONE);
-            imageProfile.setImageResource(R.drawable.icon_profile_grey);
-            imageProfile.setClickable(false);
+            imageProfile2.setImageResource(R.drawable.icon_profile_grey);
+            imageProfile2.setClickable(false);
         }
 
     }
@@ -432,6 +456,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
                                 progressDialog.dismiss();
                                 if (response.contains("Perubahan profile berhasil disimpan")) {
                                     Toast.makeText(getContext(), "Profile Picture has succesfully changed.", Toast.LENGTH_LONG).show();
+                                    btn_update_photo.setVisibility(View.GONE);
 //                                    user = SharedPrefManager.getInstance(getActivity()).getUser();
 //                                    String kode = user.getKode().toString();
 //                                    UrlImageViewHelper test = new UrlImageViewHelper();
@@ -472,7 +497,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
 //            DialogModify();
         }else {
-            imageProfile.setImageResource(R.drawable.icon_profile_grey);
+            imageProfile2.setImageResource(R.drawable.icon_profile_grey);
             Toast.makeText(getContext(), "Anda Belum Login", Toast.LENGTH_SHORT).show();
         }
     }

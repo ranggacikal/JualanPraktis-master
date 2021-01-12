@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -82,6 +83,8 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> dataRekening = new ArrayList<>();
 
     Dialog dialog;
+    RelativeLayout relativeDetailRekeningBank;
+    FrameLayout frameDetailRekening;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,8 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         btnEditDetailRekeningBank = findViewById(R.id.btn_edit_detail_rekening_bank);
+        relativeDetailRekeningBank = findViewById(R.id.relative_detail_rekening);
+        frameDetailRekening = findViewById(R.id.frame_detail_rekening);
 
         user = SharedPrefManager.getInstance(DetailRekeningBankActivity.this).getUser();
 
@@ -101,9 +106,13 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         nama = getIntent().getStringExtra("nama");
         rekening = getIntent().getStringExtra("rekening");
 
-        getDataRekeningDetail();
-
         validasiForm();
+
+        if (get_nama_bank == null && nama == null && rekening == null){
+
+            getDataRekeningDetail();
+
+        }
 
         if (get_nama_bank != null) {
             txtNamaBank.setText(get_nama_bank);
@@ -130,6 +139,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                 validasiData();
             }
         });
+
 
     }
 
@@ -162,6 +172,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 //                        Toast.makeText(DetailRekeningBankActivity.this, "Password Sesuai", Toast.LENGTH_SHORT).show();
                         //  progressDialog.dismiss();
+
                         try {
                             responseKataSandi.clear();
                             JSONArray array = response.getJSONArray("data");
@@ -366,10 +377,23 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         String nama = edtNamaBukuTabungan.getText().toString();
         String rekening = edtNoRekening.getText().toString();
 
+        if (nama.isEmpty()){
+            edtNamaBukuTabungan.setError("Field Tidak Boleh Kosong");
+            edtNamaBukuTabungan.requestFocus();
+            return;
+        }
+
+        if (rekening.isEmpty()){
+            edtNoRekening.setError("Field No. Rekening Tidak Boleh Kosong");
+            edtNoRekening.requestFocus();
+            return;
+        }
+
         Intent intent = new Intent(DetailRekeningBankActivity.this, PilihBankDetailRekeningActivity.class);
         intent.putExtra(PilihBankDetailRekeningActivity.ExtraNama, nama);
         intent.putExtra(PilihBankDetailRekeningActivity.ExtraRekening, rekening);
         startActivity(intent);
+        finish();
 
     }
 }

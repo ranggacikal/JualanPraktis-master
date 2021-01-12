@@ -174,6 +174,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 }
             });
 
+
+
 //                viewHolder.harga_dropshipper.addTextChangedListener(new TextWatcher() {
 //                    @Override
 //                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -182,8 +184,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //
 //                    @Override
 //                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                        keranjang.dataHarga.add(charSequence.toString());
-//                        Log.d("cartAdapter", "onTextChanged: "+charSequence.toString());
+////                        keranjang.dataHarga.add(charSequence.toString());
+////                        Log.d("cartAdapter", "onTextChanged: "+charSequence.toString());
+////                        Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
 //                    }
 //
 //                    @Override
@@ -194,9 +197,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //                        try {
 //
 //                            if (!viewHolder.harga_dropshipper.getText().toString().isEmpty()) {
+//
+//                                for (int i = 0; i<data.size(); i++) {
+//
+//                                    ArrayList<String> dataArray = new ArrayList<>(data.size());
+//                                    dataArray.add(editable.toString());
+//                                    Log.d("testDataArray", "afterTextChanged: " + dataArray);
+//
+//                                }
+//
 //                                keranjang.dataHarga.add(editable.toString());
 //                                Log.d("cartAdapter", "afterTextChanged: "+editable.toString());
-////                        viewHolder.harga_dropshipper.setText(text);
+//                                Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
 //                            }
 //
 //                        } catch (NullPointerException e) {
@@ -206,7 +218,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //
 //                    }
 //                });
-//            }
+
         }
 
 

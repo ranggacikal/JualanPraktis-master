@@ -100,8 +100,9 @@ public class keranjang extends Fragment implements View.OnClickListener {
 
     public int[] hargaItem;
 
-    public ArrayList<String> dataHarga = new ArrayList<>();
+//    public ArrayList<String> dataHarga = new ArrayList<>();
 
+    public ArrayList<String> dataHarga;
     public keranjang() {
 
     }
@@ -321,6 +322,8 @@ public class keranjang extends Fragment implements View.OnClickListener {
                             adapterCart = new CartAdapter(getActivity(), cartList, keranjang.this);
                             recyclerView.setAdapter(adapterCart);
                             recyclerView.setItemViewCacheSize(cartList.size());
+
+                            dataHarga = new ArrayList<>(cartList.size());
 
                             int Total = 0;
                             int Berat = 0;

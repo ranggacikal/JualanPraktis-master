@@ -93,4 +93,9 @@ public class PilihBankDetailRekeningActivity extends AppCompatActivity {
         recyclerBankPopuler.setAdapter(adapter);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

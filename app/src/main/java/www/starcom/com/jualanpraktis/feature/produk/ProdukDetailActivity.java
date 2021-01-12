@@ -134,7 +134,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
     private Spinner spn_variasi;
     List<Variasi> variasiList = new ArrayList<>();
     String id_variasi,nama_variasi,stok_variasi,id_sub_kategori_produk;
-    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit, linearTambahKeranjang;
+    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit, linearTambahKeranjang, shareIg;
     CardView cvVariasi;
     ShimmerFrameLayout shimmerProdukLainnya;
 
@@ -184,6 +184,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
         btn_keranjang = findViewById(R.id.btn_keranjang);
         shareFb = findViewById(R.id.linear_facebook_detail_produk);
         shareWa = findViewById(R.id.linear_whatsapp_detail_produk);
+        shareIg = findViewById(R.id.linear_instagram_detail_produk);
         salinDeskripsi = findViewById(R.id.linear_salin_detail_produk);
         rvSlider = findViewById(R.id.rv_slider);
         linearFavorit = findViewById(R.id.linear_favorit_detail_produk);
@@ -384,6 +385,13 @@ public class ProdukDetailActivity extends AppCompatActivity {
             }
         });
 
+        shareIg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareImageInstagram();
+            }
+        });
+
         salinDeskripsi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,6 +403,38 @@ public class ProdukDetailActivity extends AppCompatActivity {
         getDataVariasi();
         getDataProdukSejenis();
 
+
+    }
+
+    private void shareImageInstagram() {
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) gambar.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        String mediaPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "shareInstagram", null);
+
+        String type = "image/*";
+        String filename = "/produk.jpg";
+
+        createInstagramIntent(type, mediaPath);
+    }
+
+    private void createInstagramIntent(String type, String mediaPath) {
+
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        // Set the MIME type
+        share.setType(type);
+
+        // Create the URI from the media
+        Uri uri = Uri.parse(mediaPath);
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+
+        // Broadcast the Intent.
+        startActivity(Intent.createChooser(share, "Share to"));
+    
 
     }
 
