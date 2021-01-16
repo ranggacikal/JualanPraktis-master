@@ -53,6 +53,7 @@ public class SplashActivity extends AppCompatActivity {
         Context pContext;
         pContext = this;
 
+
         try {
             PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {

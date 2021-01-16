@@ -46,7 +46,7 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
 
         //inflate your layout and pass it to view holder
         LayoutInflater inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.item_kategori, viewGroup, false);
+        View view = inflater.inflate(R.layout.item_sub_kategori, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
@@ -60,10 +60,10 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
         viewHolder.title.setText(item.get("subkategori"));
         viewHolder.new_indicatior.setVisibility(View.GONE);
 
-        Random rnd = new Random();
-        int currentColor2 = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-
-        viewHolder.linear_item_kategori.setBackgroundColor(currentColor2);
+//        Random rnd = new Random();
+//        int currentColor2 = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+//
+//        viewHolder.linear_item_kategori.setBackgroundColor(currentColor2);
 
         String img_url = "https://trading.my.id/img2/"+item.get("gambar");
         Glide.with(activity.getApplicationContext())
@@ -181,11 +181,11 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
 
         public ViewHolder(View view) {
             super(view);
-            title=view.findViewById(R.id.title);
-            new_indicatior=view.findViewById(R.id.new_indicatior);
-            image=view.findViewById(R.id.image);
-            ll_kategori = view.findViewById(R.id.ll_kategori);
-            linear_item_kategori = view.findViewById(R.id.linear_item_kategori);
+            title=view.findViewById(R.id.title_sub_kategori);
+            new_indicatior=view.findViewById(R.id.new_indicatior_sub_kategori);
+            image=view.findViewById(R.id.sub_kategori_image);
+            ll_kategori = view.findViewById(R.id.ll_sub_kategori);
+            linear_item_kategori = view.findViewById(R.id.linear_item_sub_kategori);
 
         }
     }

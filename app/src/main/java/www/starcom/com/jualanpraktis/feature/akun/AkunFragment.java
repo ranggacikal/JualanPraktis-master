@@ -3,6 +3,7 @@ package www.starcom.com.jualanpraktis.feature.akun;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,6 +79,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
+import www.starcom.com.jualanpraktis.EditAkunActivity;
 import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.VolleySingleton;
@@ -89,6 +92,7 @@ import www.starcom.com.jualanpraktis.login;
 import www.starcom.com.jualanpraktis.utils.CustomProgressDialog;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static www.starcom.com.jualanpraktis.alamat_pengiriman.BASE_URL;
 import static www.starcom.com.jualanpraktis.alamat_pengiriman.KEY;
 
@@ -101,7 +105,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     private LinearLayout btn_update_photo;
     private TextView nama,email,nohp,jk,time,alamat,nama2,email2, nohp2;
     private TextView namatoko, noktp, nonpwp, atasnama, namabank, norek;
-    private ImageView imageEdit, imageProfile2;
+    private CircleImageView imageEdit, imageProfile2;
     private String PicturePath;
     private RelativeLayout relativeStatusTransaksi, relativeRincianRekening, relativeFavorit, btn_logout, btn_ubah_password,
             relativeBantuan;
@@ -111,6 +115,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     ImageView edit ;
     loginuser user;
     GoogleSignInClient googleSignInClient;
+
+    String nama_file;
 
 
     //edit
@@ -174,6 +180,8 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
 //        imageProfile.setImageResource(R.drawable.icon_profile_grey);
 
         btn_update_photo.setVisibility(View.GONE);
+
+        Log.d("getFoto", "onCreateView: "+user.getFoto());
 
         final String image_url = "https://jualanpraktis.net/files/drp/"+user.getKode()+"/"+user.getFoto();
         Glide.with(getActivity())
@@ -346,6 +354,9 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         try{
             if (resultCode==RESULT_OK){
                 Uri uri = data.getData();
+                nama_file = uri.getLastPathSegment();
+//                        data.getData().getLastPathSegment().toString();
+                Log.d("readUri", "onActivityResult: "+nama_file);
                 imageProfile2.setVisibility(View.GONE);
                 imageEdit.setVisibility(View.VISIBLE);
                 btn_update_photo.setVisibility(View.VISIBLE);
@@ -456,21 +467,9 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
                                 progressDialog.dismiss();
                                 if (response.contains("Perubahan profile berhasil disimpan")) {
                                     Toast.makeText(getContext(), "Profile Picture has succesfully changed.", Toast.LENGTH_LONG).show();
+                                    Log.d("getFoto", "onResponse: "+new File(PicturePath));
+                                    simpanFotoPreferences();
                                     btn_update_photo.setVisibility(View.GONE);
-//                                    user = SharedPrefManager.getInstance(getActivity()).getUser();
-//                                    String kode = user.getKode().toString();
-//                                    UrlImageViewHelper test = new UrlImageViewHelper();
-//                                    test.setUrlDrawable(imageProfile, "https://trading.my.id/files/drp/" + kode + "/" + PicturePath);
-//                            new AlertDialog.Builder(getContext())
-//                                    .setTitle("Check Your Email")
-//                                    .setMessage("We've send a message to the email provided with a link to active your account. This helps us verify your identity.")
-//                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(DialogInterface dialog, int which) {
-//                                            KosongField();
-//                                            finish();
-//                                        }
-//                                    }).show();
                                 } else {
                                     Toast.makeText(getContext(), "Gagal", Toast.LENGTH_SHORT).show();
                                 }
@@ -479,6 +478,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
                             @Override
                             public void onError(ANError anError) {
 //                        progressDialog.dismiss();
+                                progressDialog.dismiss();
                                 Toast.makeText(getActivity(), anError.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -491,10 +491,37 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    private void simpanFotoPreferences() {
+
+        loginuser userFoto = new loginuser(
+                user.getId(),
+                user.getKode(),
+                user.getNama(),
+                user.getNama_toko(),
+                user.getProvinsi(),
+                user.getKota(),
+                user.getKecamatan(),
+                user.getAlamat(),
+                user.getNo_ktp(),
+                user.getNo_npwp(),
+                user.getNo_hp(),
+                user.getEmail(),
+                user.getAtas_nama(),
+                user.getNo_rek(),
+                user.getNama_bank(),
+                nama_file
+        );
+
+        SharedPrefManager.getInstance(getContext()).userLogin(userFoto);
+//        Toast.makeText(getActivity(), "Berhasil Menjalankan Preferences", Toast.LENGTH_SHORT).show();
+
+    }
+
 
     @Override
     public void onClick(View v) {
         if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
+            startActivity(new Intent(getActivity(), EditAkunActivity.class));
 //            DialogModify();
         }else {
             imageProfile2.setImageResource(R.drawable.icon_profile_grey);

@@ -76,6 +76,8 @@ public class Kategori2Adapter extends RecyclerView.Adapter<Kategori2Adapter.View
         final Calendar cal2 = Calendar.getInstance();
         cal2.add(Calendar.DATE, -2);
 
+        String gambar = item.get("gambar");
+
         if (item.get("jumlah").equals("0")){
 
             viewHolder.new_indicatior.setVisibility(View.VISIBLE);
@@ -106,6 +108,7 @@ public class Kategori2Adapter extends RecyclerView.Adapter<Kategori2Adapter.View
                     intent.putExtra("status","produkKategori");
                     intent.putExtra("id",finalItem.get("id"));
                     intent.putExtra("kategori",finalItem.get("kategori"));
+                    intent.putExtra("gambar", gambar);
                     activity.startActivity(intent);
                 }
 

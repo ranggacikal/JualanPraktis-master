@@ -160,54 +160,57 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //            for (int b = 0; b<data.size(); b++) {
                 keranjang.getHargaDropshipper(viewHolder.harga_dropshipper.getText().toString());
 
-            viewHolder.harga_dropshipper.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        // do your stuff here
-                        String harga = viewHolder.harga_dropshipper.getText().toString();
-//                        keranjang.dataHarga.set(i, harga);
-                        keranjang.dataHarga.add(harga);
-                        Log.d("cartAdapter", "onEditorAction: "+harga);
+//            viewHolder.harga_dropshipper.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                        // do your stuff here
+//                        String harga = viewHolder.harga_dropshipper.getText().toString();
+////                        keranjang.dataHarga.set(i, harga);
+//                        keranjang.dataHarga.add(harga);
+//                        Log.d("cartAdapter", "onEditorAction: "+harga);
+//                        Log.d("dataHargaArray", "onEditorAction: "+keranjang.dataHarga);
+//                    }
+//                    return false;
+//                }
+//            });
+
+
+
+                viewHolder.harga_dropshipper.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                     }
-                    return false;
-                }
-            });
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int idd, int i1, int i2) {
+//                        keranjang.dataHarga.add(charSequence.toString());
+//                        Log.d("cartAdapter", "onTextChanged: "+charSequence.toString());
+//                        Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
+
+                        //hargaItem[i}
+                        keranjang.dataHarga.add(i, viewHolder.harga_dropshipper.getText().toString());
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
 
 
-//                viewHolder.harga_dropshipper.addTextChangedListener(new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-////                        keranjang.dataHarga.add(charSequence.toString());
-////                        Log.d("cartAdapter", "onTextChanged: "+charSequence.toString());
-////                        Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(Editable editable) {
-//
-//
-//
 //                        try {
 //
 //                            if (!viewHolder.harga_dropshipper.getText().toString().isEmpty()) {
 //
-//                                for (int i = 0; i<data.size(); i++) {
+//                                ArrayList<String> dataArray = new ArrayList<>(data.size());
+//                                keranjang.dataHarga = new ArrayList<>(data.size());
 //
-//                                    ArrayList<String> dataArray = new ArrayList<>(data.size());
-//                                    dataArray.add(editable.toString());
-//                                    Log.d("testDataArray", "afterTextChanged: " + dataArray);
+//                                    String data1 = editable.toString();
+//                                    String data2 = editable.toString();
 //
-//                                }
-//
-//                                keranjang.dataHarga.add(editable.toString());
-//                                Log.d("cartAdapter", "afterTextChanged: "+editable.toString());
+//                                    keranjang.dataHarga.add(data1);
+//                                    keranjang.dataHarga.add(data2);
 //                                Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
 //                            }
 //
@@ -215,9 +218,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //
 //
 //                        }
-//
-//                    }
-//                });
+
+                    }
+                });
 
         }
 

@@ -653,6 +653,47 @@ public class alamat_pengiriman extends AppCompatActivity implements View.OnClick
             "JNE","JNT","SiCepat","Tiki"
     };
 
+    private void getDataGender(){
+        AndroidNetworking.get("http://jualanpraktis.net/android/gender.php")
+                .setTag("test")
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // do anything with response
+                        kotaKabupatenList.clear();
+                        try {
+                            JSONObject object = response.getJSONObject("data");
+                            JSONArray array = object.getJSONArray("results");
+
+                            for (int i = 0; i < array.length(); i++){
+                                JSONObject obj = array.getJSONObject(i);
+                                KotaKabupaten item = new KotaKabupaten();
+                                item.setCity_id(obj.getString("city_id"));
+                                item.setCity_name(obj.getString("city_name"));
+                                kotaKabupatenList.add(item);
+                            }
+
+
+                            //   List<JenisPerangkat> list =respone.getJenisPerangkatArrayList();
+                            spinner1.setVisibility(View.VISIBLE);
+                            ArrayAdapter<KotaKabupaten> adapter = new ArrayAdapter<KotaKabupaten>(alamat_pengiriman.this, R.layout.support_simple_spinner_dropdown_item, kotaKabupatenList);
+                            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                            //  spinner.setPrompt("Jenis Perangkat : ");
+                            spinner1.setAdapter(adapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                    }
+                });
+    }
+
 
 
 }

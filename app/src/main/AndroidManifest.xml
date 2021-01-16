@@ -39,7 +39,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".feature.akun.NotifikasiActivity"></activity>
+        <activity android:name=".EditAkunActivity"></activity>
+        <activity android:name=".PlayVideoActivity" />
+        <activity android:name=".feature.akun.NotifikasiActivity" />
         <activity android:name=".feature.akun.SearchFavoritActivity" />
         <activity android:name=".PanduanActivity" />
         <activity android:name=".WelcomePageActivity" />

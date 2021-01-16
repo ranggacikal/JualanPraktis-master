@@ -100,9 +100,10 @@ public class keranjang extends Fragment implements View.OnClickListener {
 
     public int[] hargaItem;
 
-//    public ArrayList<String> dataHarga = new ArrayList<>();
+    public ArrayList<String> dataHarga = new ArrayList<>();
 
-    public ArrayList<String> dataHarga;
+//    public ArrayList<String> dataHarga;
+
     public keranjang() {
 
     }
@@ -323,7 +324,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
                             recyclerView.setAdapter(adapterCart);
                             recyclerView.setItemViewCacheSize(cartList.size());
 
-                            dataHarga = new ArrayList<>(cartList.size());
+//                            dataHarga = new ArrayList<>(cartList.size());
 
                             int Total = 0;
                             int Berat = 0;
@@ -401,12 +402,6 @@ public class keranjang extends Fragment implements View.OnClickListener {
         for (int a = 0; a < adapterCart.getItemCount(); a++) {
 
             Log.d(TAG, "proccess: "+dataHarga.get(a));
-
-        }
-
-        for (int b =0; b<dataHarga.size(); b++){
-
-            Log.d(TAG, "forHarga: "+dataHarga.get(b));
 
         }
 //

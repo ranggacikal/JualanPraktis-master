@@ -27,5 +27,12 @@
         app:tabSelectedTextColor="@color/darkRed"
         android:background="@android:color/white"/>
 
+<!--    <fragment-->
+<!--        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"-->
+<!--        android:id="@+id/youtube_fragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        tools:ignore="Instantiatable" />-->
+
 
 </LinearLayout>

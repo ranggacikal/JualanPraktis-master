@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".PlayVideoActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarProdukFavorit"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/panduan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/arialbold"
+                android:text="Panduan"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp" />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/viewPlayVideo"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"/>
+
+        <ImageView
+            android:id="@+id/img_play_video_panduan"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="80dp"
+            android:src="@drawable/playbutton"
+            android:layout_centerHorizontal="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@id/viewPlayVideo"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/text_nama_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Video"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jualan Praktis"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/text_waktu_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Waktu"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

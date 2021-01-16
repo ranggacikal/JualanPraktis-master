@@ -90,12 +90,6 @@
         app:tabIndicatorColor="@color/colorPrimary"
         android:background="@color/white"/>
 
-    <FrameLayout
-        android:id="@+id/framePenghasilanSaya"
-        android:background="@android:color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_total_pesanan_proses"/>
 
     <View
         android:id="@+id/garis_grey_penghasilan_saya"
@@ -105,66 +99,73 @@
         android:layout_below="@+id/tabLayoutPenghasilanSaya"
         android:background="@android:color/darker_gray" />
 
-    <RelativeLayout
-        android:id="@+id/relative_total_pesanan_proses"
+    <FrameLayout
+        android:id="@+id/framePenghasilanSaya"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/garis_grey_penghasilan_saya">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/garis_grey_penghasilan_saya"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:orientation="vertical">
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/relative_total_pesanan_proses"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_below="@id/garis_grey_penghasilan_saya">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total Penghasilan Saya"
-                android:textColor="@color/colorPrimary"/>
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/text_totalpenghasilan_pesanan_proses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rp. 1.000.000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Total Penghasilan Saya"-->
+<!--                android:textColor="@color/colorPrimary"/>-->
 
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/text_totalpenghasilan_pesanan_proses"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Rp. 1.000.000"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:textColor="@color/colorPrimary"/>-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true">
+<!--        </LinearLayout>-->
 
-            <Spinner
-                android:id="@+id/spinner_tanggal_awal_penghasilan_saya"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:background="@drawable/background_border_grey"/>
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center"-->
+<!--            android:layout_marginRight="15dp"-->
+<!--            android:layout_alignParentRight="true">-->
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_panah_kanan"/>
+<!--            <Spinner-->
+<!--                android:id="@+id/spinner_tanggal_awal_penghasilan_saya"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:background="@drawable/background_border_grey"/>-->
 
-            <Spinner
-                android:id="@+id/spinner_tanggal_akhir_penghasilan_saya"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:background="@drawable/background_border_grey"/>
+<!--            <ImageView-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:src="@drawable/ic_panah_kanan"/>-->
 
-        </LinearLayout>
+<!--            <Spinner-->
+<!--                android:id="@+id/spinner_tanggal_akhir_penghasilan_saya"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:background="@drawable/background_border_grey"/>-->
 
-    </RelativeLayout>
+<!--        </LinearLayout>-->
+
+<!--    </RelativeLayout>-->
 
     <RelativeLayout
         android:id="@+id/relative_total_pesanan_selesai"

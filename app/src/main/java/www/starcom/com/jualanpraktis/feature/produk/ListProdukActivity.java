@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import www.starcom.com.jualanpraktis.Kategori.SliderUtils;
 import www.starcom.com.jualanpraktis.Kategori.ViewPagerAdapter;
 import www.starcom.com.jualanpraktis.R;
@@ -84,6 +86,8 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
     ProdukEndlessScrollAdapter recyclerViewAdapter;
     List<ListProduk.ObjectSub.Results> rowsArrayList = new ArrayList<>();
 
+    CircleImageView imgListProduk;
+    TextView txtKategoriProduk;
 
     GridLayoutManager gridLayoutManager;
     private static final int PAGE_START = 1;
@@ -108,6 +112,13 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
             status = bundle.getString("status");
 
         }
+
+        imgListProduk = findViewById(R.id.img_list_produk);
+        txtKategoriProduk = findViewById(R.id.text_nama_kategori);
+
+        String kategori = getIntent().getStringExtra("kategori");
+
+        txtKategoriProduk.setText(kategori);
 
         produkPaginationAdapter = new ProdukPaginationAdapter(ListProdukActivity.this);
 

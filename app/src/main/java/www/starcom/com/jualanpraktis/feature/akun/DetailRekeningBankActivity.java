@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import www.starcom.com.jualanpraktis.EditAkunActivity;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.VolleySingleton;
 import www.starcom.com.jualanpraktis.Login.loginuser;
@@ -346,6 +347,27 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                         Toast.makeText(DetailRekeningBankActivity.this, "Berhasil Update", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         progressDialog.dismiss();
+                        //TO DO SAVE KE SHARED PREFERENCES MANAGER
+                        loginuser userUpdateBank = new loginuser(
+                                user.getId(),
+                                user.getKode(),
+                                user.getNama(),
+                                user.getNama_toko(),
+                                user.getProvinsi(),
+                                user.getKota(),
+                                user.getKecamatan(),
+                                user.getAlamat(),
+                                user.getNo_ktp(),
+                                user.getNo_npwp(),
+                                user.getNo_hp(),
+                                user.getEmail(),
+                                atas_nama,
+                                no_rek,
+                                nama_bank,
+                                user.getFoto()
+                        );
+
+                        SharedPrefManager.getInstance(DetailRekeningBankActivity.this).userLogin(userUpdateBank);
 
                     } else {
                         Toast.makeText(DetailRekeningBankActivity.this, "Gagal Update", Toast.LENGTH_SHORT).show();

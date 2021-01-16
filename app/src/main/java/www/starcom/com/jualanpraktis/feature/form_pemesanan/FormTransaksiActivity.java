@@ -192,6 +192,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
             idVendor1.add(item.get("id_vendor"));
             beratItem.add(item.get("berat"));
             hargaItem.add(item.get("total_belanja"));
+
             jumlahItem.add(item.get("jumlah"));
 
         }

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import www.starcom.com.jualanpraktis.feature.akun.AkunCoorperateFragment;
 import www.starcom.com.jualanpraktis.feature.akun.AkunFragment;
@@ -24,6 +25,9 @@ public class PanduanFragment extends Fragment {
 
     TabLayout tabLayoutPanduan;
     FrameLayout frameLayoutPanduan;
+
+    private PenggunaanAppFragment penggunaanAppFragment;
+    private TipsTrickFragment tipsTrickFragment;
 
     public PanduanFragment() {
         // Required empty public constructor
@@ -51,6 +55,8 @@ public class PanduanFragment extends Fragment {
     private void setupTabLayout() {
 //        tabLayout.removeAllTabs();
 //        AkunFragment = new AkunFragment();
+        penggunaanAppFragment = new PenggunaanAppFragment();
+        tipsTrickFragment = new TipsTrickFragment();
         // tabLayout.removeAllTabs();
         tabLayoutPanduan.addTab(tabLayoutPanduan.newTab().setText("Panduan"));
         tabLayoutPanduan.addTab(tabLayoutPanduan.newTab().setText("Tips & Trick"));
@@ -78,18 +84,17 @@ public class PanduanFragment extends Fragment {
         switch (tabPosition)
         {
             case 0 :
-                Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_SHORT).show();
-//                replaceFragment(Home_dashboard);
-//                break;
+                replaceFragment(penggunaanAppFragment);
+                break;
             case 1 :
-//                replaceFragment(Katalog);
-//                break;
+                replaceFragment(tipsTrickFragment);
+                break;
         }
     }
     public void replaceFragment(Fragment fragment) {
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frame, fragment);
+        ft.replace(R.id.framePanduan, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }

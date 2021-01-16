@@ -44,6 +44,7 @@ public class StatusTransaksiActivity extends AppCompatActivity {
     private DikirimFragment dikirimFragment;
     private DiterimaFragment diterimaFragment;
     private DitukarFragment ditukarFragment;
+    private SelesaiFragment selesaiFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         dikirimFragment = new DikirimFragment();
         diterimaFragment = new DiterimaFragment();
         ditukarFragment = new DitukarFragment();
+        selesaiFragment = new SelesaiFragment();
         // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Semua"));
         tabLayout.addTab(tabLayout.newTab().setText("Dipesan"));
@@ -88,6 +90,7 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Diterima"));
         tabLayout.addTab(tabLayout.newTab().setText("Dibatalkan"));
         tabLayout.addTab(tabLayout.newTab().setText("Tukar"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pesanan Selesai"));
 
     }
 
@@ -130,6 +133,9 @@ public class StatusTransaksiActivity extends AppCompatActivity {
                 break;
             case 6 :
                 replaceFragment(ditukarFragment);
+                break;
+            case 7 :
+                replaceFragment(selesaiFragment);
                 break;
 //            case 4 :
 //                if (pref.getLoginMethod().equals("coorperate")){

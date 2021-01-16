@@ -19,6 +19,10 @@ import com.github.javiersantos.appupdater.enums.Display;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.github.javiersantos.appupdater.objects.Update;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -76,11 +80,15 @@ public class MainActivity extends AppCompatActivity {
     loginuser user ;
     Pref pref;
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
         setContentView(R.layout.activity_main);
+
 
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
@@ -107,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         getAllWidgets();
         bindWidgetsWithAnEvent();
         setupTabLayout();
+
 
     }
 
@@ -379,4 +388,5 @@ public class MainActivity extends AppCompatActivity {
                 });
         appUpdaterUtils.start();
     }
+
 }
