@@ -66,6 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     app:searchIcon="@drawable/ic_cari"
+                    android:imeOptions="actionSearch"
                     android:background="@drawable/background_circle_grey">
 
                 </androidx.appcompat.widget.SearchView>

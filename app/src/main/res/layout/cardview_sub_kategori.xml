@@ -12,6 +12,8 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:layout_marginBottom="0.5dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="20dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@android:color/white">
 
@@ -42,6 +44,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
+                android:fontFamily="@font/nuunito_bold"
                 android:layout_marginBottom="2dp"
                 android:maxLines="2"
                 android:text="Nama Produk"
@@ -51,24 +54,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/img_rating_produk"
-                    android:layout_width="60dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ratings" />
-
                 <TextView
                     android:id="@+id/text_id_qty_produk_dibeli"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="373 Dibeli"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/nuunito_bold"
                     android:layout_marginLeft="10dp"
-                    android:textSize="10sp"
-                    android:layout_toRightOf="@id/img_rating_produk"/>
+                    android:text="373 Terjual"
+                    android:textSize="10sp" />
 
 
             </RelativeLayout>
@@ -87,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/nuunito_bold"
                     android:text="Rp.20.000"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="12sp" />
@@ -97,22 +92,60 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/nuunito_bold"
                     android:text=""
                     android:textAlignment="center"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="8sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/harga_jual"
-                style="@style/TextAppearance.AppCompat.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="2dp"
-                android:text="Rp. 18.000"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="20sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/harga_jual"
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:fontFamily="@font/nuunito_bold"
+                    android:text="Rp. 18.000"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/nuunito_bold"
+                        android:gravity="center"
+                        android:text="Stok : "
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/item_id_stock_produk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="@font/nuunito_bold"
+                        android:text="00"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/imgBackEditAkun"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_back_red" />
 
@@ -33,10 +33,10 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Edit Akun"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/arialrounded"
+                android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
                 android:text="Edit Foto Profil"
                 android:textColor="@android:color/black"

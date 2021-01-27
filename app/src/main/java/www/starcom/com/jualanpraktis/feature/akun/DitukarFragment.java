@@ -116,7 +116,9 @@ public class DitukarFragment extends Fragment {
                                 for (int j = 0; j<produk.length(); j++){
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
                                     data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("gambar", jsonObject1.getString("image_o"));
                                     data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("jumlah", jsonObject1.getString("jumlah"));
                                     data.put("harga_produk", jsonObject1.getString("harga_produk"));
                                     data.put("harga_jual", jsonObject1.getString("harga_jual"));
                                     data.put("untung", jsonObject1.getString("untung"));

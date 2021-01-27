@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -37,6 +38,7 @@ public class DipesanFragment extends Fragment {
 
     RecyclerView rvDipesan;
     ShimmerFrameLayout shimmerDipesan;
+    TextView txtKosong;
 
     loginuser user ;
 
@@ -59,6 +61,7 @@ public class DipesanFragment extends Fragment {
 
         rvDipesan = rootView.findViewById(R.id.recycler_status_transaksi_dipesan);
         shimmerDipesan = rootView.findViewById(R.id.shimmerDipesan);
+        txtKosong = rootView.findViewById(R.id.text_kosong_dipesan);
 
         AndroidNetworking.initialize(getActivity().getApplicationContext());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
@@ -113,7 +116,9 @@ public class DipesanFragment extends Fragment {
                                 for (int j = 0; j<produk.length(); j++){
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
                                     data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("gambar", jsonObject1.getString("image_o"));
                                     data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("jumlah", jsonObject1.getString("jumlah"));
                                     data.put("harga_produk", jsonObject1.getString("harga_produk"));
                                     data.put("harga_jual", jsonObject1.getString("harga_jual"));
                                     data.put("untung", jsonObject1.getString("untung"));
@@ -127,6 +132,9 @@ public class DipesanFragment extends Fragment {
                             rvDipesan.setVisibility(View.VISIBLE);
                             StatusDipesanAdapter adapter = new StatusDipesanAdapter(getActivity(), dataDipesan);
                             rvDipesan.setAdapter(adapter);
+                            if (dataDipesan.isEmpty()){
+                                txtKosong.setVisibility(View.VISIBLE);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

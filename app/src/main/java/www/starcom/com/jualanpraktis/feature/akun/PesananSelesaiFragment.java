@@ -49,15 +49,17 @@ import www.starcom.com.jualanpraktis.model_retrofit.model_penghasilan_selesai.Re
 public class PesananSelesaiFragment extends Fragment {
 
     RecyclerView rvPesananSelesai;
-    TextView txtTotalPenghasilan;
+    TextView txtTotalPenghasilan, txtKosong;
 
     ShimmerFrameLayout shimmerPenghasilanSelesai;
-    loginuser user ;
+    loginuser user;
 
     ArrayList<HashMap<String, String>> penghasilanSayaSelesai = new ArrayList<>();
     ArrayList<HashMap<String, String>> listProdukSelesai = new ArrayList<>();
 
     String penghasilan;
+
+    PenghasilanSayaActivity penghasilanSayaActivity;
 
     public PesananSelesaiFragment() {
         // Required empty public constructor
@@ -78,12 +80,17 @@ public class PesananSelesaiFragment extends Fragment {
         shimmerPenghasilanSelesai = rootView.findViewById(R.id.shimmerPenghasilanSaya);
         txtTotalPenghasilan = rootView.findViewById(R.id.text_total_penghasilan_saya_selesai);
         txtTotalPenghasilan.setVisibility(View.GONE);
+        txtKosong = rootView.findViewById(R.id.text_kosong_pesanan_selesai);
 
         AndroidNetworking.initialize(getActivity().getApplicationContext());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         rvPesananSelesai.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvPesananSelesai.setHasFixedSize(true);
+
+//        String range = getArguments().getString("periodeTanggal");
+//
+//        Log.d("rangePeriodeFragment", "onCreateView: "+range);
 
         loadData();
 
@@ -116,36 +123,43 @@ public class PesananSelesaiFragment extends Fragment {
                         try {
 
                             penghasilan = response.getString("penghasilan");
+                            Log.d("penghasilanSaya", "onResponse: " + penghasilan);
                             JSONArray array = response.getJSONArray("data");
-                            for (int i = 0;i<array.length();i++){
+                            for (int i = 0; i < array.length(); i++) {
                                 JSONObject jsonObject = array.getJSONObject(i);
-                                HashMap<String,String> data = new HashMap<>();
-                                data.put("id_transaksi",jsonObject.getString("id_transaksi"));
+                                HashMap<String, String> data = new HashMap<>();
+                                data.put("id_transaksi", jsonObject.getString("id_transaksi"));
 
                                 listProdukSelesai.clear();
                                 JSONArray produk = jsonObject.getJSONArray("produk");
-                                for (int j = 0; j<produk.length(); j++){
+                                for (int j = 0; j < produk.length(); j++) {
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
-                                    HashMap<String,String> data2 = new HashMap<>();
+                                    HashMap<String, String> data2 = new HashMap<>();
 //                                    data2.put("id_transaksi", jsonObject1.getString("id_transaksi"));
                                     data2.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data2.put("gambar", jsonObject1.getString("image_o"));
                                     data2.put("keterangan", jsonObject1.getString("ket2"));
                                     data2.put("tanggal_transaksi", jsonObject1.getString("tgl_transaksi"));
                                     data2.put("untung", jsonObject1.getString("untung"));
 //                                    dataProdukSemuaPesanan.add(data);
 //                                    listProdukSelesai.add(data);
                                     listProdukSelesai.add(data2);
-                                    Log.d("listProduk", "onResponse: "+listProdukSelesai);
+                                    Log.d("listProduk", "onResponse: " + listProdukSelesai);
                                 }
 
                                 penghasilanSayaSelesai.add(data);
                             }
 
-                            Log.d("penghasilanSaya", "onResponse: "+penghasilan);
-                            Log.d("dataPesananSelesai", "onResponse: "+penghasilanSayaSelesai);
+                            Log.d("penghasilanSaya", "onResponse: " + penghasilan);
+                            Log.d("dataPesananSelesai", "onResponse: " + penghasilanSayaSelesai);
                             rvPesananSelesai.setVisibility(View.VISIBLE);
                             PenghasilanSelesaiAdapter adapter = new PenghasilanSelesaiAdapter(listProdukSelesai, getActivity());
                             rvPesananSelesai.setAdapter(adapter);
+
+                            if (listProdukSelesai.isEmpty()){
+                                txtKosong.setVisibility(View.VISIBLE);
+                            }
+
                             int penghasilanInt = Integer.parseInt(penghasilan);
                             Locale localID = new Locale("in", "ID");
                             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
@@ -173,9 +187,9 @@ public class PesananSelesaiFragment extends Fragment {
                             Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                         } else {
                             // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            if (anError.getErrorDetail().equals("connectionError")){
+                            if (anError.getErrorDetail().equals("connectionError")) {
                                 Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                             }
                         }

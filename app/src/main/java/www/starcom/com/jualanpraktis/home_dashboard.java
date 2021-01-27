@@ -15,9 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -51,8 +54,11 @@ import www.starcom.com.jualanpraktis.Kategori.ViewPagerAdapter;
 import www.starcom.com.jualanpraktis.Kategori.adapterkategori;
 import www.starcom.com.jualanpraktis.Kategori.objectkategori;
 import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
+import www.starcom.com.jualanpraktis.SubKategori.adaptersubTerlaris;
+import www.starcom.com.jualanpraktis.SubKategori.objectSubTerlaris;
 import www.starcom.com.jualanpraktis.SubKategori.objectsub;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
+import www.starcom.com.jualanpraktis.adapter.NotifikasiAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
 import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
 import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
@@ -91,9 +97,10 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     private Timer timer ;
 
     //produk
-    private RecyclerView recyclerView,rv_produk1,rv_produk2,rv_produk3,rv_produk4 ;
+    private RecyclerView recyclerView,rv_produk1,rv_produk2,rv_produk3,rv_produk4, recyclerTerlaris, recyclerTerfavorit ;
     private objectsub.ObjectSub objectSub;
     private www.starcom.com.jualanpraktis.SubKategori.adaptersub adaptersub ;
+    private www.starcom.com.jualanpraktis.SubKategori.adaptersubTerlaris adaptersubTerlaris;
     private www.starcom.com.jualanpraktis.adapter.ProdukAdapter produk1,produk2,produk3,produk4,allproduk ;
     GridLayoutManager gridLayoutManager;
     private ShimmerFrameLayout shimmer,shimmerAllProduk,shimmer_kategori;
@@ -110,8 +117,10 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     //diskon
     private ImageView imgDiskon;
     //contact
-    ImageView img_contact;
+    ImageView img_contact, img_flash_sale;
     Context context;
+    Spinner spinnerFilter;
+    String image_flash_sale;
 
     //Cart
     private ImageView imgKeranjang;
@@ -153,6 +162,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
         sendRequest();
 
+        spinnerFilter = rootView.findViewById(R.id.spinner_filter_produk);
         imgChat = rootView.findViewById(R.id.img_chat_dashboard);
         imgNotif = rootView.findViewById(R.id.img_notif_dashboard);
         imgFavorite = rootView.findViewById(R.id.img_favorite_dashboard);
@@ -173,6 +183,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
         rv_produk3 = rootView.findViewById(R.id.rv_produk3);
         rv_produk4 = rootView.findViewById(R.id.rv_produk4);
         rv_kategori = rootView.findViewById(R.id.rv_kategori);
+        img_flash_sale = rootView.findViewById(R.id.img_flash_sale);
         recyclerView.setHasFixedSize(true);
         rv_produk1.setHasFixedSize(true);
         rv_produk2.setHasFixedSize(true);
@@ -232,53 +243,109 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
-//        img_contact = rootView.findViewById(R.id.img_contact);
-//        img_contact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Uri uri = Uri.parse("http://api.whatsapp.com/send?phone=62895623458199&text= ");
-//                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-//                sendIntent.setData(uri);
-//                startActivity(sendIntent);
-              /*  AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
-                View layoutView = getLayoutInflater().inflate(R.layout.dialog_info, null);
-                final TextView txt_number = layoutView.findViewById(R.id.txt_number);
-                final ImageView button = layoutView.findViewById(R.id.close);
-                txt_number.setPaintFlags(txt_number.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        getAllProduk();
 
-                dialogBuilder.setView(layoutView);
-                final AlertDialog  alertDialog = dialogBuilder.create();
-                alertDialog.setCancelable(false);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                alertDialog.show();
+        recyclerTerlaris = rootView.findViewById(R.id.rv_produk_terlaris);
+        recyclerTerfavorit = rootView.findViewById(R.id.rv_produk_terfavorit);
 
-                txt_number.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse("http://api.whatsapp.com/send?phone=62895623458199&text= ");
-                        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                        sendIntent.setData(uri);
-                        startActivity(sendIntent);
-                    }
-                });
+        ArrayAdapter adapterSpinner = ArrayAdapter.createFromResource(getActivity(), R.array.filterProduk
+                , R.layout.list_spinner_filter);
 
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                    }
-                }); **/
-//            }
-//        });
+        adapterSpinner.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        spinnerFilter.setAdapter(adapterSpinner);
+        clickedSpinner();
 
-     //   init();
-       // loadData();
-
-       // getAllProduk();
         btn_see_all.setVisibility(View.GONE);
        // getProdykPerBaris();
         getKategori();
+        loadImageFlashSale();
         return rootView;
+    }
+
+    private void loadImageFlashSale() {
+
+        String url = "https://jualanpraktis.net/android/fs-icon.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.get(url)
+                .setTag(getActivity())
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray array = response.getJSONArray("data");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String,String> data = new HashMap<>();
+                                image_flash_sale = jsonObject.getString("file");
+                            }
+
+                            String urlImage = "https://jualanpraktis.net/file-uploads/flashsale/"+image_flash_sale;
+
+                            Glide.with(getActivity())
+                                    .load(urlImage)
+                                    .into(img_flash_sale);
+
+                            Log.d("imageFlashSale", "onResponse: "+urlImage);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    private void clickedSpinner() {
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if (selectedItem.equals("Produk Terbaru")){
+
+                    getAllProduk();
+
+                }else if (selectedItem.equals("Produk Terlaris")){
+                    getProdukTerlaris();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     @Override
@@ -299,40 +366,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask(),4000,4000);
-        /*
-        if (getActivity() != null){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
 
-                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                        @Override
-                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                        }
-
-                        @Override
-                        public void onPageSelected(int position) {
-
-                                for (int i = 0; i < dotscount; i++) {
-                                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.notactive_dots));
-                                }
-
-                                dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dots));
-
-                        }
-
-                        @Override
-                        public void onPageScrollStateChanged(int state) {
-
-                        }
-                    });
-
-
-                }
-            });
-        }
-        */
     }
 
     @Override
@@ -413,99 +447,6 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
         requestQueue.add(jsonArrayRequest);
     }
-/**
-    public void loadData(){
-        GetData(urlkategori.URL_kategori);
-        GetData2(urlkategori.URL_kategori2);
-        GetData3(urlkategori.URL_kategori3);
-        GetData4(urlkategori.URL_kategori4);
-        GetData5(urlkategori.URL_kategori5);
-        GetData6(urlkategori.URL_kategori6);
-        GetData7(urlkategori.URL_kategori7);
-        GetData8(urlkategori.URL_kategori8);
-        GetData9(urlkategori.URL_kategori9);
-        GetData10(urlkategori.URL_kategori10);
-        GetData11(urlkategori.URL_kategori11);
-        GetData12(urlkategori.URL_kategori12);
-        GetData13(urlkategori.URL_kategori13);
-        GetData14(urlkategori.URL_kategori14);
-        GetData15(urlkategori.URL_kategori15);
-    }
-
-    private void init(){
-
-        /**
-        //linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView1 = rootView.findViewById(R.id.rv_item1);
-        recyclerView1.setHasFixedSize(true);
-        recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView2 = rootView.findViewById(R.id.rv_item2);
-        recyclerView2.setHasFixedSize(true);
-        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView3 = rootView.findViewById(R.id.rv_item3);
-        recyclerView3.setHasFixedSize(true);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView4 = rootView.findViewById(R.id.rv_item4);
-        recyclerView4.setHasFixedSize(true);
-        recyclerView4.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView5 = rootView.findViewById(R.id.rv_item5);
-        recyclerView5.setHasFixedSize(true);
-        recyclerView5.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView6 = rootView.findViewById(R.id.rv_item6);
-        recyclerView6.setHasFixedSize(true);
-        recyclerView6.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView7 = rootView.findViewById(R.id.rv_item7);
-        recyclerView7.setHasFixedSize(true);
-        recyclerView7.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView8 = rootView.findViewById(R.id.rv_item8);
-        recyclerView8.setHasFixedSize(true);
-        recyclerView8.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView9 = rootView.findViewById(R.id.rv_item9);
-        recyclerView9.setHasFixedSize(true);
-        recyclerView9.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView10 = rootView.findViewById(R.id.rv_item10);
-        recyclerView10.setHasFixedSize(true);
-        recyclerView10.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-
-        recyclerView11 = rootView.findViewById(R.id.rv_item11);
-        recyclerView11.setHasFixedSize(true);
-        recyclerView11.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        recyclerView12 = rootView.findViewById(R.id.rv_item12);
-        recyclerView12.setHasFixedSize(true);
-        recyclerView12.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        recyclerView13 = rootView.findViewById(R.id.rv_item13);
-        recyclerView13.setHasFixedSize(true);
-        recyclerView13.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        recyclerView14 = rootView.findViewById(R.id.rv_item14);
-        recyclerView14.setHasFixedSize(true);
-        recyclerView14.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        recyclerView15 = rootView.findViewById(R.id.rv_item15);
-        recyclerView15.setHasFixedSize(true);
-        recyclerView15.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-    } **/
 
     //Menampilkan kategori
     private void getKategori(){
@@ -542,6 +483,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                                 data.put("id",jsonObject.getString("id_kategori_produk"));
                                 data.put("kategori",jsonObject.getString("kategori"));
                                 data.put("gambar", jsonObject.getString("img"));
+                                data.put("color", jsonObject.getString("hex_code"));
                                 data.put("jumlah", jsonObject.getString("jumlah"));
                            //     data.put("created_at",jsonObject.getString("created_at"));
                                 kategoriList.add(data);
@@ -555,7 +497,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                             rv_kategori.setAdapter(adapter);
 
                                 getGambarIklan();
-                                getAllProduk();
+//                                getAllProduk();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -752,6 +694,47 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
                     }
                 });
+    }
+
+    private void getProdukTerlaris(){
+
+        recyclerView.setVisibility(View.GONE);
+        // shimmerAllProduk.setVisibility(View.VISIBLE);
+        // shimmerAllProduk.startShimmerAnimation();
+        String url = "https://jualanpraktis.net/android/produk_terlaris.php";
+        AndroidNetworking.get(url)
+                .setTag(getActivity())
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(objectsub.ObjectSub.class, new ParsedRequestListener<objectsub.ObjectSub>() {
+                    @Override
+                    public void onResponse(objectsub.ObjectSub response) {
+                        // swipeRefreshLayout.setRefreshing(false);
+                        swipeRefreshLayout.setRefreshing(false);
+                        shimmer.stopShimmerAnimation();
+                        shimmer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        imgDiskon.setVisibility(View.GONE);
+                        adaptersub = new adaptersub(getActivity(), response.sub1_kategori1);
+                        recyclerView.setAdapter(adaptersub);
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        //  swipeRefreshLayout.setRefreshing(false);
+                        swipeRefreshLayout.setRefreshing(false);
+                        shimmer.stopShimmerAnimation();
+                        shimmer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                        Toast.makeText(getContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
     }
 
     private void klikIklan(ImageView imageView, final String id_member){

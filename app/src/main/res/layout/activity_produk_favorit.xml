@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/imgBackPenghasilanSaya"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_panah_kiri" />
 
@@ -32,7 +32,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/imgBackPenghasilanSaya"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Favorit"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
@@ -45,26 +45,26 @@
 
                 <ImageView
                     android:id="@+id/img_search_favorit"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_search_white" />
 
                 <ImageView
                     android:id="@+id/img_favorit"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginLeft="5dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_favorite_white" />
+                    android:src="@drawable/icon_fav_grey" />
 
                 <ImageView
                     android:id="@+id/img_notif_favorit"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginLeft="5dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_notif_white" />
+                    android:src="@drawable/icon_notif_grey" />
 
             </LinearLayout>
         </RelativeLayout>

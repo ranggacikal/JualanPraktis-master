@@ -45,6 +45,14 @@ public class PenghasilanSelesaiAdapter extends RecyclerView.Adapter<PenghasilanS
         item = this.listPenghasilanSelesai.get(position);
         pref = new Pref(context.getApplicationContext());
 
+        String image = item.get("gambar");
+        String url = "https://trading.my.id/img/"+image;
+
+
+        Glide.with(context)
+                .load(url)
+                .into(holder.imgBarang);
+
         holder.txtNama.setText(item.get("nama_produk"));
         holder.txtTanggal.setText(item.get("tanggal_transaksi"));
         holder.txtTotal.setVisibility(View.GONE);

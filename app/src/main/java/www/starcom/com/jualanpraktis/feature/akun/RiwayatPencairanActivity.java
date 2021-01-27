@@ -1,6 +1,7 @@
 package www.starcom.com.jualanpraktis.feature.akun;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,13 @@ public class RiwayatPencairanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_riwayat_pencairan);
         ButterKnife.bind(this);
+
+        imgBackRiwayatPencairan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         loadData();
     }

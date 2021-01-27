@@ -17,6 +17,8 @@ import androidx.cardview.widget.CardView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -102,6 +104,9 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     //String jk = "" ;
     String id_kota,id_wilayah,id_provinsi ;
     String url = "https://jualanpraktis.net/android/signup.php";
+
+    ImageView imghidePassword;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +143,7 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
         edtEmail = findViewById(R.id.edt_email_daftar);
         edtPassword = findViewById(R.id.edt_password_daftar);
         btn_daftar = findViewById(R.id.card_daftar);
+        imghidePassword = findViewById(R.id.img_hide_password);
 
 //        jenis_kelamin = findViewById(R.id.RG);
 //        laki = findViewById(R.id.laki);
@@ -212,6 +218,34 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 //            }
 //        });
 
+        showHidePass(imghidePassword);
+
+    }
+
+    public void showHidePass(View view){
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.img_hide_password){
+
+                    if(edtPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        edtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        edtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -220,11 +254,6 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
         String password = edtPassword.getText().toString();
         int min_length = 6;
 
-        if (edtNama.getText().toString().equals("")) {
-            edtNama.setError("Nama belum di isi");
-            edtNama.requestFocus();
-            return;
-        }
         if (edtEmail.getText().toString().equals("")) {
             edtEmail.setError("Email belum di isi");
             edtEmail.requestFocus();

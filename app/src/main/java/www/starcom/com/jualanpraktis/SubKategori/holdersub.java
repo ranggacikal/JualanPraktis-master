@@ -20,8 +20,9 @@ public class holdersub extends RecyclerView.ViewHolder {
     public ImageView gambar ;
     public LinearLayout linearWa, linearFb, linearSalin;
     public Button btnWa;
-    public TextView nama_produk,harga_jual,harga_asli,diskon ;
+    public TextView nama_produk,harga_jual,harga_asli,diskon,txtTerjual ;
     public CardView cardView;
+    public TextView txtStok;
    // public SimpleDraweeView draweeView;
 
     public holdersub(View itemView) {
@@ -35,5 +36,7 @@ public class holdersub extends RecyclerView.ViewHolder {
         linearFb = itemView.findViewById(R.id.share_fb_home);
         linearWa = itemView.findViewById(R.id.share_whatsapp_home);
         linearSalin = itemView.findViewById(R.id.share_salin_home);
+        txtStok = itemView.findViewById(R.id.item_id_stock_produk);
+        txtTerjual = itemView.findViewById(R.id.text_id_qty_produk_dibeli);
     }
 }

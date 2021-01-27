@@ -215,10 +215,10 @@ public class MainActivity extends AppCompatActivity {
         Katalog = new katalog();
         panduanFragment = new PanduanFragment();
        // tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.untuk_anda_icon));
-        tabLayout.addTab(tabLayout.newTab().setText("Kategori").setIcon(R.drawable.katalog_icon__red_));
-        tabLayout.addTab(tabLayout.newTab().setText("Panduan").setIcon(R.drawable.pesanan_icon__red_));
-        tabLayout.addTab(tabLayout.newTab().setText("Keranjang").setIcon(R.drawable.icon_cart));
+        tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.icon_jualan_praktis_red));
+        tabLayout.addTab(tabLayout.newTab().setText("Kategori").setIcon(R.drawable.icon_kategori));
+        tabLayout.addTab(tabLayout.newTab().setText("Panduan").setIcon(R.drawable.icon_panduan));
+        tabLayout.addTab(tabLayout.newTab().setText("Keranjang").setIcon(R.drawable.icon_keranjang));
 //        int tab = getIntent().getIntExtra("tab",0);
 //        if (tab==2){
 //            tabLayout.addTab(tabLayout.newTab().setText("Pesanan").setIcon(R.drawable.ic_bag),true);

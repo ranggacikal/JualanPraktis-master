@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +69,14 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
         pref = new Pref(context.getApplicationContext());
 
         user = SharedPrefManager.getInstance(context).getUser();
+
+        String image = item.get("gambar");
+        String url = "https://trading.my.id/img/"+image;
+
+
+        Glide.with(context)
+                .load(url)
+                .into(holder.imgBarang);
 
         holder.txtId.setText(item.get("id_transaksi"));
         holder.txtTanggal.setText(item.get("tanggal"));
@@ -172,6 +182,7 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
 
         LinearLayout linearPesananSelesai, linearAfterUpdate;
         TextView txtId, txtTanggal, txtNama, txtVariasi, txthargaProduk, txtHargaJual, txtKeuntungan;
+        ImageView imgBarang;
 
         public PesananSelesaiViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -184,6 +195,7 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
             txthargaProduk = itemView.findViewById(R.id.text_list_hargaproduk_status_transaksi_selesai);
             txtHargaJual = itemView.findViewById(R.id.text_list_hargajual_status_transaksi_selesai);
             txtKeuntungan = itemView.findViewById(R.id.text_list_keuntungan_status_transaksi_selesai);
+            imgBarang = itemView.findViewById(R.id.img_list_gambar_status_transaksi_selesai);
         }
     }
 }

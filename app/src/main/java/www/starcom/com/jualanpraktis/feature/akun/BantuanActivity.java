@@ -45,6 +45,13 @@ public class BantuanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bantuan);
         ButterKnife.bind(this);
 
+        imgBackBantuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         getDataBantuan();
     }
 

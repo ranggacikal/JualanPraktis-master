@@ -13,7 +13,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/redLight"
+            android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
                     android:id="@+id/akunsaya"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/bold"
+                    android:fontFamily="@font/nuunito_bold"
                     android:text="Akun Saya"
                     android:textAlignment="center"
                     android:layout_marginEnd="20dp"
@@ -123,7 +123,7 @@
                                 android:layout_below="@+id/image_profile"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="5dp"
-                                android:fontFamily="@font/arialbold"
+                                android:fontFamily="@font/nuunito_bold"
                                 android:gravity="center"
                                 android:hint="Nama User"
                                 android:textColor="@color/white"
@@ -235,14 +235,17 @@
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="5dp"
                                         android:text="Penjualan Saya"
+                                        android:fontFamily="@font/nuunito_bold"
                                         android:textColor="@color/colorPrimary"
                                         android:textSize="15sp"/>
 
                                     <TextView
+                                        android:id="@+id/text_penghasilan_saya_akun"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_marginLeft="15dp"
+                                        android:fontFamily="@font/nuunito_bold"
                                         android:text="Rp. 0.000.000"
                                         android:textColor="@color/colorPrimary"
                                         android:textSize="25sp"
@@ -301,7 +304,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -313,8 +316,8 @@
 
                         <ImageView
                             android:id="@+id/img_rincian_rekening"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_rekening_bank"
                             android:layout_marginLeft="20dp"/>
@@ -325,15 +328,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rincian Rekening Saya"
+                            android:fontFamily="@font/nuunito_bold"
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_rincian_rekening"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp" />
+                            android:textSize="15sp" />
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -344,7 +348,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -356,8 +360,8 @@
 
                         <ImageView
                             android:id="@+id/img_status_transaksi"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_status_transaksi"
                             android:layout_marginLeft="20dp"/>
@@ -368,13 +372,14 @@
                             android:layout_toRightOf="@+id/img_status_transaksi"
                             android:layout_marginLeft="20dp"
                             android:text="Status Transaksi"
+                            android:fontFamily="@font/nuunito_bold"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp" />
+                            android:textSize="15sp" />
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -385,7 +390,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -397,8 +402,8 @@
 
                         <ImageView
                             android:id="@+id/img_produk_favorit"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/heart"
                             android:layout_marginLeft="20dp"/>
@@ -411,11 +416,12 @@
                             android:layout_toRightOf="@id/img_produk_favorit"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp" />
+                            android:fontFamily="@font/nuunito_bold"
+                            android:textSize="15sp" />
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -426,7 +432,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -438,8 +444,8 @@
 
                         <ImageView
                             android:id="@+id/img_bantuan"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/icon_bantuan"
                             android:layout_marginLeft="20dp"/>
@@ -452,11 +458,12 @@
                             android:text="Bantuan"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp"/>
+                            android:fontFamily="@font/nuunito_bold"
+                            android:textSize="15sp"/>
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -467,7 +474,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -479,8 +486,8 @@
 
                         <ImageView
                             android:id="@+id/img_nilai"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_nilai_kami"
                             android:layout_marginLeft="20dp"/>
@@ -493,11 +500,11 @@
                             android:text="Nilai Kami"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp"/>
+                            android:textSize="15sp"/>
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -508,7 +515,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
@@ -520,8 +527,8 @@
 
                         <ImageView
                             android:id="@+id/img_kata_sandi"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_ganti_kata_sandi"
                             android:layout_marginLeft="20dp"/>
@@ -534,11 +541,12 @@
                             android:text="Ubah Kata Sandi"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp" />
+                            android:fontFamily="@font/nuunito_bold"
+                            android:textSize="15sp" />
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -549,7 +557,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray"
                         android:layout_marginBottom="10dp"/>
 
@@ -562,8 +570,8 @@
 
                         <ImageView
                             android:id="@+id/img_keluar_akun"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/icon_metro_exit"
                             android:layout_marginLeft="20dp"/>
@@ -576,11 +584,12 @@
                             android:text="Keluar"
                             android:textColor="@color/colorPrimary"
                             android:layout_centerVertical="true"
-                            android:textSize="20sp" />
+                            android:fontFamily="@font/nuunito_bold"
+                            android:textSize="15sp" />
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
@@ -591,7 +600,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:background="@android:color/darker_gray"
                         android:layout_marginBottom="10dp"/>
 

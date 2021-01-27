@@ -16,9 +16,9 @@
 
     <ImageView
         android:id="@+id/logoimage"
-        android:layout_width="450dp"
-        android:layout_height="450dp"
-        android:src="@drawable/ic_logo_putih_foreground"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/logo_splash_white_hdpi"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         />

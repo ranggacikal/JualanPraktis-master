@@ -59,6 +59,8 @@ public class PilihPengirimanAdapter extends RecyclerView.Adapter<PilihPengiriman
         holder.linearRodaDua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                formTransaksiActivity.dataOngkir.clear();
+
                 formTransaksiActivity.isClicked = "linearRodaDua";
                 onItemClickListener.onItemClick(v, position);
 //                harga_ongkir = 10000;
@@ -84,6 +86,7 @@ public class PilihPengirimanAdapter extends RecyclerView.Adapter<PilihPengiriman
         holder.linearRodaEmpat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                formTransaksiActivity.dataOngkir.clear();
                 formTransaksiActivity.isClicked = "linearRodaEmpat";
                 onItemClickListener.onItemClick(v, position);
                 //                harga_ongkir = 50000;
@@ -131,15 +134,7 @@ public class PilihPengirimanAdapter extends RecyclerView.Adapter<PilihPengiriman
         public PilihPengirimanViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            linearRodaDua = itemView.findViewById(R.id.linear_ekspedisi_roda_dua);
-            linearRodaEmpat = itemView.findViewById(R.id.linear_ekspedisi_roda_empat);
-            txtNamaVendor = itemView.findViewById(R.id.text_nama_vendor_pilih_pengiriman);
-            txtKendaraanRodaDua = itemView.findViewById(R.id.text_kendaraan_roda_dua);
-            txtHargaRodaDua = itemView.findViewById(R.id.text_harga_kendaraan_roda_dua);
-            txtPerlokasiRodaDua = itemView.findViewById(R.id.text_perlokasi_kendaraan_roda_dua);
-            txtKendaraanRodaEmpat = itemView.findViewById(R.id.text_kendaraan_roda_empat);
-            txtHargaRodaEmpat = itemView.findViewById(R.id.text_harga_kendaraan_roda_empat);
-            txtPerlokasiRodaEmpat = itemView.findViewById(R.id.text_perlokasi_kendaraan_roda_empat);
+
 
         }
     }

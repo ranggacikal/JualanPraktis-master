@@ -11,6 +11,7 @@ import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataFavorite;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataVideo;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseRegister;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseUpdateRekening;
+import www.starcom.com.jualanpraktis.model_retrofit.datacheck.ResponseDataCheck;
 import www.starcom.com.jualanpraktis.model_retrofit.editakun.ResponseInsertEditAkun;
 import www.starcom.com.jualanpraktis.model_retrofit.model_bantuan.ResponseDataBantuan;
 import www.starcom.com.jualanpraktis.model_retrofit.model_penggunaan_app.ResponseListPanduan;
@@ -75,5 +76,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("transaksi_selesai.php")
     Call<ResponseDataPenghasilanSelesai> penghasilanSelesai(@Field("customer") String customer);
+
+    @FormUrlEncoded
+    @POST("data-check.php")
+    Call<ResponseDataCheck> dataCheck(@Field("id_member") String id_member);
 
 }

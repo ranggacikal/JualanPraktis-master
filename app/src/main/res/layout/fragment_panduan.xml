@@ -19,12 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imgBackPanduan"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_back_red" />
+<!--            <ImageView-->
+<!--                android:id="@+id/imgBackPanduan"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:src="@drawable/ic_back_red" />-->
 
             <TextView
                 android:id="@+id/panduan"
@@ -33,10 +33,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Panduan"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>

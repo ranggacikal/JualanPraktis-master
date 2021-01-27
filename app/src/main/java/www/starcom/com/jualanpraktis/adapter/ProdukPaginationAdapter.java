@@ -119,8 +119,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
             case ITEM:
                 ViewHolder viewHolder = (ViewHolder) holder;
 
-
-                final String UrlImage = "https://batammall.co.id/img/";
+                final String UrlImage = "https://jualanpraktis.net/img/";
                 final String Image = item.gambar;
                 final Uri uri = Uri.parse(UrlImage+Image);
                 final String harga = item.harga_asli ;
@@ -229,6 +228,9 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
                         .load(UrlImage+Image)
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(200,200).skipMemoryCache(false))
                         .into(viewHolder.gambar);
+                Log.d("gambarKategori", "onBindViewHolder: "+UrlImage+Image);
+
+
                 viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

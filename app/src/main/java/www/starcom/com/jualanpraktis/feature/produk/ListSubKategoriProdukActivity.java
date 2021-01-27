@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -18,9 +21,13 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.SearchResultsActivity;
+import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
+import www.starcom.com.jualanpraktis.SubKategori.objectsub;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukPaginationAdapter;
 import www.starcom.com.jualanpraktis.databinding.ActivityListSubKategoriProdukBinding;
@@ -36,8 +43,10 @@ public class ListSubKategoriProdukActivity extends AppCompatActivity {
     //adapter
     ProdukAdapter adapter;
     List<ListProduk.ObjectSub.Results> allproduct;
-    GridLayoutManager gridLayoutManager;
+    GridLayoutManager gridLayoutManager, gridLayoutManager2;
     ProdukPaginationAdapter produkPaginationAdapter;
+
+    Spinner spinnerFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +64,21 @@ public class ListSubKategoriProdukActivity extends AppCompatActivity {
         binding.tvHint.setText("Cari dalam " + title);
         produkPaginationAdapter = new ProdukPaginationAdapter(ListSubKategoriProdukActivity.this);
         gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        gridLayoutManager2 = new GridLayoutManager(getApplicationContext(), 2);
         binding.recyclerView.setLayoutManager(gridLayoutManager);
+        binding.recyclerViewTerlarisSub.setLayoutManager(gridLayoutManager2);
+
+        spinnerFilter = findViewById(R.id.spinner_filter_produk_subkategori);
+
+        ArrayAdapter adapterSpinner = ArrayAdapter.createFromResource(ListSubKategoriProdukActivity.this, R.array.filterProduk
+                , R.layout.list_spinner_filter);
+
+        adapterSpinner.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        spinnerFilter.setAdapter(adapterSpinner);
+        clickedSpinner();
 
 
+        binding.recyclerViewTerlarisSub.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerView.setAdapter(produkPaginationAdapter);
 
@@ -86,7 +107,79 @@ public class ListSubKategoriProdukActivity extends AppCompatActivity {
         });
     }
 
+    private void clickedSpinner() {
 
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if (selectedItem.equals("Produk Terbaru")){
+
+
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerViewTerlarisSub.setVisibility(View.GONE);
+
+                }else if (selectedItem.equals("Produk Terlaris")){
+                    getProdukTerlaris();
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.recyclerViewTerlarisSub.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void getProdukTerlaris() {
+
+        binding.recyclerViewTerlarisSub.setVisibility(View.GONE);
+        binding.shimmer.setVisibility(View.VISIBLE);
+        binding.shimmer.startShimmerAnimation();
+        String url = "https://jualanpraktis.net/android/produk_terlaris.php";
+
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("id_sub_kategori_produk", id)
+                .setTag(ListSubKategoriProdukActivity.this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(objectsub.ObjectSub.class, new ParsedRequestListener<objectsub.ObjectSub>() {
+                    @Override
+                    public void onResponse(objectsub.ObjectSub response) {
+                        // swipeRefreshLayout.setRefreshing(false);
+                        binding.shimmer.stopShimmerAnimation();
+                        binding.shimmer.setVisibility(View.GONE);
+                        binding.recyclerViewTerlarisSub.setVisibility(View.VISIBLE);
+
+                        adaptersub adaptersub = new adaptersub(ListSubKategoriProdukActivity.this, response.sub1_kategori1);
+                        binding.recyclerViewTerlarisSub.setAdapter(adaptersub);
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        //  swipeRefreshLayout.setRefreshing(false);
+                        binding.shimmer.stopShimmerAnimation();
+                        binding.shimmer.setVisibility(View.GONE);
+                        binding.recyclerViewTerlarisSub.setVisibility(View.VISIBLE);
+
+                        Toast.makeText(ListSubKategoriProdukActivity.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+    }
 
 
     private void getData(final int currentPage){

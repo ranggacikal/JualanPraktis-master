@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -30,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +57,7 @@ import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
 import www.starcom.com.jualanpraktis.interfaces.PilihPengirimanClickInterface;
 import www.starcom.com.jualanpraktis.service.ServiceTask;
 
-public class FormTransaksiActivity extends AppCompatActivity implements PilihPengirimanClickInterface {
+public class FormTransaksiActivity extends AppCompatActivity {
     Activity activity = FormTransaksiActivity.this;
     ActivityFormTransaksiBinding binding;
 
@@ -121,9 +125,15 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
     String validasiAdapter;
 
+    String ongkir, kurirFix;
+
     String totalOngkir2;
 
     private static final int REQUEST_PENGIRIMAN = 4;
+
+    LinearLayout linearRodaDua, linearRodaEmpat;
+    TextView txtKendaraanRodaDua, txtHargaRodaDua, txtPerlokasiRodaDua;
+    TextView txtKendaraanRodaEmpat, txtHargaRodaEmpat, txtPerlokasiRodaEmpat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +149,20 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
         total_belanja = getIntent().getExtras().getString(EXTRA_TOTAL);
 
+        linearRodaDua = findViewById(R.id.linear_ekspedisi_roda_dua);
+        linearRodaEmpat = findViewById(R.id.linear_ekspedisi_roda_empat);
+        txtKendaraanRodaDua = findViewById(R.id.text_kendaraan_roda_dua);
+        txtHargaRodaDua = findViewById(R.id.text_harga_kendaraan_roda_dua);
+        txtPerlokasiRodaDua = findViewById(R.id.text_perlokasi_kendaraan_roda_dua);
+        txtKendaraanRodaEmpat = findViewById(R.id.text_kendaraan_roda_empat);
+        txtHargaRodaEmpat = findViewById(R.id.text_harga_kendaraan_roda_empat);
+        txtPerlokasiRodaEmpat = findViewById(R.id.text_perlokasi_kendaraan_roda_empat);
+
         total_berat1 = new String[]{total_berat};
         total_belanj1 = new String[]{total_belanja};
         idTransaksi = getIntent().getExtras().getString("id_transaksi");
         dataList.clear();
         dataList = (ArrayList<HashMap<String, String>>) getIntent().getExtras().getSerializable("dataList");
-
 
         binding.idTransaksi.setText(idTransaksi);
 //         binding.lblNamaPenerima.setText(user.getNama());
@@ -177,14 +195,71 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         binding.recyclerView.setLayoutManager(linearLayoutManager);
 
+        Drawable dr = FormTransaksiActivity.this.getResources().getDrawable(R.drawable.background_pilih_pengiriman_red);
+
+        Drawable dr2 = FormTransaksiActivity.this.getResources().getDrawable(R.drawable.background_pilih_pengiriman);
+
+        Locale localID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
+
+        linearRodaDua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearRodaDua.setBackground(dr);
+                linearRodaEmpat.setBackground(dr2);
+
+                txtKendaraanRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+                txtHargaRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+                txtPerlokasiRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+
+                txtKendaraanRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+                txtHargaRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+                txtPerlokasiRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+
+                ongkir = "10000";
+                kurirFix = "Roda Dua";
+
+                int ongkirRodaDua = Integer.valueOf(ongkir);
+                binding.lblNominalOngkir.setText(formatRupiah.format(ongkirRodaDua));
+
+                int jumlahTotal = ongkirRodaDua + Integer.parseInt(total_belanja);
+                binding.lblNominalTotal.setText(formatRupiah.format(jumlahTotal));
+
+
+            }
+        });
+
+        linearRodaEmpat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearRodaEmpat.setBackground(dr);
+                linearRodaDua.setBackground(dr2);
+
+                //set text color kendaraan roda empat
+                txtKendaraanRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+                txtHargaRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+                txtPerlokasiRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.white));
+
+                //set text color kendaraan roda dua
+                txtKendaraanRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+                txtHargaRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+                txtPerlokasiRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
+
+                ongkir = "50000";
+                kurirFix = "Roda Empat";
+
+                int ongkirRodaEmpat = Integer.valueOf(ongkir);
+                binding.lblNominalOngkir.setText(formatRupiah.format(ongkirRodaEmpat));
+
+                int jumlahTotal2 = ongkirRodaEmpat + Integer.parseInt(total_belanja);
+                binding.lblNominalTotal.setText(formatRupiah.format(jumlahTotal2));
+
+            }
+        });
+
 
         CartAdapter adapter = new CartAdapter(activity, dataList, null);
         binding.recyclerView.setAdapter(adapter);
-
-        //Recyclerview Pilih Pengiriman
-        PilihPengirimanAdapter adapterPengiriman = new PilihPengirimanAdapter(activity, dataList, FormTransaksiActivity.this, this);
-        binding.rvPilihPengiriman.setAdapter(adapterPengiriman);
-        binding.rvPilihPengiriman.setLayoutManager(new LinearLayoutManager(activity));
 
 
         for (HashMap<String, String> item : dataList) {
@@ -197,13 +272,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
         }
 
-        binding.btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
+        Log.d("IdVendor", "onCreate: "+idVendor1);
 
 
         for (int total1 = 0; total1 < hargaItem.size(); total1++) {
@@ -290,7 +359,6 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
     }
 
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -353,9 +421,8 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
                 binding.lblKecamatan.setText(nama_kecamatan);
                 binding.lblKecamatan.setTextColor(getResources().getColor(android.R.color.black));
             }
-        }
-        else if (requestCode == REQUEST_PENGIRIMAN) {
-            if (resultCode == RESULT_OK && data!=null) {
+        } else if (requestCode == REQUEST_PENGIRIMAN) {
+            if (resultCode == RESULT_OK && data != null) {
 
                 String totalOngkirIntent = data.getStringExtra("totalOngkir");
                 binding.lblNominalOngkir.setText(totalOngkirIntent);
@@ -468,14 +535,14 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
         });
     }
 
-    private void totalBayar(){
+    private void totalBayar() {
 
         int harga_ongkir = 0;
         int harga_belanja = 0;
         int totalSeluruh = 0;
         ArrayList<Integer> total = new ArrayList<>();
-        
-        for (int sum : dataOngkir){
+
+        for (int sum : dataOngkir) {
 
             harga_ongkir = harga_ongkir + sum;
 
@@ -485,7 +552,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
         totalSeluruh = harga_ongkir + harga_belanja;
 
-        Log.d("indexTotal", "totalBayar: "+totalSeluruh);
+        Log.d("indexTotal", "totalBayar: " + totalSeluruh);
 
 
     }
@@ -716,11 +783,9 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
     private void validasiEkspedisi() {
 
-        if (dataKurir.size() != 0) {
-
-            if (dataKurir.size() < 0) {
+            if (kurirFix==null) {
                 Toast.makeText(activity, "Silahkan Pilih Kurir", Toast.LENGTH_SHORT).show();
-            } else if (dataOngkir.size() < 0) {
+            } else if (ongkir==null) {
                 Toast.makeText(activity, "Silahkan Pilih Kurir", Toast.LENGTH_SHORT).show();
             } else {
                 new AlertDialog.Builder(activity)
@@ -741,8 +806,6 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
                         .setIcon(android.R.drawable.ic_menu_info_details)
                         .show();
             }
-
-        }
 
 //        if (kode_ekspedisi != null) {
 //
@@ -818,28 +881,27 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
         Date date;
         Calendar calendar = Calendar.getInstance();
         String id_member = "";
-        String total_bayar3= "";
+        String total_bayar3 = "";
 
         int jumlahOngkir = 0;
 
-        for (int a = 0; a<dataOngkir.size(); a++){
+        for (int a = 0; a < hargaItem.size(); a++) {
 
-            harga_ongkir2 = dataOngkir.get(a);
             harga_item2 = Integer.parseInt(hargaItem.get(a));
 
-            total_harga2 = harga_ongkir2 + harga_item2;
+            total_harga2 = Integer.parseInt(ongkir) + harga_item2;
             totalbayarArray.add(total_harga2);
 
         }
 
-        for (int sumOngkir : dataOngkir){
-            jumlahOngkir = jumlahOngkir + sumOngkir;
-            total_ongkir = String.valueOf(jumlahOngkir);
-        }
+//        for (int sumOngkir : dataOngkir) {
+//            jumlahOngkir = jumlahOngkir + sumOngkir;
+//            total_ongkir = String.valueOf(jumlahOngkir);
+//        }
 
-        Log.d("FormTransaksiTotal", "TotalOngkir: "+total_ongkir);
+        Log.d("FormTransaksiTotal", "TotalOngkir: " + total_ongkir);
 
-        int total_seluruh = Integer.parseInt(total_belanja) + Integer.parseInt(total_ongkir);
+        int total_seluruh = Integer.parseInt(total_belanja) + Integer.parseInt(ongkir);
         total_bayar_item = String.valueOf(total_seluruh);
 
         for (int a = 0; a < idVendor1.size(); a++) {
@@ -880,7 +942,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
             Map<String, String> params = new HashMap<String, String>();
             params.put("id_customer", user.getId());
             params.put("id_transaksi", idTransaksi);
-            params.put("tgl_transaksi", currentDateTime);
+//            params.put("tgl_transaksi", currentDateTime);
             params.put("nama_penerima", binding.lblNamaPenerima.getText().toString());
             params.put("alamat", binding.lblAlamat.getText().toString());
             params.put("city_destination", id_kota);
@@ -895,14 +957,12 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
             total_berat2 = beratItem.get(a);
             params.put("weight[]", total_berat2);
 
-            kurir = dataKurir.get(a);
-            params.put("courier[]", kurir);
+            params.put("courier[]", kurirFix);
 
-            harga_ongkir = dataOngkir.get(a);
-            params.put("ongkos_kirim[]", String.valueOf(harga_ongkir));
+            params.put("ongkos_kirim", String.valueOf(ongkir));
 
-            total_bayar3 = String.valueOf(totalbayarArray.get(a));
-            params.put("total_bayar[]", total_bayar3);
+//            total_bayar3 = String.valueOf(totalbayarArray.get(a));
+//            params.put("total_bayar[]", total_bayar3);
             params.put("opsi", opsi_pembayaran);
 
 
@@ -935,7 +995,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
                                 intent.putExtra("nama", binding.lblNamaPenerima.getText().toString());
                                 intent.putExtra("alamat", alamat);
                                 intent.putExtra("nominal_belanja", total_belanja);
-                                intent.putExtra("ongkos_kirim", total_ongkir);
+                                intent.putExtra("ongkos_kirim", ongkir);
                                 intent.putExtra("berat", total_berat2);
                                 intent.putExtra("total", total_bayar_item);
                                 intent.putExtra("no_hp", binding.lblNoTelpon.getText().toString());
@@ -975,7 +1035,7 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
                             progressDialog.dismiss();
                             Log.d("FormTransaksi", String.valueOf(anError.getErrorCode()));
                             Log.d("FormTransaksi", anError.getErrorDetail());
-                            Toast.makeText(getApplicationContext(), "Gagal Melakukan Pemesanan", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), anError.getErrorDetail()+" Code : "+anError.getErrorCode(), Toast.LENGTH_SHORT).show();
                         }
 
                     });
@@ -985,51 +1045,59 @@ public class FormTransaksiActivity extends AppCompatActivity implements PilihPen
 
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
+//    @Override
+//    public void onItemClick(View view, int position) {
+//
+//        LinearLayout linearRodaDua = view.findViewById(R.id.linear_ekspedisi_roda_dua);
+//        LinearLayout linearRodaEmpat = view.findViewById(R.id.linear_ekspedisi_roda_empat);
+//
+//        int harga_ongkir_adapter;
+//        String nama_kurir;
+//
+//        if (isClicked.equals("linearRodaDua")) {
+//            harga_ongkir_adapter = 10000;
+//            nama_kurir = "motor";
+//            dataOngkir.add(harga_ongkir_adapter);
+//            dataKurir.add(nama_kurir);
+//        }
+//
+//        if (isClicked.equals("linearRodaEmpat")) {
+//            harga_ongkir_adapter = 50000;
+//            nama_kurir = "mobil";
+//            dataOngkir.add(harga_ongkir_adapter);
+//            dataKurir.add(nama_kurir);
+//        }
+//
+//        int tambahOngkir2 = 0;
+//
+//        if (dataOngkir.size() > 0) {
+//            for (int jumlahOngkir : dataOngkir) {
+//
+//                tambahOngkir2 = tambahOngkir2 + jumlahOngkir;
+//
+//            }
+//
+//            binding.lblNominalOngkir.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(tambahOngkir2))));
+//            int total_bayar_seluruh;
+//
+//            total_bayar_seluruh = Integer.parseInt(total_belanja) + tambahOngkir2;
+//
+//            binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_bayar_seluruh))));
+//
+//            if (dataOngkir.size()>=dataList.size()){
+//
+//                dataOngkir.clear();
+//                dataKurir.clear();
+//
+//            }
+//
+//        }
+//
+//
+//    }
 
-        LinearLayout linearRodaDua = view.findViewById(R.id.linear_ekspedisi_roda_dua);
-        LinearLayout linearRodaEmpat = view.findViewById(R.id.linear_ekspedisi_roda_empat);
-
-        int harga_ongkir_adapter;
-        String nama_kurir;
-
-
-
-        if (isClicked.equals("linearRodaDua")) {
-            harga_ongkir_adapter = 10000;
-            nama_kurir = "motor";
-            dataOngkir.add(harga_ongkir_adapter);
-            dataKurir.add(nama_kurir);
-        }else if (isClicked.equals("linearRodaEmpat")){
-            harga_ongkir_adapter = 50000;
-            nama_kurir = "mobil";
-            dataOngkir.add(harga_ongkir_adapter);
-            dataKurir.add(nama_kurir);
-        }
-
-        int tambahOngkir2 = 0;
-
-        if (dataOngkir.size()>0) {
-            for (int jumlahOngkir : dataOngkir) {
-
-                tambahOngkir2 = tambahOngkir2 + jumlahOngkir;
-
-            }
-
-            binding.lblNominalOngkir.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(tambahOngkir2))));
-            int total_bayar_seluruh;
-
-            total_bayar_seluruh = Integer.parseInt(total_belanja) + tambahOngkir2;
-
-            binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_bayar_seluruh))));
-        }
-
-
-    }
-
-    @Override
-    public void onLongItemClick(int position) {
-
-    }
+//    @Override
+//    public void onLongItemClick(int position) {
+//
+//    }
 }

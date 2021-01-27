@@ -11,8 +11,8 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
@@ -30,16 +30,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00 Des 2020"
+                android:fontFamily="@font/nuunito_bold"
                 android:textStyle="bold"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>
 
             <TextView
                 android:id="@+id/text_item_waktu_pencairan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="00 : 00"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textColor="@color/colorPrimary"/>
 
         </LinearLayout>
@@ -54,7 +56,8 @@
                 android:id="@+id/text_item_total_pencairan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-Rp 350.000"
+                android:text="Rp 350.000"
+                android:fontFamily="@font/nuunito_bold"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -67,7 +70,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
 
 </LinearLayout>

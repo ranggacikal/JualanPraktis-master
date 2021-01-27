@@ -71,9 +71,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.FileSystemException;
 import java.nio.file.FileSystemNotFoundException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -88,6 +90,7 @@ import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.Spinner.Kecamatan;
 import www.starcom.com.jualanpraktis.Spinner.KotaKabupaten;
 import www.starcom.com.jualanpraktis.Spinner.Provinsi;
+import www.starcom.com.jualanpraktis.adapter.StatusDipesanAdapter;
 import www.starcom.com.jualanpraktis.login;
 import www.starcom.com.jualanpraktis.utils.CustomProgressDialog;
 
@@ -123,11 +126,15 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
     List<KotaKabupaten> kotaKabupatenList = new ArrayList<>();
     List<Kecamatan> kecamatanList = new ArrayList<>();
     List<Provinsi> provinsiList = new ArrayList<>();
+
+    TextView txtPesnghasilanSayaAkun;
     String id_kota,id_wilayah,id_provinsi ;
     String nama_kota,nama_wilayah,nama_provinsi;
     Pref pref;
     CustomProgressDialog progressDialog;
     private static final int IMG_REQUEST = 777;
+
+    String penghasilan_saya;
 
     public AkunFragment() {
 
@@ -170,6 +177,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         cardPesananSaya = rootView.findViewById(R.id.card_penjualan_saya_profile);
         imageProfile2 = rootView.findViewById(R.id.image_profile2);
         imageEdit = rootView.findViewById(R.id.image_edit);
+        txtPesnghasilanSayaAkun = rootView.findViewById(R.id.text_penghasilan_saya_akun);
 
 //        btn_ubah_profil = rootView.findViewById(R.id.btn_ubah_profil);
         btn_ubah_password = rootView.findViewById(R.id.btn_ubah_password);
@@ -345,8 +353,73 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        getPenghasilanSaya();
+
 
         return rootView;
+    }
+
+    private void getPenghasilanSaya() {
+
+        String url = "https://jualanpraktis.net/android/penghasilan.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("id_member", user.getId())
+                .setTag(getActivity())
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray array = response.getJSONArray("data");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String,String> data = new HashMap<>();
+                                penghasilan_saya = jsonObject.getString("jumlah");
+                            }
+
+                            Log.d("penghasilanSayaAkun", "jumlah: "+penghasilan_saya);
+                            int penghasilanSayaInt = Integer.parseInt(penghasilan_saya);
+                            Locale localID = new Locale("in", "ID");
+                            NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
+                            txtPesnghasilanSayaAkun.setText(formatRupiah.format(penghasilanSayaInt));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {

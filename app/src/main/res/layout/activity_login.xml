@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:src="@drawable/background_login"-->
-<!--        android:scaleType="centerCrop"/>-->
+    <!--    <ImageView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:src="@drawable/background_login"-->
+    <!--        android:scaleType="centerCrop"/>-->
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -47,7 +46,7 @@
                 android:layout_height="200dp"
                 android:layout_marginStart="105dp"
                 android:layout_marginEnd="107dp"
-                android:src="@drawable/ic_logo_hitam_foreground"
+                android:src="@drawable/logo_jualan_merah"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.997"
                 app:layout_constraintStart_toEndOf="@+id/card_Email_Input"
@@ -71,13 +70,11 @@
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <RelativeLayout
                 android:id="@+id/layout_input_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:passwordToggleDrawable="@android:drawable/ic_menu_view"
-                app:passwordToggleEnabled="true">
+                android:layout_marginTop="5dp">
 
                 <EditText
                     android:id="@+id/login_pass"
@@ -86,19 +83,31 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:fontFamily="@font/nuunito_bold"
-                    android:hint="Password"
+                    android:hint="Kata Sandi"
                     android:inputType="textPassword"
                     android:padding="8dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/show_pass_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:alpha=".5"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_awesome_eye_slash" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/txt_lupa_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nuunito_bold"
                 android:gravity="end"
-                android:text="Lupa Password?"
+                android:text="Lupa kata sandi?"
                 android:textColor="@android:color/holo_blue_dark" />
 
             <Button
@@ -131,25 +140,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
                 android:hint="Or Login With : "
                 android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="20dp"/>
+                android:textStyle="bold" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/btnFacebook"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/view5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/view5"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/ic_facebook" />
 
@@ -170,13 +180,12 @@
                     android:layout_width="4dp"
                     android:layout_height="50dp"
                     android:background="#c0c0c0"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
             <Button
@@ -236,53 +245,60 @@
                     android:layout_height="3dp"
                     android:layout_marginTop="10dp"
                     android:background="#FFFFFFFF"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="anda menyetujui "
-                        android:visibility="gone" />
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/term_and_condition"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginRight="20dp"
-                        android:text="Term and Conditions"
-                        android:fontFamily="@font/nuunito_bold"
-                        android:textColor="@color/colorPrimaryDark" />
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Body1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="anda menyetujui "
+                            android:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/image_circle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/circle_splash"
-                        android:backgroundTint="@color/colorPrimaryDark" />
+                        <TextView
+                            android:id="@+id/term_and_condition"
+                            style="@style/TextAppearance.AppCompat.Body1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="20dp"
+                            android:fontFamily="@font/nuunito_bold"
+                            android:text="Syarat dan ketentuan"
+                            android:textColor="@color/colorPrimaryDark" />
 
-                    <TextView
-                        android:id="@+id/kebijakan_privasi"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/nuunito_bold"
-                        android:text="Kebijakan Privasi"
-                        android:textColor="@color/colorPrimaryDark" />
+                        <ImageView
+                            android:id="@+id/image_circle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/circle_splash"
+                            android:backgroundTint="@color/colorPrimaryDark" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/kebijakan_privasi"
+                            style="@style/TextAppearance.AppCompat.Body1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="15dp"
+                            android:fontFamily="@font/nuunito_bold"
+                            android:text="Kebijakan Privasi"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

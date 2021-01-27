@@ -109,7 +109,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 .buildRound("" + item.get("jumlah"), Color.RED);
         viewHolder.card_item_jumlah.setImageDrawable(drawable);
 
-        viewHolder.txt_vendor.setText(item.get("nama_vendor"));
         viewHolder.number_picker.setValue(Integer.parseInt(item.get("jumlah")));
         viewHolder.number_picker.setMin(1);
         String label = item.get("nama") + " - " + item.get("variasi");

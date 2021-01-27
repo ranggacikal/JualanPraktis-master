@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/imgBackChat"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_panah_kiri" />
 
@@ -32,10 +32,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@+id/imgBackChat"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Chat Dengan Kami"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/bantuan"
@@ -44,10 +44,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@+id/imgBackChat"
                 android:layout_below="@+id/chat"
-                android:fontFamily="@font/arialrounded"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Tanyakan apa saja, Kami senang membantu!"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -69,8 +69,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hallo "
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textColor="@color/white"
+                android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
                 android:layout_gravity="center"/>
 
@@ -85,7 +86,7 @@
 
         <LinearLayout
             android:layout_width="270dp"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -104,7 +105,9 @@
                 android:layout_height="wrap_content"
                 android:text="Hallo, Ada Yang bisa kami bantu?"
                 android:textSize="20sp"
+                android:fontFamily="@font/nuunito_bold"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/colorPrimary"/>
 
         </LinearLayout>

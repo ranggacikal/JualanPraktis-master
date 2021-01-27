@@ -47,33 +47,31 @@
                                 android:layout_height="180dp"
                                 android:background="@color/redLight">
 
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
                                     android:id="@+id/img_list_produk"
                                     android:layout_width="120dp"
                                     android:layout_height="120dp"
-                                    android:src="@mipmap/ic_launcher"
                                     android:layout_alignParentEnd="true"
                                     android:layout_marginTop="20dp"
                                     android:layout_marginEnd="30dp"
-                                    app:civ_border_width="2dp"
-                                    app:civ_border_color="@color/white"/>
+                                    android:src="@mipmap/ic_launcher" />
 
                                 <TextView
                                     android:id="@+id/text_nama_kategori"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_below="@+id/img_list_produk"
+                                    android:layout_marginStart="15dp"
                                     android:text="Kategori"
                                     android:textColor="@color/white"
-                                    android:textStyle="bold"
                                     android:textSize="20sp"
-                                    android:layout_below="@+id/img_list_produk"
-                                    android:layout_marginStart="15dp"/>
+                                    android:textStyle="bold" />
 
                                 <androidx.viewpager.widget.ViewPager
                                     android:id="@+id/pagerslide"
                                     android:layout_width="match_parent"
                                     android:layout_height="180dp"
-                                    android:visibility="gone"/>
+                                    android:visibility="gone" />
 
                                 <LinearLayout
                                     android:id="@+id/SliderDots"
@@ -82,7 +80,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:orientation="horizontal"
                                     android:padding="10dp"
-                                    android:visibility="gone"/>
+                                    android:visibility="gone" />
 
                             </RelativeLayout>
 
@@ -150,7 +148,7 @@
                                 android:layout_marginTop="4dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="@color/colorPrimary"
-                                android:text="More"
+                                android:text="Lihat Lainnya"
                                 android:textColor="@android:color/white" />
 
                         </LinearLayout>
@@ -203,12 +201,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Kategori"
-                                android:textSize="17sp"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:text="Kategori"
                                 android:textColor="@color/white"
-                                android:textStyle="bold"
-                                android:layout_marginLeft="10dp"/>
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -219,9 +217,9 @@
                                     android:id="@+id/linear_header_dashboard"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="10dp"
                                     android:layout_alignParentRight="true"
-                                    tools:ignore="MissingConstraints" >
+                                    android:layout_marginRight="10dp"
+                                    tools:ignore="MissingConstraints">
 
                                     <ImageView
                                         android:id="@+id/img_search_list_produk"
@@ -252,9 +250,9 @@
                                 android:id="@+id/cari"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:visibility="gone"
                                 android:layout_gravity="center_vertical"
-                                android:background="@drawable/bg_cari">
+                                android:background="@drawable/bg_cari"
+                                android:visibility="gone">
 
                                 <RelativeLayout
                                     android:layout_width="match_parent"
@@ -289,14 +287,50 @@
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:padding="4dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_filter_kategori"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="20dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_filter_produk_kategori"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/card_filter_kategori"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:padding="4dp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewTerlaris"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/card_filter_kategori"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:padding="4dp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

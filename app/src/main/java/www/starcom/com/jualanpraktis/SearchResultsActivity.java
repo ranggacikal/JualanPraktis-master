@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchVi
         searchView.setFocusable(true);
         searchView.setIconified(false);
         searchView.setOnQueryTextListener(this);
+        searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
          searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchAutoComplete.setDropDownBackgroundResource(android.R.color.white);
 
@@ -94,6 +96,8 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchVi
           searchAutoComplete.setAdapter(dataAdapter); **/
 
       getAllProduk();
+
+
 
     }
 

@@ -1,7 +1,9 @@
 package www.starcom.com.jualanpraktis;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -29,6 +32,9 @@ import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.adapter.Kategori2Adapter;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
 import www.starcom.com.jualanpraktis.dummy.DummyContent;
+import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
+import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
+import www.starcom.com.jualanpraktis.feature.chat.ChatActivity;
 
 /**
  * A fragment representing a list of Items.
@@ -41,6 +47,8 @@ public class katalog extends Fragment {
     private int mColumnCount = 2;
     private RecyclerView listKatalog;
     ArrayList<HashMap<String,String>> kategoriList = new ArrayList<>();
+    ImageView imgChat, imgFav, imgNotif;
+    CardView cari;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -86,6 +94,40 @@ public class katalog extends Fragment {
 //            }
 //            recyclerView.setAdapter(new MykatalogRecyclerViewAdapter(DummyContent.ITEMS));
 //        }
+        imgChat = view.findViewById(R.id.img_chat_kategori);
+        imgFav = view.findViewById(R.id.img_favorit_kategori);
+        imgNotif = view.findViewById(R.id.img_notif_kategori);
+        cari = view.findViewById(R.id.cariKategori);
+
+        cari.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),SearchResultsActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        imgChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ChatActivity.class));
+            }
+        });
+
+        imgFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
+        imgNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), NotifikasiActivity.class));
+            }
+        });
+
 
         getKategori();
         return view;
@@ -125,6 +167,7 @@ public class katalog extends Fragment {
                                 data.put("id",jsonObject.getString("id_kategori_produk"));
                                 data.put("kategori",jsonObject.getString("kategori"));
                                 data.put("gambar", jsonObject.getString("img"));
+                                data.put("color", jsonObject.getString("hex_code"));
                                 data.put("jumlah", jsonObject.getString("jumlah"));
                                 //     data.put("created_at",jsonObject.getString("created_at"));
                                 kategoriList.add(data);

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -107,7 +110,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     //facebook
     CallbackManager callbackManager;
     private FirebaseAuth mAuth;
-    private ImageView btnFacebook, btnGoogleLogin;
+    private ImageView btnFacebook, btnGoogleLogin, showPassBtn;
 
     Pref pref;
     CustomProgressDialog progress;
@@ -137,6 +140,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         btn_coorperate = findViewById(R.id.btn_coorperate);
         coba = findViewById(R.id.coba);
         coba.setVisibility(View.GONE);
+        showPassBtn = findViewById(R.id.show_pass_btn);
 
         txt_lupa_password.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,6 +286,33 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
+        showHidePass(showPassBtn);
+
+    }
+
+    public void showHidePass(View view){
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.show_pass_btn){
+
+                    if(loginPass.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        loginPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        loginPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
 
     }
 

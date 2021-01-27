@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/imgBackStatusTransaksi"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
                 android:text="Status Transaksi"
                 android:textColor="@color/colorPrimary"

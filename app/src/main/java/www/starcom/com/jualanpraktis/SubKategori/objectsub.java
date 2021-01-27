@@ -29,8 +29,6 @@ public class objectsub {
             @SerializedName("kode")
             public String kode;
 
-
-
             @SerializedName("id_member")
             public String id_member;
 
@@ -58,6 +56,11 @@ public class objectsub {
             @SerializedName("keterangan_produk")
             public String keterangan;
 
+            @SerializedName("total_stok")
+            public String total_stok;
+
+            @SerializedName("terjual")
+            public String terjual;
 
             @SerializedName("start_disc") public  String start_disc;
             @SerializedName("end_disc") public  String end_disc;

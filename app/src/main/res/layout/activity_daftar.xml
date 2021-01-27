@@ -15,14 +15,15 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="250dp"
-                android:layout_height="150dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:src="@drawable/logo_jualan_merah" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
@@ -59,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Email"
+                    android:fontFamily="@font/nuunito_bold"
                     android:background="@drawable/background_edittext_white"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="10dp" />
@@ -69,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="5dp"
                 app:cardBackgroundColor="@color/white"
@@ -84,26 +86,17 @@
                         android:id="@+id/edt_password_daftar"
                         android:layout_width="280dp"
                         android:layout_height="match_parent"
-                        android:hint="Password"
+                        android:hint="Kata Sandi"
+                        android:fontFamily="@font/nuunito_bold"
                         android:background="@drawable/background_edittext_white"
                         android:inputType="textPassword"
                         android:paddingLeft="10dp" />
 
                     <ImageView
                         android:id="@+id/img_hide_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/icon_awesome_eye_slash"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="15dp"/>
-
-                    <ImageView
-                        android:id="@+id/img_show_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_awesome_eye"
-                        android:visibility="gone"
                         android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="15dp"/>
@@ -136,6 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/nuunito_bold"
                     android:text="Saya Setuju Terhadap Kebijakan Privasi"
                     android:layout_centerHorizontal="true"/>
 
@@ -160,6 +154,7 @@
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/nuunito_bold"
                     android:gravity="center"
                     android:layout_gravity="center"/>
 

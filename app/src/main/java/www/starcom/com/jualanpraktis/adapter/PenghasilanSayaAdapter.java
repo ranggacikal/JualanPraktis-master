@@ -12,16 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.model.ListPenghasilanSaya;
 
 public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSayaAdapter.PenghasilanSayaViewHolder> {
 
-    private ListPenghasilanSaya[] listPenghasilanSaya;
+    ArrayList<HashMap<String, String>> listPenghasilanProses = new ArrayList<>();
     Context context;
+    private Pref pref;
 
-    public PenghasilanSayaAdapter(ListPenghasilanSaya[] listPenghasilanSaya, Context context) {
-        this.listPenghasilanSaya = listPenghasilanSaya;
+    public PenghasilanSayaAdapter(ArrayList<HashMap<String, String>> listPenghasilanProses, Context context) {
+        this.listPenghasilanProses = listPenghasilanProses;
         this.context = context;
     }
 
@@ -35,21 +40,27 @@ public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSaya
     @Override
     public void onBindViewHolder(@NonNull PenghasilanSayaViewHolder holder, int position) {
 
-        String image = listPenghasilanSaya[position].getImage_barang();
+        HashMap<String, String> item = new HashMap<>();
+        item = this.listPenghasilanProses.get(position);
+        pref = new Pref(context.getApplicationContext());
+
+        String image = item.get("gambar");
+        String url = "https://trading.my.id/img/"+image;
+
+
         Glide.with(context)
-                .load(image)
+                .load(url)
                 .into(holder.imgBarang);
 
-        holder.txtNama.setText(listPenghasilanSaya[position].getNama_barang());
-        holder.txtTanggal.setText(listPenghasilanSaya[position].getTanggal());
-        holder.txtStatus.setText(listPenghasilanSaya[position].getStatus());
-        holder.txtTotal.setText(listPenghasilanSaya[position].getTotal());
+        holder.txtNama.setText(item.get("nama_produk"));
+        holder.txtTanggal.setText(item.get("tanggal_transaksi"));
+        holder.txtTotal.setVisibility(View.GONE);
 
     }
 
     @Override
     public int getItemCount() {
-        return listPenghasilanSaya.length;
+        return (null != listPenghasilanProses ? listPenghasilanProses.size() : 0);
     }
 
     public class PenghasilanSayaViewHolder extends RecyclerView.ViewHolder {

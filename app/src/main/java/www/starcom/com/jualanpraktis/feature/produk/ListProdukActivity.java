@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.arthurivanets.bottomsheets.BottomSheet;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,12 +45,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.Kategori.SliderUtils;
 import www.starcom.com.jualanpraktis.Kategori.ViewPagerAdapter;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.SearchResultsActivity;
+import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
+import www.starcom.com.jualanpraktis.SubKategori.objectsub;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukEndlessScrollAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukPaginationAdapter;
@@ -86,10 +94,10 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
     ProdukEndlessScrollAdapter recyclerViewAdapter;
     List<ListProduk.ObjectSub.Results> rowsArrayList = new ArrayList<>();
 
-    CircleImageView imgListProduk;
+    ImageView imgListProduk;
     TextView txtKategoriProduk;
 
-    GridLayoutManager gridLayoutManager;
+    GridLayoutManager gridLayoutManager, gridLayoutManager2;
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -98,6 +106,9 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
 
     private BottomSheet bottomSheet;
     RecyclerView recyclerViewSub;
+
+    Spinner spinnerFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +124,25 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
 
         }
 
+        String urlGambar = "https://jualanpraktis.net/img2/"+getIntent().getStringExtra("image");
+
         imgListProduk = findViewById(R.id.img_list_produk);
         txtKategoriProduk = findViewById(R.id.text_nama_kategori);
+        spinnerFilter = findViewById(R.id.spinner_filter_produk_kategori);
+
+        Glide.with(ListProdukActivity.this)
+                .load(urlGambar)
+                .error(R.drawable.icon_jualan_praktis)
+                .into(imgListProduk);
 
         String kategori = getIntent().getStringExtra("kategori");
+
+        ArrayAdapter adapterSpinner = ArrayAdapter.createFromResource(ListProdukActivity.this, R.array.filterProduk
+                , R.layout.list_spinner_filter);
+
+        adapterSpinner.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        spinnerFilter.setAdapter(adapterSpinner);
+        clickedSpinner();
 
         txtKategoriProduk.setText(kategori);
 
@@ -125,9 +151,11 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
         setSupportActionBar(binding.toolbar);
         binding.tvHint.setText("Cari dalam " + title);
        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+       gridLayoutManager2 = new GridLayoutManager(getApplicationContext(), 2);
      //   gridLayoutManager.setAutoMeasureEnabled(true);
 
         binding.recyclerView.setLayoutManager(gridLayoutManager);
+        binding.recyclerViewTerlaris.setLayoutManager(gridLayoutManager2);
      //   binding.recyclerView.setHasFixedSize(true);
 
         //   binding.recyclerView.setNestedScrollingEnabled(false);
@@ -158,7 +186,10 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
 
 
         binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        binding.recyclerView.setAdapter(produkPaginationAdapter);
+
+
+
+        binding.recyclerViewTerlaris.setItemAnimator(new DefaultItemAnimator());
      /**   binding.recyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -222,7 +253,11 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
             getSubKategori();
         }
 
+//        getAllProduk(1);
         getAllProduk(1);
+        binding.recyclerView.setAdapter(produkPaginationAdapter);
+
+
         binding.recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -232,6 +267,79 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
         });
     }
 
+    private void clickedSpinner() {
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if (selectedItem.equals("Produk Terbaru")){
+
+
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerViewTerlaris.setVisibility(View.GONE);
+
+                }else if (selectedItem.equals("Produk Terlaris")){
+                    getProdukTerlaris();
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.recyclerViewTerlaris.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void getProdukTerlaris() {
+
+        binding.recyclerViewTerlaris.setVisibility(View.GONE);
+         binding.shimmer.setVisibility(View.VISIBLE);
+        binding.shimmer.startShimmerAnimation();
+        String url = "https://jualanpraktis.net/android/produk_terlaris.php";
+
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("id_kategori_produk", id)
+                .setTag(ListProdukActivity.this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(objectsub.ObjectSub.class, new ParsedRequestListener<objectsub.ObjectSub>() {
+                    @Override
+                    public void onResponse(objectsub.ObjectSub response) {
+                        // swipeRefreshLayout.setRefreshing(false);
+                        binding.shimmer.stopShimmerAnimation();
+                        binding.shimmer.setVisibility(View.GONE);
+                        binding.recyclerViewTerlaris.setVisibility(View.VISIBLE);
+
+                        adaptersub adaptersub = new adaptersub(ListProdukActivity.this, response.sub1_kategori1);
+                        binding.recyclerViewTerlaris.setAdapter(adaptersub);
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        //  swipeRefreshLayout.setRefreshing(false);
+                        binding.shimmer.stopShimmerAnimation();
+                        binding.shimmer.setVisibility(View.GONE);
+                        binding.recyclerViewTerlaris.setVisibility(View.VISIBLE);
+
+                        Toast.makeText(ListProdukActivity.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+    }
 
 
     @Override

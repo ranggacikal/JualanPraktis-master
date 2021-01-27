@@ -55,8 +55,6 @@ import www.starcom.com.jualanpraktis.model_retrofit.ResponseUpdateRekening;
 
 public class DetailRekeningBankActivity extends AppCompatActivity {
 
-    @BindView(R.id.imgToolbarInputRekening)
-    ImageView imgToolbarInputRekening;
     @BindView(R.id.edt_nama_buku_tabungan)
     EditText edtNamaBukuTabungan;
     @BindView(R.id.edt_no_rekening)
@@ -86,6 +84,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
     Dialog dialog;
     RelativeLayout relativeDetailRekeningBank;
     FrameLayout frameDetailRekening;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +95,20 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         btnEditDetailRekeningBank = findViewById(R.id.btn_edit_detail_rekening_bank);
         relativeDetailRekeningBank = findViewById(R.id.relative_detail_rekening);
         frameDetailRekening = findViewById(R.id.frame_detail_rekening);
+        imgBack = findViewById(R.id.imgBackInputRekening);
 
         user = SharedPrefManager.getInstance(DetailRekeningBankActivity.this).getUser();
 
         dialog = new Dialog(DetailRekeningBankActivity.this);
         dialog.setContentView(R.layout.dialog_konfirmasi_password);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         get_nama_bank = getIntent().getStringExtra(ExtraNamaBank);
         nama = getIntent().getStringExtra("nama");
@@ -138,6 +145,14 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validasiData();
+            }
+        });
+
+        btnEditDetailRekeningBank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnEditDetailRekeningBank.setVisibility(View.GONE);
+                btnSimpanDetailRekeningBank.setVisibility(View.VISIBLE);
             }
         });
 

@@ -45,12 +45,23 @@ public class StatusTransaksiActivity extends AppCompatActivity {
     private DiterimaFragment diterimaFragment;
     private DitukarFragment ditukarFragment;
     private SelesaiFragment selesaiFragment;
+    private BelumDibayarFragment belumDibayarFragment;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_transaksi);
         ButterKnife.bind(this);
+
+        imgBack = findViewById(R.id.imgBackStatusTransaksi);
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         instance=this;
         getAllWidgets();
@@ -82,9 +93,11 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         diterimaFragment = new DiterimaFragment();
         ditukarFragment = new DitukarFragment();
         selesaiFragment = new SelesaiFragment();
+        belumDibayarFragment = new BelumDibayarFragment();
         // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Semua"));
         tabLayout.addTab(tabLayout.newTab().setText("Dipesan"));
+        tabLayout.addTab(tabLayout.newTab().setText("Belum Dibayar"));
         tabLayout.addTab(tabLayout.newTab().setText("Dikemas"));
         tabLayout.addTab(tabLayout.newTab().setText("Dikirim"));
         tabLayout.addTab(tabLayout.newTab().setText("Diterima"));
@@ -120,21 +133,24 @@ public class StatusTransaksiActivity extends AppCompatActivity {
                 replaceFragment(dipesanFragment);
                 break;
             case 2 :
-                replaceFragment(dikemasFragment);
+                replaceFragment(belumDibayarFragment);
                 break;
             case 3 :
-                replaceFragment(dikirimFragment);
+                replaceFragment(dikemasFragment);
                 break;
             case 4 :
-                replaceFragment(diterimaFragment);
+                replaceFragment(dikirimFragment);
                 break;
             case 5 :
-                replaceFragment(dibatalkanFragment);
+                replaceFragment(diterimaFragment);
                 break;
             case 6 :
-                replaceFragment(ditukarFragment);
+                replaceFragment(dibatalkanFragment);
                 break;
             case 7 :
+                replaceFragment(ditukarFragment);
+                break;
+            case 8 :
                 replaceFragment(selesaiFragment);
                 break;
 //            case 4 :

@@ -90,6 +90,12 @@ public class ProdukFavoritActivity extends AppCompatActivity {
             }
         });
 
+        imgBackPenghasilanSaya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

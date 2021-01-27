@@ -100,8 +100,8 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
 
         callbackManager = CallbackManager.Factory.create();
 
-        shareDialog = new ShareDialog((Activity) context);
-        shareDialog.registerCallback(callbackManager, callback);
+//        shareDialog = new ShareDialog(context);
+//        shareDialog.registerCallback(callbackManager, callback);
 
 
         if (results.get(position).diskon.equals("0") || results.get(position).diskon == null || results.get(position).diskon.equals("")) {
@@ -123,6 +123,8 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
         holder.diskon.setText("(" + results.get(position).diskon + "%)");
         holder.harga_asli.setPaintFlags(holder.harga_asli.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.harga_jual.setText(FormatText.rupiahFormat(harga_disc));
+        holder.txtStok.setText(results.get(position).total_stok);
+        holder.txtTerjual.setText(results.get(position).terjual+" Produk Terjual");
 
         Glide.with(context)
                 .load(uri)
@@ -142,8 +144,9 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
                 intent.putExtra("image_o", results.get(position).gambar);
                 intent.putExtra("berat", results.get(position).berat);
                 intent.putExtra("harga_asli", results.get(position).harga_asli);
-                intent.putExtra("stok", results.get(position).stok);
+                intent.putExtra("stok", results.get(position).total_stok);
                 intent.putExtra("diskon", results.get(position).diskon);
+                intent.putExtra("produkTerjual", results.get(position).terjual);
                 v.getContext().startActivity(intent);
             }
         });

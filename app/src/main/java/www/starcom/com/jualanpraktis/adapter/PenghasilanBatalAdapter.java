@@ -13,15 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.model.ListPenghasilanSaya;
 
 public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBatalAdapter.PenghasilanBatalViewHolder> {
 
-    ListPenghasilanSaya[] listPenghasilanSaya;
+    ArrayList<HashMap<String, String>> listPenghasilanSaya = new ArrayList<>();
     Context context;
+    private Pref pref;
 
-    public PenghasilanBatalAdapter(ListPenghasilanSaya[] listPenghasilanSaya, Context context) {
+    public PenghasilanBatalAdapter(ArrayList<HashMap<String, String>> listPenghasilanSaya, Context context) {
         this.listPenghasilanSaya = listPenghasilanSaya;
         this.context = context;
     }
@@ -29,34 +34,34 @@ public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBat
     @NonNull
     @Override
     public PenghasilanBatalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_penghasilan_saya, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_penghasilan_saya_batal, parent, false);
         return new PenghasilanBatalViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PenghasilanBatalViewHolder holder, int position) {
 
-        String status = listPenghasilanSaya[position].getStatus();
+        HashMap<String, String> item = new HashMap<>();
+        item = this.listPenghasilanSaya.get(position);
+        pref = new Pref(context.getApplicationContext());
 
-        if (status.equals("Proses")){
-            Toast.makeText(context, "Data Masih Kosong", Toast.LENGTH_SHORT).show();
+        String image = item.get("gambar");
+        String url = "https://trading.my.id/img/"+image;
 
-        }else{
-            String image = listPenghasilanSaya[position].getImage_barang();
-            Glide.with(context)
-                    .load(image)
-                    .into(holder.imgBarang);
 
-            holder.txtNama.setText(listPenghasilanSaya[position].getNama_barang());
-            holder.txtTanggal.setText(listPenghasilanSaya[position].getTanggal());
-            holder.txtTotal.setText(listPenghasilanSaya[position].getTotal());
-            holder.txtStatus.setText(status);
-        }
+        Glide.with(context)
+                .load(url)
+                .into(holder.imgBarang);
+
+        holder.txtNama.setText(item.get("nama_produk"));
+        holder.txtTanggal.setText(item.get("tanggal_transaksi"));
+        holder.txtTotal.setVisibility(View.GONE);
+
     }
 
     @Override
     public int getItemCount() {
-        return listPenghasilanSaya.length;
+        return (null != listPenghasilanSaya ? listPenghasilanSaya.size() : 0);
     }
 
     public class PenghasilanBatalViewHolder extends RecyclerView.ViewHolder {
@@ -65,11 +70,10 @@ public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBat
         TextView txtNama, txtTanggal, txtStatus, txtTotal;
         public PenghasilanBatalViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgBarang = itemView.findViewById(R.id.img_item_penghasilan_saya);
-            txtNama = itemView.findViewById(R.id.text_item_nama_barang_penghasilansaya);
-            txtTanggal = itemView.findViewById(R.id.text_item_tanggal_penghasilansaya);
-            txtStatus = itemView.findViewById(R.id.text_item_status_penghasilansaya);
-            txtTotal = itemView.findViewById(R.id.text_item_total_penghasilansaya);
+            imgBarang = itemView.findViewById(R.id.img_item_penghasilan_saya_batal);
+            txtNama = itemView.findViewById(R.id.text_item_nama_barang_penghasilansaya_batal);
+            txtTanggal = itemView.findViewById(R.id.text_item_tanggal_penghasilansaya_batal);
+            txtTotal = itemView.findViewById(R.id.text_item_total_penghasilansaya_batal);
         }
     }
 }

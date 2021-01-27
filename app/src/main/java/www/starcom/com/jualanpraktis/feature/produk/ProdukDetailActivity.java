@@ -1,13 +1,16 @@
 package www.starcom.com.jualanpraktis.feature.produk;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
@@ -38,9 +41,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,18 +70,24 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -90,11 +102,17 @@ import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.Spinner.Variasi;
 import www.starcom.com.jualanpraktis.adapter.ImageSliderAdapter;
+import www.starcom.com.jualanpraktis.adapter.PenghasilanSelesaiAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukGambarAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukSejenisAdapter;
+import www.starcom.com.jualanpraktis.adapter.VariasiAdapter;
+import www.starcom.com.jualanpraktis.adapter.ViewPagerProdukAdapter;
+import www.starcom.com.jualanpraktis.daftar;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
 import www.starcom.com.jualanpraktis.login;
 import www.starcom.com.jualanpraktis.model.ListProduk;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by ADMIN on 08/02/2018.
@@ -116,7 +134,10 @@ public class ProdukDetailActivity extends AppCompatActivity {
     idtransaksi idtransaksi ;
     loginuser user ;
 
+
     List<SliderUtils> sliderimg ;
+
+    ArrayList<HashMap<String, String>> dataVariasi = new ArrayList<>();
 
     private ImageView gambar,main_gambar_list ;
     private TextView nama,harga,ket,harga_asli,txt_stok,txt_diskon, berat ;
@@ -125,7 +146,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
     LinearLayout btn_keranjang ;
     ViewPager pagerSlide;
     ImageSlider imageSlider;
-    ArrayList<HashMap<String, String>> listGambar = new ArrayList<>();
+    ArrayList<Uri> listGambar = new ArrayList<Uri>();
     ArrayList<String> listGambar2 = new ArrayList<>();
 
     String extra_harga,stok,diskon;
@@ -134,7 +155,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
     private Spinner spn_variasi;
     List<Variasi> variasiList = new ArrayList<>();
     String id_variasi,nama_variasi,stok_variasi,id_sub_kategori_produk;
-    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit, linearTambahKeranjang, shareIg;
+    LinearLayout gambar_main_ll, shareFb, shareWa, salinDeskripsi, linearFavorit, linearTambahKeranjang, shareIg, linearDifavoritkan;
     CardView cvVariasi;
     ShimmerFrameLayout shimmerProdukLainnya;
 
@@ -143,6 +164,25 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
     ShareDialog shareDialog;
     CallbackManager callbackManager;
+
+    ArrayList<HashMap<String,String>> dataGambar = new ArrayList<>();
+    String[] dataArrayGambar;
+    ViewPager carouselView;
+    ViewPagerProdukAdapter pagerProduk;
+    RecyclerView rvVariasi;
+    TextView txtStock, txtProdukTerjual;
+    int data_stock;
+    ImageView imgFavorit, imgBack;
+    String status_favorit;
+
+    LinearLayout linearUnduhGambar, linearKeranjang;
+
+    public String getVariasi;
+    int aa;
+    private int screenWidth, c;
+    View myView;
+    ArrayList<Uri> imageUriArray = new ArrayList<Uri>();
+    String url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,7 +202,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
         shareDialog = new ShareDialog(this);
         shareDialog.registerCallback(callbackManager, callback);
 
-        gambar = findViewById(R.id.gambar_detail);
+        gambar = findViewById(R.id.img_item_view_pager);
         final Uri uri = Uri.parse(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR));
 
         nama = findViewById(R.id.nama_produk);
@@ -174,7 +214,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
         txt_diskon = findViewById(R.id.txt_diskon);
         numberButton = findViewById(R.id.number_button);
         recyclerViewImage = findViewById(R.id.recyclerViewImage);
-        rv_produk_sejenis = findViewById(R.id.rv_produk_sejenis);
+//        rv_produk_sejenis = findViewById(R.id.rv_produk_sejenis);
         shimmerProdukLainnya = findViewById(R.id.shimmerProdukLainnya);
         main_gambar_list = findViewById(R.id.main_gambar_list);
         gambar_main_ll = findViewById(R.id.gambar_main_ll);
@@ -189,34 +229,43 @@ public class ProdukDetailActivity extends AppCompatActivity {
         rvSlider = findViewById(R.id.rv_slider);
         linearFavorit = findViewById(R.id.linear_favorit_detail_produk);
         linearTambahKeranjang = findViewById(R.id.linear_tambah_keranjang);
+        carouselView = findViewById(R.id.carouselView);
+        rvVariasi = findViewById(R.id.rv_variasi_detail_produk);
+        txtStock = findViewById(R.id.text_stock_detail_produk);
+        imgFavorit = findViewById(R.id.img_favorit_produk_detail);
+        linearDifavoritkan = findViewById(R.id.linear_difavoritkan_detail_produk);
+        txtProdukTerjual = findViewById(R.id.text_id_detail_produk_dibeli);
+        linearUnduhGambar = findViewById(R.id.linear_download_image);
+        linearKeranjang = findViewById(R.id.linear_keranjang);
+        imgBack = findViewById(R.id.imgBackDetailProduk);
 
 
         if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().containsKey(EXTRA_GAMBAR)) {
-
-
-                Glide.with(getApplicationContext())
-                        .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
-                        .into(gambar);
-                Glide.with(getApplicationContext())
-                        .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
-                        .into(main_gambar_list);
-                main_gambar_list.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Glide.with(getApplicationContext())
-                                .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
-                                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
-                                .into(gambar);
-                    }
-                });
-
-//                Log.d(TAG, uri.toString());
-
-
-            }
+//            if (getIntent().getExtras().containsKey(EXTRA_GAMBAR)) {
+//
+//
+//                Glide.with(getApplicationContext())
+//                        .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
+//                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
+//                        .into(gambar);
+//                Glide.with(getApplicationContext())
+//                        .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
+//                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
+//                        .into(main_gambar_list);
+//                main_gambar_list.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Glide.with(getApplicationContext())
+//                                .load(UrlImage+getIntent().getExtras().getString(EXTRA_GAMBAR))
+//                                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
+//                                .into(gambar);
+//                    }
+//                });
+//
+////                Log.d(TAG, uri.toString());
+//
+//
+//            }
 
             if (getIntent().getExtras().containsKey(EXTRA_BERAT)){
                 berat.setText(getIntent().getExtras().getString(EXTRA_BERAT));
@@ -263,6 +312,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
             }
 
+            txtProdukTerjual.setText(getIntent().getStringExtra("produkTerjual"+" Dibeli"));
+
             id_sub_kategori_produk = getIntent().getExtras().getString("id_sub_kategori_produk");
             kode = getIntent().getExtras().getString("kode");
             id_member = getIntent().getExtras().getString("id_member");
@@ -289,13 +340,22 @@ public class ProdukDetailActivity extends AppCompatActivity {
             }
         });
 
+        linearDifavoritkan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ProdukDetailActivity.this, "Anda Sudah Mem-Favoritkan Produk Ini", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         btn_keranjang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (SharedPrefManager.getInstance(ProdukDetailActivity.this).isLoggedIn()){
+
                     if (stok.equals("0")){
                         Toast.makeText(ProdukDetailActivity.this,"Stok barang kosong",Toast.LENGTH_SHORT).show();
-                    }else if (Integer.parseInt(stok)<Integer.parseInt(numberButton.getNumber())){
+                    }
+                    else if (Integer.parseInt(stok)<Integer.parseInt(numberButton.getNumber())){
                         Toast.makeText(ProdukDetailActivity.this,"Pemesanan melebihi dari stok yang ada",Toast.LENGTH_SHORT).show();
                     } else {
                         //validasiRadio();
@@ -331,7 +391,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
                         if (valueJenisBelanja==null){
                             Toast.makeText(ProdukDetailActivity.this,"Pilih Jenis Belanja",Toast.LENGTH_SHORT).show();
                         }else {
-                            pesan();
+                            masukanKeranjang();
                         }
 
                     }
@@ -351,7 +411,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
       //  rv_produk_sejenis.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
       //  rv_produk_sejenis.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
 
-        rv_produk_sejenis.setLayoutManager(  new GridLayoutManager(getApplicationContext(), 2, GridLayoutManager.HORIZONTAL, false));
+//        rv_produk_sejenis.setLayoutManager(  new GridLayoutManager(getApplicationContext(), 2, GridLayoutManager.HORIZONTAL, false));
         spn_variasi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -373,7 +433,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
         shareFb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareFacebook();
+//                shareFacebook();
+                shareImageFacebook();
             }
         });
 
@@ -381,7 +442,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                shareWhatsapp();
-                shareImageWhatsapp();
+//                shareImageWhatsapp();
+                shareMultipleWhasapp();
             }
         });
 
@@ -401,16 +463,103 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
         getDataGambar();
         getDataVariasi();
-        getDataProdukSejenis();
+//        getDataProdukSejenis();
 
+        getStatus();
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+        rvVariasi.setHasFixedSize(true);
+        rvVariasi.setLayoutManager(new LinearLayoutManager(ProdukDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+    }
+
+    public static void downloadFile(String urls, Context context){
+
+
+
+    }
+
+    private void getStatus() {
+
+        String url = "https://jualanpraktis.net/android/detail_produk.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("customer", user.getId())
+                .addBodyParameter("id_produk", getIntent().getStringExtra(EXTRA_ID))
+                .setTag(ProdukDetailActivity.this)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        try {
+
+                            status_favorit = response.getString("status");
+                            Log.d("dataStatusFavorit", "onCreate: "+status_favorit);
+                            Log.d("dataIdProduk", "onResponse: "+getIntent().getStringExtra(EXTRA_ID));
+
+                            if (status_favorit.equals("1")){
+                                linearFavorit.setVisibility(View.GONE);
+                                linearDifavoritkan.setVisibility(View.VISIBLE);
+                            }else{
+                                linearDifavoritkan.setVisibility(View.GONE);
+                                linearFavorit.setVisibility(View.VISIBLE);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(ProdukDetailActivity.this, "tidak ada data", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(ProdukDetailActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(ProdukDetailActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
 
     }
 
     private void shareImageInstagram() {
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) gambar.getDrawable();
+        ImageView imgViewPager = carouselView.findViewWithTag(carouselView.getCurrentItem());
+        imgViewPager.setDrawingCacheEnabled(true);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imgViewPager.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         String mediaPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "shareInstagram", null);
+
 
         String type = "image/*";
         String filename = "/produk.jpg";
@@ -425,6 +574,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
         // Set the MIME type
         share.setType(type);
+        share.setPackage("com.instagram.android");
 
         // Create the URI from the media
         Uri uri = Uri.parse(mediaPath);
@@ -435,6 +585,43 @@ public class ProdukDetailActivity extends AppCompatActivity {
         // Broadcast the Intent.
         startActivity(Intent.createChooser(share, "Share to"));
     
+
+    }
+
+    private void shareImageFacebook() {
+
+        ImageView imgViewPager = carouselView.findViewWithTag(carouselView.getCurrentItem());
+        imgViewPager.setDrawingCacheEnabled(true);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imgViewPager.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        String mediaPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "shareFacebook", null);
+
+
+        String type = "image/*";
+        String filename = "/produk.jpg";
+
+        createFacebookIntent(type, mediaPath);
+    }
+
+    private void createFacebookIntent(String type, String mediaPath) {
+
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        // Set the MIME type
+        share.setType(type);
+        share.setPackage("com.facebook.katana");
+
+        // Create the URI from the media
+        Uri uri = Uri.parse(mediaPath);
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+
+        // Broadcast the Intent.
+        startActivity(Intent.createChooser(share, "Share to"));
+
 
     }
 
@@ -458,7 +645,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
                     // Intent intent = new Intent(ProdukDetailActivity.this, MainActivity.class);
                     // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     // startActivity(intent);
-                    ProdukDetailActivity.this.finish();
+                    linearFavorit.setVisibility(View.GONE);
+                    linearDifavoritkan.setVisibility(View.VISIBLE);
                     Toast.makeText(ProdukDetailActivity.this, "Berhasil Ditambahkan Ke Favorit ", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
@@ -488,7 +676,10 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
     private void shareFacebook() {
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) gambar.getDrawable();
+        ImageView imgViewPager = carouselView.findViewWithTag(carouselView.getCurrentItem());
+        imgViewPager.setDrawingCacheEnabled(true);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imgViewPager.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
 
         SharePhoto sharePhoto = new SharePhoto.Builder()
@@ -542,9 +733,10 @@ public class ProdukDetailActivity extends AppCompatActivity {
 
     private void shareImageWhatsapp() {
 
+        ImageView imgViewPager = carouselView.findViewWithTag(carouselView.getCurrentItem());
+        imgViewPager.setDrawingCacheEnabled(true);
 
-
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) gambar.getDrawable();
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imgViewPager.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         String bitmpath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "shareWhatsapp", null);
 
@@ -620,10 +812,24 @@ public class ProdukDetailActivity extends AppCompatActivity {
                             for (int i = 0; i<array.length(); i++){
                                 JSONObject object = array.getJSONObject(i);
                                 HashMap<String,String> item = new HashMap<>();
+                                HashMap<String,String> item2 = new HashMap<>();
                                 item.put("gambar",object.getString("image"));
+                                listGambar.add(Uri.parse("https://trading.my.id/img/"+object.getString("image")));
+                                listGambar2.add("https://trading.my.id/img/"+object.getString("image"));
                                 hashMaps.add(item);
+                                dataGambar.add(item);
                             }
 
+                            Log.d("listGambar", "onResponse: "+listGambar);
+                            Log.d("dataLinkGambar", "onCreate: "+dataGambar);
+
+                            //View Pager
+                            ViewPagerProdukAdapter viewPagerAdapter = new ViewPagerProdukAdapter(ProdukDetailActivity.this, dataGambar);
+                            carouselView.setAdapter(viewPagerAdapter);
+
+
+
+                            //Adapter Image
                             ProdukGambarAdapter adapter = new ProdukGambarAdapter(ProdukDetailActivity.this,hashMaps,gambar);
                             recyclerViewImage.setAdapter(adapter);
                             ImageSliderAdapter adapter1 = new ImageSliderAdapter(hashMaps, ProdukDetailActivity.this);
@@ -667,6 +873,8 @@ public class ProdukDetailActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        dataVariasi.clear();
                         try {
                             JSONArray array = response.getJSONArray("data");
 
@@ -674,11 +882,23 @@ public class ProdukDetailActivity extends AppCompatActivity {
                                 for (int i = 0; i<array.length(); i++){
                                     JSONObject object = array.getJSONObject(i);
                                     Variasi item = new Variasi();
+                                    HashMap<String,String> data = new HashMap<>();
+                                    data.put("id_variasi",object.getString("id"));
+                                    data.put("variasi",object.getString("variasi"));
                                     item.setId(object.getString("id"));
                                     item.setVariasi(object.getString("variasi"));
                                     item.setStok(object.getString("stok"));
+                                    txtStock.setText(object.getString("stok"));
+                                    data_stock = Integer.parseInt(object.getString("stok"));
                                     variasiList.add(item);
+                                    dataVariasi.add(data);
                                 }
+
+                                //Adapter Recycler
+                                VariasiAdapter variasiAdapter = new VariasiAdapter(ProdukDetailActivity.this, dataVariasi, ProdukDetailActivity.this);
+                                rvVariasi.setAdapter(variasiAdapter);
+
+
                                 ArrayAdapter<Variasi> adapter = new ArrayAdapter<>(ProdukDetailActivity.this, R.layout.simple_spinner_text, variasiList);
                                 adapter.setDropDownViewResource(R.layout.simple_spinner_text);
                                 //  spinner.setPrompt("Jenis Perangkat : ");
@@ -715,7 +935,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
                 });
     }
     private void getDataProdukSejenis(){
-        rv_produk_sejenis.setVisibility(View.GONE);
+//        rv_produk_sejenis.setVisibility(View.GONE);
         shimmerProdukLainnya.setVisibility(View.VISIBLE);
         shimmerProdukLainnya.startShimmerAnimation();
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
@@ -736,9 +956,9 @@ public class ProdukDetailActivity extends AppCompatActivity {
                     public void onResponse(ListProduk.ObjectSub response) {
                         shimmerProdukLainnya.stopShimmerAnimation();
                         shimmerProdukLainnya.setVisibility(View.GONE);
-                        rv_produk_sejenis.setVisibility(View.VISIBLE);
+//                        rv_produk_sejenis.setVisibility(View.VISIBLE);
                         ProdukSejenisAdapter adapter = new ProdukSejenisAdapter(getApplicationContext(), response.produksejenislist);
-                        rv_produk_sejenis.setAdapter(adapter);
+//                        rv_produk_sejenis.setAdapter(adapter);
 
                     }
 
@@ -746,7 +966,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
                         shimmerProdukLainnya.stopShimmerAnimation();
                         shimmerProdukLainnya.setVisibility(View.GONE);
-                        rv_produk_sejenis.setVisibility(View.VISIBLE);
+//                        rv_produk_sejenis.setVisibility(View.VISIBLE);
                         if (anError.getErrorCode() != 0) {
                             // received error from server
                             // error.getErrorCode() - the error code from server
@@ -790,7 +1010,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Periksa Jaringan Internet Anda", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Periksa Jaringan Internet Anda", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(stringRequest);
@@ -816,7 +1036,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                    // startActivity(intent);
                     ProdukDetailActivity.this.finish();
-                    Toast.makeText(ProdukDetailActivity.this, "Berhasil Dimasukkan Kedalam Keranjang ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProdukDetailActivity.this, "Berhasil Membuat Pesanan ", Toast.LENGTH_SHORT).show();
                 }else {
                     Log.d("test Error", response);
                     Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
@@ -854,7 +1074,7 @@ public class ProdukDetailActivity extends AppCompatActivity {
                 params.put("harga_jual_item",extra_harga);
              //   params.put("harga_jual",extra_harga);
              //   params.put("time_limit",tomorrowAsString2);
-                params.put("ket1",id_variasi);
+                params.put("ket1",getVariasi);
             //  params.put("ket2",nama_variasi);
              //   params.put("bbl",valueJenisBelanja);
 
@@ -867,6 +1087,97 @@ public class ProdukDetailActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
+    public void masukanKeranjang(){
+
+        StringRequest request = new StringRequest(Request.Method.POST, "https://jualanpraktis.net/android/pesan.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("Data Berhasil Di Kirim")){
+                    /**   int total_berat = Integer.parseInt(numberButton.getNumber())*Integer.parseInt(getIntent().getExtras().getString(EXTRA_BERAT));
+                     new Database(getBaseContext()).addToChart(new order(
+                     "",
+                     getIntent().getExtras().getString(EXTRA_ID),
+                     getIntent().getExtras().getString(EXTRA_NAMA)+" - "+nama_variasi,
+                     extra_harga,
+                     numberButton.getNumber(),
+                     String.valueOf(total_berat)
+                     ));
+                     Log.d(TAG,getIntent().getExtras().getString(EXTRA_BERAT)); **/
+
+                    // finish();
+                    // Intent intent = new Intent(ProdukDetailActivity.this, MainActivity.class);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    // startActivity(intent);
+                    Toast.makeText(ProdukDetailActivity.this, "Berhasil Dimasukkan Kedalam Keranjang ", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.d("test Error", response);
+                    Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ProdukDetailActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                idtransaksi = Shared.getInstance(getApplicationContext()).getIdT();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY)+2);
+                Date tomorrow = calendar.getTime();
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+                String tomorrowAsString = dateFormat.format(tomorrow);
+                String tomorrowAsString2 = timeFormat.format(tomorrow);
+                int total_berat = Integer.parseInt(numberButton.getNumber())*Integer.parseInt(getIntent().getExtras().getString(EXTRA_BERAT));
+                Map<String,String> params = new HashMap<>();
+
+                params.put("id_produk",getIntent().getExtras().getString(EXTRA_ID));
+                params.put("customer",user.getId());
+                params.put("id_member",id_member);
+                //  params.put("tgl_transaksi",tomorrowAsString);
+                //   params.put("id_transaksi",idtransaksi.getId_transaksi());
+                // params.put("berat_barang",getIntent().getExtras().getString(EXTRA_BERAT));
+                params.put("berat",String.valueOf(total_berat));
+                params.put("jumlah", "1");
+                params.put("harga_jual_item",extra_harga);
+                //   params.put("harga_jual",extra_harga);
+                //   params.put("time_limit",tomorrowAsString2);
+                params.put("ket1",getVariasi);
+                //  params.put("ket2",nama_variasi);
+                //   params.put("bbl",valueJenisBelanja);
+
+                Log.d("CobaKirim", params.toString());
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
+
+    }
+
+
+    ImageListener imageListener = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+
+            HashMap<String, String> item = new HashMap<>();
+            item = dataGambar.get(position);
+
+            final String url = "https://trading.my.id/img/" ;
+
+            String link = item.get("gambar");
+
+            Glide.with(ProdukDetailActivity.this)
+                    .load(url+link)
+                    .error(R.mipmap.ic_launcher)
+                    .into(imageView);
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -879,6 +1190,19 @@ public class ProdukDetailActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void shareMultipleWhasapp(){
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.setPackage("com.whatsapp");
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, listGambar);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        Log.d("shareMultipleData", "data: "+listGambar);
     }
 
     @Override

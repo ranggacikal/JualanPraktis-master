@@ -20,12 +20,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imgBackKeranjang"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_panah_kiri" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/imgBackKeranjang"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:src="@drawable/ic_panah_kiri" />-->
 
                 <TextView
                     android:id="@+id/keranjang"
@@ -33,41 +33,40 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/imgBackKeranjang"
-                    android:fontFamily="@font/arialbold"
+                    android:fontFamily="@font/nuunito_bold"
                     android:text="Keranjang Saya"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
-                    android:textSize="25sp"/>
+                    android:textSize="20sp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_alignParentRight="true">
 
                     <ImageView
                         android:id="@+id/img_search_keranjang"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_search_white" />
 
                     <ImageView
                         android:id="@+id/img_favorit_keranjang"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_favorite_white_border" />
+                        android:src="@drawable/icon_fav_grey" />
 
                     <ImageView
                         android:id="@+id/img_notif_keranjang"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_notif_white" />
+                        android:src="@drawable/icon_notif_grey" />
 
                 </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -79,6 +80,7 @@ public class EditAkunActivity extends AppCompatActivity {
             , cardPekerjaanAwal, cardPenghasilanAwal;
 
     EditText edtTanggalLahir, edtPassword, edtNama, edtEmail, edtNoHp, edtAlamat, edtJumlahAnak, edtNamaToko, edtNoKtp, edtNoNpwp;
+    ImageView imgBack;
 
     List<Provinsi> provinsiList = new ArrayList<>();
     List<KotaKabupaten> kotaKabupatenList = new ArrayList<>();
@@ -151,6 +153,7 @@ public class EditAkunActivity extends AppCompatActivity {
         edtNamaToko = findViewById(R.id.edt_nama_toko_edit_akun);
         edtNoKtp = findViewById(R.id.edt_noKTP_edit_akun);
         edtNoNpwp = findViewById(R.id.edt_noNPWP_edit_akun);
+        imgBack = findViewById(R.id.imgBackEditAkun);
         user = SharedPrefManager.getInstance(EditAkunActivity.this).getUser();
 
         AndroidNetworking.initialize(getApplicationContext());
@@ -164,6 +167,17 @@ public class EditAkunActivity extends AppCompatActivity {
 
         edtNama.setText(user.getNama());
         edtEmail.setText(user.getEmail());
+        edtNamaToko.setText(user.getNama_toko());
+        edtNoHp.setText(user.getNo_hp());
+        edtNoKtp.setText(user.getNo_ktp());
+        edtNoNpwp.setText(user.getNo_npwp());
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         txtEditFotoProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,21 +295,98 @@ public class EditAkunActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        ConfigRetrofit.service.editAkun(user.getId(),nama, nama_toko, nama_provinsi, nama_kota, nama_wilayah, alamat, no_ktp, no_npwp,
-                noHp, email, jenis_kelamin, tanggal_lahir, status_perkawinan, jumlah_anak, pendidikan, pekerjaan,
-                penghasilan, password).enqueue(new Callback<ResponseInsertEditAkun>() {
-            @Override
-            public void onResponse(Call<ResponseInsertEditAkun> call, Response<ResponseInsertEditAkun> response) {
-                if (response.isSuccessful()){
+//        ConfigRetrofit.service.editAkun(user.getId(),nama, nama_toko, nama_provinsi, nama_kota, nama_wilayah, alamat, no_ktp, no_npwp,
+//                noHp, email, jenis_kelamin, tanggal_lahir, status_perkawinan, jumlah_anak, pendidikan, pekerjaan,
+//                penghasilan, password).enqueue(new Callback<ResponseInsertEditAkun>() {
+//            @Override
+//            public void onResponse(Call<ResponseInsertEditAkun> call, Response<ResponseInsertEditAkun> response) {
+//                if (response.isSuccessful()){
+//
+//                    progressDialog.dismiss();
+//                    String pesan = response.body().getMessage();
+//
+//                    if (pesan.equals("Perubahan profile berhasil disimpan")){
+//                        progressDialog.dismiss();
+//                        Toast.makeText(EditAkunActivity.this, "Berhasil Edit Akun", Toast.LENGTH_SHORT).show();
+//                        finish();
+//
+//                        //TO DO SAVE KE SHARED PREFERENCES MANAGER
+//                        loginuser userUpdate = new loginuser(
+//                                user.getId(),
+//                                user.getKode(),
+//                                nama,
+//                                nama_toko,
+//                                nama_provinsi,
+//                                nama_kota,
+//                                nama_wilayah,
+//                                alamat,
+//                                no_ktp,
+//                                no_npwp,
+//                                noHp,
+//                                email,
+//                                user.getAtas_nama(),
+//                                user.getNo_rek(),
+//                                user.getNama_bank(),
+//                                user.getFoto()
+//                        );
+//
+//                        SharedPrefManager.getInstance(EditAkunActivity.this).userLogin(userUpdate);
+//
+//                    }else{
+//                        Toast.makeText(EditAkunActivity.this, "Gagal Edit Data", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }else{
+//                    progressDialog.dismiss();
+//                    Toast.makeText(EditAkunActivity.this, "Terjadi Kesalahan Response", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseInsertEditAkun> call, Throwable t) {
+//                progressDialog.dismiss();
+//                Toast.makeText(EditAkunActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-                    progressDialog.dismiss();
-                    String pesan = response.body().getMessage();
+        final HashMap<String, String> params = new HashMap<>();
+        params.put("id_member", user.getId());
+        params.put("nama", nama);
+        params.put("nama_toko", nama_toko);
+        params.put("provinsi", nama_provinsi);
+        params.put("kota", nama_kota);
+        params.put("kecamatan", nama_wilayah);
+        params.put("alamat", alamat);
+        params.put("no_ktp", no_ktp);
+        params.put("no_npwp", no_npwp);
+        params.put("no_hp", noHp);
+        params.put("email", email);
+        params.put("gender", jenis_kelamin);
+        params.put("tgl_lahir", tanggal_lahir);
+        params.put("status_kawin", status_perkawinan);
+        params.put("jumlah_anak", jumlah_anak);
+        params.put("pendidikan", pendidikan);
+        params.put("pekerjaan", pekerjaan);
+        params.put("penghasilan", penghasilan);
+        params.put("password", password);
 
-                    if (pesan.equals("Perubahan profile berhasil disimpan")){
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+        AndroidNetworking.post(host)
+                .addBodyParameter(params)
+                .setTag(EditAkunActivity.this)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
                         progressDialog.dismiss();
-                        Toast.makeText(EditAkunActivity.this, "Berhasil Edit Akun", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditAkunActivity.this, "Berhasil Memperbarui Akun", Toast.LENGTH_SHORT).show();
                         finish();
-
                         //TO DO SAVE KE SHARED PREFERENCES MANAGER
                         loginuser userUpdate = new loginuser(
                                 user.getId(),
@@ -318,79 +409,23 @@ public class EditAkunActivity extends AppCompatActivity {
 
                         SharedPrefManager.getInstance(EditAkunActivity.this).userLogin(userUpdate);
 
-                    }else{
-                        Toast.makeText(EditAkunActivity.this, "Gagal Edit Data", Toast.LENGTH_SHORT).show();
+                        try {
+                            Toast.makeText(getApplicationContext(), response.getString("response"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
-                }else{
-                    progressDialog.dismiss();
-                    Toast.makeText(EditAkunActivity.this, "Terjadi Kesalahan Response", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseInsertEditAkun> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(EditAkunActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
+                        Log.d("dataParams", "onError: "+params);
+                    }
 
-//        final HashMap<String, String> params = new HashMap<>();
-//        params.put("id_member", user.getId());
-//        params.put("nama", nama);
-//        params.put("nama_toko", nama_toko);
-//        params.put("provinsi", nama_provinsi);
-//        params.put("kota", nama_kota);
-//        params.put("kecamatan", nama_wilayah);
-//        params.put("alamat", alamat);
-//        params.put("no_ktp", no_ktp);
-//        params.put("no_npwp", no_npwp);
-//        params.put("no_hp", noHp);
-//        params.put("email", email);
-//        params.put("gender", jenis_kelamin);
-//        params.put("tgl_lahir", tanggal_lahir);
-//        params.put("status_kawin", status_perkawinan);
-//        params.put("jumlah_anak", jumlah_anak);
-//        params.put("pendidikan", pendidikan);
-//        params.put("pekerjaan", pekerjaan);
-//        params.put("penghasilan", penghasilan);
-//        params.put("password", password);
-//
-//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-//                .connectTimeout(10, TimeUnit.SECONDS)
-//                .readTimeout(10, TimeUnit.SECONDS)
-//                .writeTimeout(10, TimeUnit.SECONDS)
-//                .build();
-//        AndroidNetworking.post("http://jualanpraktis.net/android/update_akun.php")
-//                .addBodyParameter(params)
-//                .setTag(EditAkunActivity.this)
-//                .setPriority(Priority.MEDIUM)
-//                .setOkHttpClient(okHttpClient)
-//                .build()
-//                .getAsJSONObject(new JSONObjectRequestListener() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        progressDialog.dismiss();
-//                        Toast.makeText(EditAkunActivity.this, "Berhasil Memperbarui Akun", Toast.LENGTH_SHORT).show();
-//                        finish();
-//
-//                        try {
-//                            Toast.makeText(getApplicationContext(), response.getString("response"), Toast.LENGTH_SHORT).show();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//
-//
-//                    @Override
-//                    public void onError(ANError anError) {
-//                        progressDialog.dismiss();
-//                        Toast.makeText(getApplicationContext(), anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
-//                        Log.d("dataParams", "onError: "+params);
-//                    }
-//
-//                });
+                });
 
     }
 
@@ -893,7 +928,7 @@ public class EditAkunActivity extends AppCompatActivity {
 
     private void getPenghasilan(){
 
-        AndroidNetworking.get("http://jualanpraktis.net/android/penghasilan.php")
+        AndroidNetworking.get("https://jualanpraktis.net/android/list_penghasilan.php")
                 .setTag(EditAkunActivity.this)
                 .setPriority(Priority.LOW)
                 .build()
@@ -933,5 +968,11 @@ public class EditAkunActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

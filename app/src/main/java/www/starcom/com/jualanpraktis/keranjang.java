@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import www.starcom.com.jualanpraktis.Database.Database;
 import www.starcom.com.jualanpraktis.Keranjang.keranjangAdapter;
 import www.starcom.com.jualanpraktis.Login.Pref;
@@ -52,8 +58,13 @@ import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.SubKategori.order;
 import www.starcom.com.jualanpraktis.adapter.CartAdapter;
+import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
+import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
+import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
 import www.starcom.com.jualanpraktis.feature.form_pemesanan.FormTransaksiActivity;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
+import www.starcom.com.jualanpraktis.feature.produk.ProdukDetailActivity;
+import www.starcom.com.jualanpraktis.model_retrofit.datacheck.ResponseDataCheck;
 
 /**
  * Created by ADMIN on 05/02/2018.
@@ -98,9 +109,13 @@ public class keranjang extends Fragment implements View.OnClickListener {
     int grandTotal = 0;
     Pref pref;
 
+    String status_user;
+
     public int[] hargaItem;
 
     public ArrayList<String> dataHarga = new ArrayList<>();
+
+    ImageView imgSearch, imgFav, imgNotif;
 
 //    public ArrayList<String> dataHarga;
 
@@ -130,9 +145,32 @@ public class keranjang extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         total = rootView.findViewById(R.id.total);
         btnSubmit = rootView.findViewById(R.id.submitOrder);
+        imgSearch = rootView.findViewById(R.id.img_search_keranjang);
+        imgFav = rootView.findViewById(R.id.img_favorit_keranjang);
+        imgNotif = rootView.findViewById(R.id.img_notif_keranjang);
 
         btn_belanja_lagi = rootView.findViewById(R.id.btn_belanja_lagi);
 
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SearchResultsActivity.class));
+            }
+        });
+
+        imgFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProdukFavoritActivity.class));
+            }
+        });
+
+        imgNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), NotifikasiActivity.class));
+            }
+        });
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-message"));
@@ -151,7 +189,63 @@ public class keranjang extends Fragment implements View.OnClickListener {
                 getActivity().overridePendingTransition(0, 0);
             }
         });
+
+        getDataUser();
+
         return rootView;
+    }
+
+    private void getDataUser() {
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post("https://jualanpraktis.net/android/data-check.php")
+                .addBodyParameter("id_member", user.getId())
+                .setTag(getActivity())
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        try {
+
+                            status_user = response.getString("status");
+                            Log.d("dataStatusUser", "onCreate: "+status_user);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(getActivity(), "tidak ada data", Toast.LENGTH_SHORT).show();
+                            Log.d("dataError", "onError: "+anError.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
     }
 
 
@@ -223,7 +317,9 @@ public class keranjang extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn() && !Objects.equals(total.getText().toString(), "Rp. 0")) {
+        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn() &&
+                !Objects.equals(total.getText().toString(), "Rp. 0")
+                && status_user.equals("1")) {
             if (Integer.parseInt(totalbelanja) < 5000) {
                 new AlertDialog.Builder(getActivity())
                         // .setTitle("Tidak bisa melanjutkan pemesanan")
@@ -256,7 +352,10 @@ public class keranjang extends Fragment implements View.OnClickListener {
 
         } else if (Objects.equals(total.getText().toString(), "Rp. 0")) {
             Toast.makeText(getActivity(), "Anda Belum Belanja", Toast.LENGTH_SHORT).show();
-        } else {
+        }else if(status_user.equals("0")){
+            Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), EditAkunActivity.class));
+        } else{
             startActivity(new Intent(getActivity(), login.class));
             Toast.makeText(getActivity(), "Harap masuk terlebih dahulu", Toast.LENGTH_SHORT).show();
         }
@@ -305,8 +404,6 @@ public class keranjang extends Fragment implements View.OnClickListener {
                                 item.put("nama", object.getString("nama_produk"));
                                 item.put("id_variasi", object.getString("ket1"));
                                 item.put("variasi", object.getString("ket2"));
-                                item.put("nama_vendor", object.getString("nama"));
-                                item.put("id_vendor", object.getString("id_member"));
                                 item.put("gambar", object.getString("image_o"));
                                 item.put("harga", object.getString("harga_item"));
                                 item.put("jumlah", object.getString("jumlah"));
@@ -314,6 +411,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
                                 item.put("berat_item", object.getString("berat_item"));
                                 item.put("stok", object.getString("stok"));
                                 item.put("fee", object.getString("fee"));
+                                item.put("id_vendor", object.getString("id_member"));
                                 item.put("total_belanja", String.valueOf(hasil));
 //                                item.put("bbl",object.getString("bbl"));
                                 cartList.add(item);
@@ -323,6 +421,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
                             adapterCart = new CartAdapter(getActivity(), cartList, keranjang.this);
                             recyclerView.setAdapter(adapterCart);
                             recyclerView.setItemViewCacheSize(cartList.size());
+                            Log.d("dataItem", "onResponse: "+cartList);
 
 //                            dataHarga = new ArrayList<>(cartList.size());
 

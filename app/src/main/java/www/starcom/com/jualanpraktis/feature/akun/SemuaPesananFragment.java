@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -37,6 +38,8 @@ public class SemuaPesananFragment extends Fragment {
     RecyclerView rvSemuaPesanan;
     ShimmerFrameLayout shimmerSemuaPesanan;
 
+    TextView txtKosong;
+
     loginuser user ;
 
     ArrayList<HashMap<String, String>> dataSemuaPesanan = new ArrayList<>();
@@ -60,6 +63,7 @@ public class SemuaPesananFragment extends Fragment {
 
         rvSemuaPesanan = rootView.findViewById(R.id.recycler_status_transaksi_semua);
         shimmerSemuaPesanan = rootView.findViewById(R.id.shimmerSemuaPesanan);
+        txtKosong = rootView.findViewById(R.id.text_kosong_semua);
 
         AndroidNetworking.initialize(getActivity().getApplicationContext());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
@@ -115,7 +119,9 @@ public class SemuaPesananFragment extends Fragment {
                                 for (int j = 0; j<produk.length(); j++){
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
                                     data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("gambar", jsonObject1.getString("image_o"));
                                     data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("jumlah", jsonObject1.getString("jumlah"));
                                     data.put("harga_produk", jsonObject1.getString("harga_produk"));
                                     data.put("harga_jual", jsonObject1.getString("harga_jual"));
                                     data.put("untung", jsonObject1.getString("untung"));
@@ -129,6 +135,9 @@ public class SemuaPesananFragment extends Fragment {
                             rvSemuaPesanan.setVisibility(View.VISIBLE);
                             StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(getActivity(), dataSemuaPesanan);
                             rvSemuaPesanan.setAdapter(adapter);
+                            if (dataSemuaPesanan.isEmpty()){
+                                txtKosong.setVisibility(View.VISIBLE);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

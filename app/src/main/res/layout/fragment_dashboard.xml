@@ -79,34 +79,34 @@
 
                     <ImageView
                         android:id="@+id/img_chat_dashboard"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_message" />
+                        android:src="@drawable/icon_chat_grey" />
 
                     <ImageView
                         android:id="@+id/img_favorite_dashboard"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_favorite_white" />
+                        android:src="@drawable/icon_fav_grey" />
 
                     <ImageView
                         android:id="@+id/img_notif_dashboard"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_notif_white" />
+                        android:src="@drawable/icon_notif_grey" />
 
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cari"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="2dp"
@@ -123,8 +123,8 @@
 
                         <ImageView
                             android:id="@+id/img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginStart="10dp"
                             android:layout_centerVertical="true"
                             android:contentDescription="@null"
@@ -136,15 +136,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="5dp"
                             android:layout_toEndOf="@+id/img"
+                            android:fontFamily="@font/nuunito_bold"
                             android:hint="Cari Produk" />
-
-                        <ImageView
-                            android:id="@+id/search_photo"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:src="@drawable/ic_photo_camera_black_48dp" />
 
                     </RelativeLayout>
 
@@ -181,19 +174,12 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/pagerslide"
                             android:layout_width="match_parent"
-                            android:visibility="gone"
                             android:layout_height="200dp"/>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="195dp"
-                            android:src="@drawable/banner_jualan"/>
 
                         <LinearLayout
                             android:id="@+id/SliderDots"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:layout_below="@+id/pagerslide"
                             android:layout_centerHorizontal="true"
                             android:orientation="horizontal"
@@ -207,6 +193,7 @@
                         android:orientation="vertical">
 
                         <ImageView
+                            android:id="@+id/img_flash_sale"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_marginTop="2dp"
@@ -343,18 +330,51 @@
                             android:visibility="gone"
                             android:src="@drawable/diskon_batammall" />
 
-                        <TextView
-                            style="@style/TextAppearance.AppCompat.Body2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_filter"
+                            android:layout_width="150dp"
+                            android:layout_height="40dp"
                             android:layout_marginTop="10dp"
-                            android:text="Produk baru upload" />
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="5dp"
+                            app:cardCornerRadius="30dp"
+                            app:cardElevation="20dp">
+
+                            <Spinner
+                                android:id="@+id/spinner_filter_produk"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp" />
+
+                        </androidx.cardview.widget.CardView>
+
+
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_produk"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="4dp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_produk_terlaris"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:visibility="gone"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="4dp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_produk_terfavorit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:visibility="gone"
                             android:layout_marginLeft="4dp"
                             android:layout_marginTop="4dp"
                             android:layout_marginRight="4dp" />

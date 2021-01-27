@@ -57,11 +57,14 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
         Random rnd = new Random();
         int currentColor = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
-        viewHolder.linear_item_kategori.setBackgroundColor(currentColor);
+        String hexColor = item.get("color");
+        int color = Color.parseColor(hexColor);
+
+        viewHolder.linear_item_kategori.setBackgroundColor(Color.parseColor(hexColor));
 
         viewHolder.title.setText(item.get("kategori"));
 
-        String img_url = "https://trading.my.id/img2/"+item.get("gambar");
+        String img_url = "https://jualanpraktis.net/img2/"+item.get("gambar");
         Uri uri  = Uri.parse(img_url);
 
         Glide.with(activity.getApplicationContext())
@@ -106,6 +109,7 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
                     intent.putExtra("status","produkKategori");
                     intent.putExtra("id",finalItem.get("id"));
                     intent.putExtra("kategori",finalItem.get("kategori"));
+                    intent.putExtra("image", finalItem.get("gambar"));
                     activity.startActivity(intent);
                 }
 
