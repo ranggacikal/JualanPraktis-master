@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -44,7 +47,14 @@ public class PenggunaanAppAdapter extends RecyclerView.Adapter<PenggunaanAppAdap
     public void onBindViewHolder(@NonNull PenggunaanAppViewHolder holder, int position) {
 
         holder.txtnama.setText(dataItems.get(position).getTitle());
-        holder.txtWaktu.setText(dataItems.get(position).getCreatedAt());
+        holder.txtWaktu.setText(dataItems.get(position).getDurasi());
+
+        String id = dataItems.get(position).getIdVideo();
+        String url = "https://img.youtube.com/vi/"+id+"/0.jpg";
+
+        Glide.with(context)
+                .load(url)
+                .into(holder.imgPanduan);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +62,7 @@ public class PenggunaanAppAdapter extends RecyclerView.Adapter<PenggunaanAppAdap
                 Intent intent = new Intent(context, PlayVideoActivity.class);
                 intent.putExtra("id_video", dataItems.get(position).getIdVideo());
                 intent.putExtra("nama_video", dataItems.get(position).getTitle());
-                intent.putExtra("waktu_video", dataItems.get(position).getCreatedAt());
+                intent.putExtra("waktu_video", dataItems.get(position).getDurasi());
                 context.startActivity(intent);
             }
         });
@@ -67,12 +77,14 @@ public class PenggunaanAppAdapter extends RecyclerView.Adapter<PenggunaanAppAdap
     public class PenggunaanAppViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtnama, txtWaktu;
+        ImageView imgPanduan;
 
         public PenggunaanAppViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txtnama = itemView.findViewById(R.id.text_item_nama_panduan);
             txtWaktu = itemView.findViewById(R.id.text_item_waktu_panduan);
+            imgPanduan = itemView.findViewById(R.id.img_item_panduan);
         }
     }
 }

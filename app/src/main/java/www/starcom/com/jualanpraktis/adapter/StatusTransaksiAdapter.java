@@ -64,7 +64,7 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
         pref = new Pref(context.getApplicationContext());
 
         String image = item.get("gambar");
-        String url = "https://trading.my.id/img/" + image;
+        String url = "https://jualanpraktis.net/img/" + image;
 
 
         Glide.with(context)
@@ -77,9 +77,19 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
         holder.txtTanggal.setText(item.get("tanggal"));
         holder.txtNama.setText(item.get("nama_produk"));
         holder.txtVariasi.setText(item.get("variasi"));
-        holder.txtHargaJual.setText(item.get("harga_jual"));
-        holder.txthargaProduk.setText(item.get("harga_produk"));
-        holder.txtKeuntungan.setText(item.get("untung"));
+
+        if (item.get("harga_jual")!=null) {
+            holder.txtHargaJual.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_jual"))));
+        }
+
+        if (item.get("harga_produk")!=null) {
+            holder.txthargaProduk.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_produk"))));
+        }
+
+        if (item.get("untung")!=null) {
+            holder.txtKeuntungan.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("untung"))));
+        }
+
         holder.txtStatus.setText(item.get("status_pesanan"));
 
         id_transaksi = holder.txtId.getText().toString();

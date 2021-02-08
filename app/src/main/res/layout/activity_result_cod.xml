@@ -316,28 +316,6 @@
                 android:layout_marginStart="6dp"
                 android:background="@android:color/black"
                 android:layout_marginTop="10dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PERHATIAN.."
-                android:layout_marginTop="8dp"
-                android:textStyle="bold"
-                android:layout_marginEnd="6dp"
-                android:layout_marginStart="6dp"
-                android:textAlignment="textStart"
-                android:textColor="@color/colorPrimary"
-                style="@style/TextAppearance.AppCompat.Subhead"/>
-
-            <TextView
-                android:layout_marginTop="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:textAlignment="textStart"
-                android:layout_marginEnd="6dp"
-                android:layout_marginStart="6dp"
-                android:text="Pastikan alamat anda benar dan HP/WA yang bisa dihubungi di AKTIFKAN"/>
-
 
         </LinearLayout>
 

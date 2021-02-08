@@ -52,4 +52,12 @@
         <item name="textAllCaps">false</item>
         <item name="android:padding">2dp</item>
     </style>
+
+    <style name="CustomTabTextPanduan" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+
 </resources>

@@ -54,18 +54,36 @@
             android:layout_marginRight="30dp"
             android:textColor="@color/colorPrimary"/>
 
-        <EditText
-            android:id="@+id/edt_password_lama_ubah"
+        <RelativeLayout
+            android:id="@+id/layout_input_pass"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/background_edt_white"
-            android:layout_marginTop="10dp"
-            android:hint="Kata Sandi Lama"
-            android:textColor="@color/colorPrimary"
-            android:drawableRight="@drawable/awesome_eye_slash_ldpi"
-            android:paddingRight="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <EditText
+                android:id="@+id/edt_password_lama_ubah"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/background_edt_white"
+                android:layout_marginTop="10dp"
+                android:hint="Kata Sandi Lama"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimary"/>
+
+            <ImageView
+                android:id="@+id/show_pass_btn_pass_lama"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:alpha=".5"
+                android:padding="5dp"
+                android:src="@drawable/icon_awesome_eye_slash" />
+        </RelativeLayout>
+
 
         <Button
             android:id="@+id/btn_lanjut_password"
@@ -99,31 +117,65 @@
             android:layout_marginRight="30dp"
             android:textColor="@color/colorPrimary"/>
 
-        <EditText
-            android:id="@+id/edt_password_baru_ubah"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/background_edt_white"
-            android:layout_marginTop="10dp"
-            android:hint="Kata Sandi Baru"
-            android:textColor="@color/colorPrimary"
-            android:drawableRight="@drawable/awesome_eye_slash_ldpi"
-            android:paddingRight="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
-        <EditText
-            android:id="@+id/edt_password_konfirmasi_ubah"
+            <EditText
+                android:id="@+id/edt_password_baru_ubah"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/background_edt_white"
+                android:layout_marginTop="10dp"
+                android:hint="Kata Sandi Baru"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimary"/>
+
+            <ImageView
+                android:id="@+id/show_pass_btn_pass_baru"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:alpha=".5"
+                android:padding="5dp"
+                android:src="@drawable/icon_awesome_eye_slash" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/background_edt_white"
-            android:layout_marginTop="10dp"
-            android:hint="Konfirmasi Kata Sandi Baru"
-            android:textColor="@color/colorPrimary"
-            android:drawableRight="@drawable/awesome_eye_slash_ldpi"
-            android:paddingRight="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <EditText
+                android:id="@+id/edt_password_konfirmasi_ubah"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/background_edt_white"
+                android:layout_marginTop="10dp"
+                android:hint="Konfirmasi Kata Sandi Baru"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimary"/>
+
+            <ImageView
+                android:id="@+id/show_pass_btn_pass_konfirmasi"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:alpha=".5"
+                android:padding="5dp"
+                android:src="@drawable/icon_awesome_eye_slash" />
+        </RelativeLayout>
+
+
 
 
         <TextView
@@ -136,7 +188,7 @@
             android:layout_marginRight="30dp"
             android:textStyle="bold"
             android:visibility="gone"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:gravity="center"
             android:textColor="@color/colorPrimary"/>
 
@@ -150,7 +202,7 @@
             android:layout_marginRight="30dp"
             android:textStyle="bold"
             android:visibility="gone"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:gravity="center"
             android:textColor="@color/colorPrimary"/>
 

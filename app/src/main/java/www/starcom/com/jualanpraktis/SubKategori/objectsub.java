@@ -14,6 +14,8 @@ public class objectsub {
         @SerializedName("sub1_kategori1")
         public List<Results> sub1_kategori1;
 
+        @SerializedName("data")
+        public List<Results> data;
 
         @SerializedName("produk")
         public List<Results> produk;

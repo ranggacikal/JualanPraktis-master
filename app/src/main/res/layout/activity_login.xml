@@ -119,7 +119,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/bg_lightred"
                 android:fontFamily="@font/nuunito_bold"
-                android:text="Sign in"
+                android:text="MASUK"
                 android:textColor="@android:color/white" />
 
             <Button
@@ -131,7 +131,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/bg_daftar"
                 android:fontFamily="@font/nuunito_bold"
-                android:text="Create An Account"
+                android:text="DAFTAR"
                 android:textAllCaps="false"
                 android:textColor="@android:color/black" />
 
@@ -143,7 +143,7 @@
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
-                android:hint="Or Login With : "
+                android:hint="Atau login dengan : "
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

@@ -30,16 +30,17 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_logo_hitam"
+        android:icon="@drawable/icon_app"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_logo_putih_round"
+        android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".feature.akun.UploadBuktiTransferActivity"></activity>
+        <activity android:name=".FlashSaleActivity"></activity>
+        <activity android:name=".feature.akun.UploadBuktiTransferActivity" />
         <activity android:name=".feature.akun.TukarkanPesananActivity" />
         <activity android:name=".feature.akun.BatalkanTransaksiActivity" />
         <activity android:name=".feature.akun.RincianTransaksiActivity" />
@@ -192,6 +193,15 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider2985898851643418"
             android:exported="true" />
+        <provider
+            android:name=".fileprovider.GenericFIleProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

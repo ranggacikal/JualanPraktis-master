@@ -112,6 +112,8 @@ public class PesananDibatalkanFragment extends Fragment {
                                 JSONObject jsonObject = array.getJSONObject(i);
                                 HashMap<String,String> data = new HashMap<>();
                                 data.put("id_transaksi",jsonObject.getString("id_transaksi"));
+                                data.put("tanggal",jsonObject.getString("tgl_transaksi"));
+                                data.put("status_pesanan",jsonObject.getString("status_pesanan"));
 
                                 listProdukBatal.clear();
                                 JSONArray produk = jsonObject.getJSONArray("produk");
@@ -119,11 +121,13 @@ public class PesananDibatalkanFragment extends Fragment {
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
                                     HashMap<String,String> data2 = new HashMap<>();
 //                                    data2.put("id_transaksi", jsonObject1.getString("id_transaksi"));
-                                    data2.put("nama_produk", jsonObject1.getString("nama_produk"));
-                                    data2.put("gambar", jsonObject1.getString("image_o"));
-                                    data2.put("keterangan", jsonObject1.getString("ket2"));
-                                    data2.put("tanggal_transaksi", jsonObject1.getString("tgl_transaksi"));
-                                    data2.put("untung", jsonObject1.getString("untung"));
+                                    data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("gambar", jsonObject1.getString("image_o"));
+                                    data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("jumlah", jsonObject1.getString("jumlah"));
+                                    data.put("harga_produk", jsonObject1.getString("harga_produk"));
+                                    data.put("harga_jual", jsonObject1.getString("harga_jual"));
+                                    data.put("untung", jsonObject1.getString("untung"));
 //                                    dataProdukSemuaPesanan.add(data);
 //                                    listProdukSelesai.add(data);
                                     listProdukBatal.add(data2);
@@ -136,7 +140,7 @@ public class PesananDibatalkanFragment extends Fragment {
                             Log.d("potonganSaya", "onResponse: "+potongan);
                             Log.d("dataPesananSelesai", "onResponse: "+penghasilanBatal);
                             rvPesananBatal.setVisibility(View.VISIBLE);
-                            PenghasilanBatalAdapter adapter = new PenghasilanBatalAdapter(listProdukBatal, getActivity());
+                            PenghasilanBatalAdapter adapter = new PenghasilanBatalAdapter(penghasilanBatal, getActivity());
                             rvPesananBatal.setAdapter(adapter);
 
 //                            if (listProdukBatal.isEmpty()){
@@ -146,7 +150,7 @@ public class PesananDibatalkanFragment extends Fragment {
                             int potonganInt = Integer.parseInt(potongan);
                             Locale localID = new Locale("in", "ID");
                             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
-                            txtPotongan.setText(formatRupiah.format(potonganInt));
+                            txtPotongan.setText("Rp"+ NumberFormat.getInstance().format(potonganInt));
                             txtPotongan.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {

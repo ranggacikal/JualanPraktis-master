@@ -90,7 +90,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="4dp"
                     android:text="Variasi : "
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="7dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="13sp"
                     android:textStyle="normal"
@@ -117,7 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="8dp"
                     android:text="Rp. 200000"
                     android:textColor="@color/colorPrimary"
@@ -206,9 +206,21 @@
                     android:background="@drawable/background_border_grey"
                     android:imeOptions="actionDone"
                     android:hint="Masukkan Harga Jual"
-                    android:inputType="number"
+                    android:inputType="numberDecimal|numberSigned"
                     android:paddingLeft="10dp"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_harga_jual_dibawah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Harga jual tidak boleh dibawah harga produk"
+                    android:layout_below="@+id/harga_dropshipper"
+                    android:textSize="10sp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/nuunito_bold"
+                    android:visibility="gone"/>
 
                 <www.starcom.com.jualanpraktis.utils.NumberPicker
                     android:id="@+id/number_picker"

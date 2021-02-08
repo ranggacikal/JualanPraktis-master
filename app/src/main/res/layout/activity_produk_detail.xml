@@ -98,6 +98,7 @@
                     android:id="@+id/app_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:fitsSystemWindows="true"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -384,19 +385,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:gravity="center"
                             android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <LinearLayout
                                 android:id="@+id/linear_whatsapp_detail_produk"
-                                android:layout_width="100dp"
-                                android:layout_height="40dp"
+                                android:layout_width="80dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
                                 android:background="@drawable/background_list_wa"
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center"
                                     android:paddingLeft="8dp"
                                     android:src="@drawable/whatsapp" />
@@ -408,23 +412,25 @@
                                     android:layout_marginLeft="7dp"
                                     android:text="Bagikan Ke\nWhatsapp"
                                     android:textColor="#25D366"
-                                    android:textSize="10sp"
+                                    android:textSize="6sp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/linear_instagram_detail_produk"
-                                android:layout_width="100dp"
-                                android:layout_height="40dp"
+                                android:layout_width="80dp"
+                                android:layout_height="30dp"
                                 android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
                                 android:background="@drawable/background_list_ig"
                                 android:clickable="true"
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center"
                                     android:paddingLeft="8dp"
                                     android:src="@drawable/instagram" />
@@ -433,26 +439,28 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="7dp"
-                                    android:layout_marginTop="5dp"
+                                    android:layout_gravity="center"
                                     android:text="Bagikan Ke\nInstagram"
                                     android:textColor="#3b5998"
-                                    android:textSize="10sp"
+                                    android:textSize="6sp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/linear_facebook_detail_produk"
-                                android:layout_width="100dp"
-                                android:layout_height="40dp"
+                                android:layout_width="80dp"
+                                android:layout_height="30dp"
                                 android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
                                 android:background="@drawable/background_list_fb"
                                 android:clickable="true"
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center"
                                     android:paddingLeft="8dp"
                                     android:src="@drawable/facebook" />
@@ -461,10 +469,40 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="7dp"
-                                    android:layout_marginTop="5dp"
+                                    android:layout_gravity="center"
                                     android:text="Bagikan Ke\nFacebook"
                                     android:textColor="#3b5998"
-                                    android:textSize="10sp"
+                                    android:textSize="6sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linear_sharing_detail_produk"
+                                android:layout_width="80dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:background="@drawable/background_list_sharing"
+                                android:clickable="true"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:paddingLeft="8dp"
+                                    android:src="@drawable/ic_share" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="7dp"
+                                    android:layout_gravity="center"
+                                    android:text="Bagikan"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="6sp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>
@@ -482,20 +520,70 @@
                     app:cardElevation="3dp"
                     app:cardUseCompatPadding="true">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/bg_daftar">
 
                         <TextView
+                            android:id="@+id/pilihVariasi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:layout_marginTop="4dp"
                             android:layout_marginRight="8dp"
-                            android:text="Variasi : "
+                            android:gravity="center"
+                            android:text="Pilih Variasi"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_variasi_detail_produk"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_below="@+id/pilihVariasi"
+                            android:text="Pilih Variasi"
+                            android:visibility="gone"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="20dp"
+                            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:tint="@color/colorPrimary" />
+
+                        <Spinner
+                            android:id="@+id/spn_variasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dialog"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvStock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -506,22 +594,9 @@
                             android:layout_marginBottom="12dp"
                             android:background="@drawable/bg_daftar">
 
-                            <Spinner
-                                android:id="@+id/spn_variasi"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:spinnerMode="dialog"
-                                android:visibility="gone" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_variasi_detail_produk"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/rv_variasi_detail_produk"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -529,6 +604,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginRight="8dp"
+                                    android:layout_marginLeft="8dp"
                                     android:text="Stock : "
                                     android:textSize="15sp"
                                     android:textStyle="bold" />

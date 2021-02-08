@@ -46,6 +46,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
     ImageView imgBack;
     TextView txtTotalHargaProduk, txtTotalKeuntungan, txtTotalOngkosKirim, txtTotalBayar;
     int total_bayar, totalHargaProduk, totalKeuntungan, totalOngkosKirim;
+    String opsi_pembayaran;
     LinearLayout linearBatalkanPesanan, linearTukarkanPesanan, linearBelumDibayar;
 
     @Override
@@ -183,6 +184,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
                                 data.put("alamat",jsonObject.getString("alamat"));
                                 data.put("kode_pos",jsonObject.getString("kode_pos"));
                                 data.put("kurir",jsonObject.getString("kurir"));
+                                data.put("opsi_pembayaran",jsonObject.getString("id_opsi_bayar"));
                                 data.put("kecamatan",jsonObject.getString("subdistrict_name"));
                                 data.put("kota",jsonObject.getString("city_name"));
 

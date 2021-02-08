@@ -68,7 +68,7 @@ public class BelumDibayarFragment extends Fragment {
 
         rvBelumDibayar = rootView.findViewById(R.id.recycler_status_transaksi_belum_dibayar);
         shimmerBelumDiabayar = rootView.findViewById(R.id.shimmerBelumDiBayar);
-        txtKosong = rootView.findViewById(R.id.text_kosong_semua);
+        txtKosong = rootView.findViewById(R.id.text_kosong_belum_dibayar);
 
         rvBelumDibayar.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvBelumDibayar.setHasFixedSize(true);

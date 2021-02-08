@@ -45,33 +45,33 @@ public class ServiceTask extends Service  {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
        // displayNotification(this,"test service");
-        if (Build.VERSION.SDK_INT >= 26) {
-            String CHANNEL_ID = "my_channel_01";
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("SHE Inspection")
-                    .setContentText("Service Running").build();
-
-            startForeground(1, notification);
-        }
-
-        Bundle bundle = intent.getExtras();
-        String backgroundProcess;
-        if (bundle!=null){
-            backgroundProcess = bundle.getString("proses");
-
-            if (backgroundProcess.equals("home")){
-                cekTransaksi();
-            }else if (backgroundProcess.equals("form_transaksi_back")){
-                dataList = (ArrayList<HashMap<String, String>>) bundle.getSerializable("dataList");
-                back();
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            String CHANNEL_ID = "my_channel_01";
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+//                    "Channel human readable title",
+//                    NotificationManager.IMPORTANCE_DEFAULT);
+//
+//            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+//
+//            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                    .setContentTitle("SHE Inspection")
+//                    .setContentText("Service Running").build();
+//
+//            startForeground(1, notification);
+//        }
+//
+//        Bundle bundle = intent.getExtras();
+//        String backgroundProcess;
+//        if (bundle!=null){
+//            backgroundProcess = bundle.getString("proses");
+//
+//            if (backgroundProcess.equals("home")){
+//                cekTransaksi();
+//            }else if (backgroundProcess.equals("form_transaksi_back")){
+//                dataList = (ArrayList<HashMap<String, String>>) bundle.getSerializable("dataList");
+//                back();
+//            }
+//        }
 
 
         return START_STICKY;

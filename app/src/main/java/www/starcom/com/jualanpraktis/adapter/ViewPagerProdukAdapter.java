@@ -55,7 +55,7 @@ public class ViewPagerProdukAdapter extends PagerAdapter {
         ImageView imageView = view.findViewById(R.id.img_item_view_pager);
         imageView.setTag(position);
 
-        final String url = "https://trading.my.id/img/" ;
+        final String url = "https://jualanpraktis.net/img/" ;
         String imgUrl = item.get("gambar");
 
         Glide.with(context)

@@ -124,11 +124,37 @@ public class ProdukFavoritActivity extends AppCompatActivity {
                             for (int i = 0;i<array.length();i++){
                                 JSONObject object = array.getJSONObject(i);
                                 HashMap<String,String> item = new HashMap<>();
+                                item.put("id_produk",object.getString("id_produk"));
+                                item.put("harga",object.getString("harga"));
+                                item.put("id_kategori_produk",object.getString("id_kategori_produk"));
+                                item.put("id_sub_kategori_produk",object.getString("id_sub_kategori_produk"));
+                                item.put("id_brand",object.getString("id_brand"));
+                                item.put("id_jenis",object.getString("id_jenis"));
+                                item.put("status_produk1",object.getString("status_produk1"));
+                                item.put("status_produk2",object.getString("status_produk2"));
+                                item.put("id_supplier",object.getString("id_supplier"));
                                 item.put("nama_produk",object.getString("nama_produk"));
+                                item.put("size",object.getString("size"));
+                                item.put("warna",object.getString("warna"));
+                                item.put("berat",object.getString("berat"));
+                                item.put("keterangan_produk",object.getString("keterangan_produk"));
+                                item.put("image2_o", object.getString("image2_o"));
                                 item.put("diskon",object.getString("disc"));
+                                item.put("harga_diskon",object.getString("harga_disc"));
+                                item.put("harga_jual",object.getString("harga_jual"));
+                                item.put("stok",object.getString("stok"));
+                                item.put("status_disc",object.getString("status_disc"));
+                                item.put("image_disc",object.getString("image_disc"));
+                                item.put("created_by",object.getString("created_by"));
+                                item.put("id_member",object.getString("id_member"));
+                                item.put("sku",object.getString("sku"));
+                                item.put("date",object.getString("date"));
+                                item.put("start_disc",object.getString("start_disc"));
+                                item.put("end_disc",object.getString("end_disc"));
+                                item.put("total_stok",object.getString("total_stok"));
+                                item.put("terjual",object.getString("terjual"));
                                 item.put("gambar", object.getString("image_o"));
                                 item.put("kode",object.getString("kode"));
-                                item.put("berat",object.getString("berat"));
                                 favoritList.add(item);
                             }
                             FavoritAdapter adapter = new FavoritAdapter(ProdukFavoritActivity.this, favoritList);

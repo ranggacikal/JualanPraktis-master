@@ -46,7 +46,7 @@ public class ProdukRincianTransaksiAdapter extends RecyclerView.Adapter<ProdukRi
         pref = new Pref(context.getApplicationContext());
 
         String gambar = item.get("gambar");
-        String url = "https://trading.my.id/img/"+gambar;
+        String url = "https://jualanpraktis.net/img/"+gambar;
 
         Glide.with(context)
                 .load(url)
@@ -65,15 +65,15 @@ public class ProdukRincianTransaksiAdapter extends RecyclerView.Adapter<ProdukRi
 
         holder.txtNamaBarang.setText(item.get("nama_produk"));
         holder.txtVariasi.setText(item.get("variasi"));
-        holder.txtHargaProduk.setText(formatRupiah.format(harga_produk));
+        holder.txtHargaProduk.setText("Rp"+NumberFormat.getInstance().format(harga_produk));
         holder.txtJumlahProduk.setText("x"+item.get("jumlah"));
-        holder.txtTotalProduk.setText(formatRupiah.format(total_produk));
-        holder.txtHargaJual.setText(formatRupiah.format(harga_jual));
+        holder.txtTotalProduk.setText("Rp"+NumberFormat.getInstance().format(total_produk));
+        holder.txtHargaJual.setText("Rp"+NumberFormat.getInstance().format(harga_jual));
         holder.txtJumlahJual.setText("x"+item.get("jumlah"));
-        holder.txtTotalJual.setText(formatRupiah.format(total_jual));
-        holder.txtKeuntungan.setText(formatRupiah.format(untung1));
+        holder.txtTotalJual.setText("Rp"+NumberFormat.getInstance().format(total_jual));
+        holder.txtKeuntungan.setText("Rp"+NumberFormat.getInstance().format(untung1));
         holder.txtJumlahKeuntungan.setText("x"+item.get("jumlah"));
-        holder.txtTotalKeuntungan.setText(formatRupiah.format(untung2));
+        holder.txtTotalKeuntungan.setText("Rp"+NumberFormat.getInstance().format(untung2));
 
 
     }

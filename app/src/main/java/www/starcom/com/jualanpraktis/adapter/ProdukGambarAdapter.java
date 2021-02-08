@@ -44,7 +44,7 @@ public class ProdukGambarAdapter extends RecyclerView.Adapter<ProdukGambarAdapte
         HashMap<String, String> item = new HashMap<>();
         item = this.data.get(i);
 
-        final String url = "https://trading.my.id/img/" ;
+        final String url = "https://jualanpraktis.net/img/" ;
         Glide.with(activity.getApplicationContext())
                 .load(url+ item.get("gambar"))
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(200,200).skipMemoryCache(false))

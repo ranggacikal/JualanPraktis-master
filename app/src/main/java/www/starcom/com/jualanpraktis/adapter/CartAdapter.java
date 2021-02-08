@@ -34,7 +34,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.DecimalFormat;
 import java.text.Format;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +60,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     int harga = 0;
     String pengiriman;
     private List<HargaItem> hargaDropshipper;
+    int hargaItem;
 
     public CartAdapter(Activity activity, ArrayList<HashMap<String, String>> data, keranjang keranjang) {
         this.data = data;
@@ -91,6 +95,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             viewHolder.number_picker.setVisibility(View.GONE);
             viewHolder.number_button.setVisibility(View.GONE);
             viewHolder.txt_sisa.setVisibility(View.GONE);
+
 //            viewHolder.harga_dropshipper.setVisibility(View.GONE);
 
         } else {
@@ -101,6 +106,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //            viewHolder.txt_sisa.setVisibility(View.VISIBLE);
 //            viewHolder.harga_dropshipper.setVisibility(View.VISIBLE);
             viewHolder.txt_sisa.setText("Stok tersedia " + item.get("stok"));
+            viewHolder.lblVariasi.setText(item.get("variasi"));
 
         }
 
@@ -115,13 +121,30 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         viewHolder.lbl_nama.setText(label);
 
 
-        int hargaItem = Integer.parseInt(item.get("harga")) * Integer.parseInt(item.get("jumlah"));
-        viewHolder.lbl_nominal.setText(FormatText.rupiahFormat(hargaItem));
+
+        int hargaItem2 = Integer.parseInt(item.get("harga")) * Integer.parseInt(item.get("jumlah"));
+        viewHolder.lbl_nominal.setText("Rp" + NumberFormat.getInstance().format(hargaItem2));
+
+        int harga = Integer.parseInt(item.get("harga"));
+        int jumlah = Integer.parseInt(item.get("jumlah"));
+
+//        ArrayList<Integer> hargaItemArray = new ArrayList<>();
+//
+//        for (int a = 0; a<data.size(); a++) {
+//
+//            hargaItemArray.add(a, hargaItem);
+//
+//        }
+
+//        Log.d("hargaItemArray", "onTextChanged: "+hargaItemArray);
+//        Log.d("hargaItemArray", "jumlahData: "+hargaItemArray.size());
+
+
 
 //        int hargaDropshipper = Integer.parseInt(viewHolder.harga_dropshipper.getText().toString());
 //        viewHolder.harga_dropshipper.setText(FormatText.rupiahFormat(hargaDropshipper));
 
-        String urlImage = "https://trading.my.id/img/" + item.get("gambar");
+        String urlImage = "https://jualanpraktis.net/img/" + item.get("gambar");
         // Picasso.get().load(urlImage).into(viewHolder.gambar);
 
 
@@ -177,6 +200,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
 
                 viewHolder.harga_dropshipper.addTextChangedListener(new TextWatcher() {
+
+                    private DecimalFormat df;
+                    private DecimalFormat dfnd;
+                    private boolean hasFractionalPart;
+
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -189,14 +217,85 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 //                        Log.d("dataHargaArray", "onTextChanged: "+keranjang.dataHarga);
 
                         //hargaItem[i}
-                        keranjang.dataHarga.add(i, viewHolder.harga_dropshipper.getText().toString());
+
+//                        ArrayList<Integer> hargaItemList = new ArrayList<>();
+//
+//                        hargaItemList.add(i, harga * jumlah);
+
+                        String harga_jual = viewHolder.harga_dropshipper.getText().toString();
+
+                        Log.d("hargaItem", "jumlahData: "+hargaItem);
+
+                        int hargaJual = 0;
+
+                        if (!harga_jual.equals("")) {
+//                            Double harga_jual_double = Double.parseDouble(harga_jual);
+                            String str = harga_jual.replace(".", "");
+//                            int intValue = (int) Math.round(harga_jual_double);
+                            hargaJual = Integer.parseInt(str);
+                        }
+
+                        keranjang.dataHarga.add(i, String.valueOf(hargaJual));
+
+                        Log.d("checkValue", "onTextChanged: "+hargaJual);
+
+                        if (hargaJual<hargaItem2){
+                            viewHolder.harga_dropshipper.setError("Harga Jual Tidak Boleh Di bawah Harga Item");
+                            keranjang.btnSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(activity, "Harga Jual Tidak Boleh Di bawah Harga Item", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }else{
+                            keranjang.btnSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    keranjang.proccess();
+                                }
+                            });
+                        }
+
 
                     }
 
                     @Override
                     public void afterTextChanged(Editable editable) {
 
+                        df = new DecimalFormat("#,###.##");
+                        df.setDecimalSeparatorAlwaysShown(true);
+                        dfnd = new DecimalFormat("#,###");
+                        hasFractionalPart = false;
 
+                        viewHolder.harga_dropshipper.removeTextChangedListener(this);
+
+                        try {
+                            int inilen, endlen;
+                            inilen = viewHolder.harga_dropshipper.getText().length();
+
+                            String v = editable.toString().replace(String.valueOf(df.getDecimalFormatSymbols().getGroupingSeparator()), "");
+                            Number n = df.parse(v);
+                            int cp = viewHolder.harga_dropshipper.getSelectionStart();
+                            if (hasFractionalPart) {
+                                viewHolder.harga_dropshipper.setText(df.format(n));
+                            } else {
+                                viewHolder.harga_dropshipper.setText(dfnd.format(n));
+                            }
+                            endlen = viewHolder.harga_dropshipper.getText().length();
+                            int sel = (cp + (endlen - inilen));
+                            if (sel > 0 && sel <= viewHolder.harga_dropshipper.getText().length()) {
+                                viewHolder.harga_dropshipper.setSelection(sel);
+                            } else {
+                                // place cursor at the end?
+                                viewHolder.harga_dropshipper.setSelection(viewHolder.harga_dropshipper.getText().length() - 1);
+                            }
+                        } catch (NumberFormatException nfe) {
+                            // do nothing?
+                        } catch (ParseException e) {
+                            // do nothing?
+                        }
+
+                        viewHolder.harga_dropshipper.addTextChangedListener(this);
 
 //                        try {
 //
@@ -261,11 +360,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 if (finalStok < value) {
                     viewHolder.number_picker.setValue(Integer.parseInt(finalItem.get("jumlah")));
                     //  finalItem.put("jumlah",String.valueOf(oldValue));
-                    Toast.makeText(activity, "Stok tidak cukup", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Pesanan tidak boleh kurang dari satu", Toast.LENGTH_SHORT).show();
                 } else {
 
                     finalItem.put("jumlah", String.valueOf(value));
-                    int hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
+                    hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
                     viewHolder.lbl_nominal.setText(FormatText.rupiahFormat(hargaItem));
                     keranjang.onChangeData();
                 }
@@ -279,11 +378,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 if (finalStok < newValue) {
                     viewHolder.number_button.setNumber(finalItem.get("jumlah"));
                     //  finalItem.put("jumlah",String.valueOf(oldValue));
-                    Toast.makeText(activity, "Stok tidak cukup", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Pesanan tidak boleh kurang dari satu", Toast.LENGTH_SHORT).show();
                 } else {
 
                     finalItem.put("jumlah", String.valueOf(newValue));
-                    int hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
+                    hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
                     viewHolder.lbl_nominal.setText(FormatText.rupiahFormat(hargaItem));
                     keranjang.onChangeData();
                 }
@@ -313,25 +412,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
      * View holder to display each RecylerView item
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView lbl_nama, lbl_status, lbl_nominal, lbl_tanggal, txt_sisa, txt_vendor, lblPilihPegiriman;
+        private TextView lbl_nama, lbl_status, lbl_nominal, lbl_tanggal, txt_sisa, txtHargaDibawah, lblVariasi;
         private ImageView gambar, buang, card_item_jumlah;
         private ElegantNumberButton number_button;
         private NumberPicker number_picker;
         public EditText harga_dropshipper;
         private CardView cardPilihanPengiriman;
 
+
+
         public ViewHolder(View view) {
             super(view);
             lbl_nama = view.findViewById(R.id.card_item_nama);
             lbl_nominal = view.findViewById(R.id.card_item_harga);
             txt_sisa = view.findViewById(R.id.txt_sisa);
-            txt_vendor = view.findViewById(R.id.text_nama_vendor);
             gambar = view.findViewById(R.id.gambar);
             number_button = view.findViewById(R.id.number_button);
             number_picker = view.findViewById(R.id.number_picker);
             buang = view.findViewById(R.id.buang);
             card_item_jumlah = view.findViewById(R.id.card_item_jumlah);
             harga_dropshipper = view.findViewById(R.id.harga_dropshipper);
+            lblVariasi = view.findViewById(R.id.card_item_variasi);
+            txtHargaDibawah = view.findViewById(R.id.text_harga_jual_dibawah);
         }
     }
 
@@ -347,11 +449,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     public void onResponse(String response) {
                         if (response.contains("Berhasil Hapus")) {
                             //  keranjang.getCart();w
-                            activity.finish();
-                            activity.overridePendingTransition(0, 0);
-                            activity.startActivity(activity.getIntent().setFlags(activity.getIntent().FLAG_ACTIVITY_NO_ANIMATION));
-                            activity.overridePendingTransition(0, 0);
+//                            activity.overridePendingTransition(0, 0);
+//                            activity.startActivity(activity.getIntent().setFlags(activity.getIntent().FLAG_ACTIVITY_NO_ANIMATION));
+//                            activity.overridePendingTransition(0, 0);
                             Toast.makeText(activity, "Berhasil Hapus", Toast.LENGTH_SHORT).show();
+                            keranjang.getCart();
 
                         }
                     }

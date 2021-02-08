@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -42,6 +43,8 @@ public class SelesaiFragment extends Fragment {
 
     ArrayList<HashMap<String, String>> listSelesai = new ArrayList<>();
 
+    TextView txtKosong;
+
     public SelesaiFragment() {
         // Required empty public constructor
     }
@@ -59,6 +62,7 @@ public class SelesaiFragment extends Fragment {
 
         rvSelesai = rootView.findViewById(R.id.recycler_status_transaksi_selesai);
         shimmerSelesai = rootView.findViewById(R.id.shimmerSelesai);
+        txtKosong = rootView.findViewById(R.id.text_kosong_selesai);
 
         AndroidNetworking.initialize(getActivity().getApplicationContext());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
@@ -129,6 +133,11 @@ public class SelesaiFragment extends Fragment {
                             rvSelesai.setVisibility(View.VISIBLE);
                             PesananSelesaiAdapter adapter = new PesananSelesaiAdapter(getActivity(), listSelesai);
                             rvSelesai.setAdapter(adapter);
+
+                            if (listSelesai.size()<1){
+                                txtKosong.setVisibility(View.VISIBLE);
+                                rvSelesai.setVisibility(View.GONE);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

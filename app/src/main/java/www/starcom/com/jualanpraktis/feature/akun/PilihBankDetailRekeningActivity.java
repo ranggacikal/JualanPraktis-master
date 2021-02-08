@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,13 +13,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import www.starcom.com.jualanpraktis.R;
+import www.starcom.com.jualanpraktis.adapter.BankLainnyaAdapter;
 import www.starcom.com.jualanpraktis.adapter.PilihBankAdapter;
+import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
 import www.starcom.com.jualanpraktis.interfaces.PilihBankClickInterface;
 import www.starcom.com.jualanpraktis.model.ListBank;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_lainnya.ResponseBankLainnya;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_populer.DataItem;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_populer.ResponseBankPopuler;
 
 public class PilihBankDetailRekeningActivity extends AppCompatActivity {
 
@@ -81,16 +91,79 @@ public class PilihBankDetailRekeningActivity extends AppCompatActivity {
         rekening = getIntent().getStringExtra(ExtraRekening);
 
         loadRecyclerPopulerBank();
+        loadRecyclerBankLainnya();
+
+    }
+
+    private void loadRecyclerBankLainnya() {
+
+        ConfigRetrofit.service.bankLainnya().enqueue(new Callback<ResponseBankLainnya>() {
+            @Override
+            public void onResponse(Call<ResponseBankLainnya> call, Response<ResponseBankLainnya> response) {
+                if (response.isSuccessful()){
+
+                    List<www.starcom.com.jualanpraktis.model_retrofit.bank_lainnya.DataItem> dataItems = response.body().getData();
+
+                    if (!dataItems.isEmpty()){
+
+                        BankLainnyaAdapter adapter = new BankLainnyaAdapter(PilihBankDetailRekeningActivity.this,
+                                dataItems, PilihBankDetailRekeningActivity.this);
+                        recyclerBankLainnya.setHasFixedSize(true);
+                        recyclerBankLainnya.setLayoutManager(new LinearLayoutManager(PilihBankDetailRekeningActivity.this));
+                        recyclerBankLainnya.setAdapter(adapter);
+
+                    }else{
+                        Toast.makeText(detailRekeningBankActivity, "Data bank Lainnya Kosong", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(detailRekeningBankActivity, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBankLainnya> call, Throwable t) {
+
+                Toast.makeText(detailRekeningBankActivity, "Terjadi kesalahan", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     private void loadRecyclerPopulerBank() {
 
-        PilihBankAdapter adapter = new PilihBankAdapter(PilihBankDetailRekeningActivity.this, listBankItem, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(PilihBankDetailRekeningActivity.this, 3,
-                LinearLayoutManager.VERTICAL, false);
-        recyclerBankPopuler.setHasFixedSize(true);
-        recyclerBankPopuler.setLayoutManager(gridLayoutManager);
-        recyclerBankPopuler.setAdapter(adapter);
+        ConfigRetrofit.service.bankPopuler().enqueue(new Callback<ResponseBankPopuler>() {
+            @Override
+            public void onResponse(Call<ResponseBankPopuler> call, Response<ResponseBankPopuler> response) {
+                if (response.isSuccessful()){
+
+                    List<DataItem> dataItems = response.body().getData();
+
+                    if (!dataItems.isEmpty()){
+
+                        PilihBankAdapter adapter = new PilihBankAdapter(PilihBankDetailRekeningActivity.this, dataItems,
+                                PilihBankDetailRekeningActivity.this);
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(PilihBankDetailRekeningActivity.this, 3,
+                                LinearLayoutManager.VERTICAL, false);
+                        recyclerBankPopuler.setHasFixedSize(true);
+                        recyclerBankPopuler.setLayoutManager(gridLayoutManager);
+                        recyclerBankPopuler.setAdapter(adapter);
+
+                    }else{
+                        Toast.makeText(detailRekeningBankActivity, "Data Bank Populer kosong", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(detailRekeningBankActivity, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBankPopuler> call, Throwable t) {
+
+            }
+        });
 
     }
 

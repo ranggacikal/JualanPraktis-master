@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -37,7 +40,14 @@ public class TipsTrickAdapter extends RecyclerView.Adapter<TipsTrickAdapter.Tips
     public void onBindViewHolder(@NonNull TipsTrickViewholder holder, int position) {
 
         holder.txtNama.setText(dataItems.get(position).getTitle());
-        holder.txtWaktu.setText(dataItems.get(position).getCreatedAt());
+        holder.txtWaktu.setText(dataItems.get(position).getDurasi());
+
+        String id = dataItems.get(position).getIdVideo();
+        String url = "https://img.youtube.com/vi/"+id+"/0.jpg";
+
+        Glide.with(context)
+                .load(url)
+                .into(holder.imgTips);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +55,7 @@ public class TipsTrickAdapter extends RecyclerView.Adapter<TipsTrickAdapter.Tips
                 Intent intent = new Intent(context, PlayVideoActivity.class);
                 intent.putExtra("id_video", dataItems.get(position).getIdVideo());
                 intent.putExtra("nama_video", dataItems.get(position).getTitle());
-                intent.putExtra("waktu_video", dataItems.get(position).getCreatedAt());
+                intent.putExtra("waktu_video", dataItems.get(position).getDurasi());
                 context.startActivity(intent);
             }
         });
@@ -60,12 +70,14 @@ public class TipsTrickAdapter extends RecyclerView.Adapter<TipsTrickAdapter.Tips
     public class TipsTrickViewholder extends RecyclerView.ViewHolder {
 
         TextView txtNama, txtWaktu;
+        ImageView imgTips;
 
         public TipsTrickViewholder(@NonNull View itemView) {
             super(itemView);
 
             txtNama = itemView.findViewById(R.id.text_item_nama_tips);
             txtWaktu = itemView.findViewById(R.id.text_item_waktu_tips);
+            imgTips = itemView.findViewById(R.id.img_item_tips);
         }
     }
 }

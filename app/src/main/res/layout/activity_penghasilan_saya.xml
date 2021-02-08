@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/nuunito_bold"
                 android:gravity="center"
-                android:text="Penghasilan Saya"
+                android:text="Penjualan Saya"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
         </RelativeLayout>

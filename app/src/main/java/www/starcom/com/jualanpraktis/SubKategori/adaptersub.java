@@ -74,7 +74,7 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
     @Override
     public void onBindViewHolder(holdersub holder, final int position) {
 
-        final String UrlImage = "https://trading.my.id/img/";
+        final String UrlImage = "https://jualanpraktis.net/img/";
         final String Image = results.get(position).gambar;
         final Uri uri = Uri.parse(UrlImage + Image);
         final String harga = results.get(position).harga_asli;
@@ -119,10 +119,10 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
         final String hrg = nf.format(Integer.parseInt(harga));
         holder.nama_produk.setText(results.get(position).nama_produk);
         //   holder.harga_jual.setText(String.format("%s%s", RP, hrg));
-        holder.harga_asli.setText(FormatText.rupiahFormat(Double.parseDouble(results.get(position).harga_asli)));
+        holder.harga_asli.setText("Rp"+NumberFormat.getInstance().format(Double.parseDouble(results.get(position).harga_asli)));
         holder.diskon.setText("(" + results.get(position).diskon + "%)");
         holder.harga_asli.setPaintFlags(holder.harga_asli.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.harga_jual.setText(FormatText.rupiahFormat(harga_disc));
+        holder.harga_jual.setText("Rp"+NumberFormat.getInstance().format(harga_disc));
         holder.txtStok.setText(results.get(position).total_stok);
         holder.txtTerjual.setText(results.get(position).terjual+" Produk Terjual");
 

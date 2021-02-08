@@ -21,17 +21,32 @@
             android:textColor="#000"
             android:layout_marginBottom="20dp"/>
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="35dp"
-            android:hint="Masukan Kata Sandi"
-            android:paddingLeft="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/background_edittext_solid_grey"
-            android:drawableEnd="@drawable/awesome_eye_slash_ldpi"
-            android:paddingRight="10dp"/>
+            android:layout_marginBottom="30dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Masukan Kata Sandi"
+                android:paddingLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:inputType="textPassword"
+                android:background="@drawable/background_edittext_solid_grey"
+                android:paddingRight="10dp"/>
+
+            <ImageView
+                android:id="@+id/img_hide_password_rekening"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_awesome_eye_slash"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"/>
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

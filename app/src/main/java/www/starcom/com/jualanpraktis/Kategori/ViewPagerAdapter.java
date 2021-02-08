@@ -66,7 +66,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             ImageView imageView = view.findViewById(R.id.imageView);
 
             imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
-            imageLoader.get(utils.getSliderImageUrl(), ImageLoader.getImageListener(imageView, R.mipmap.ic_launcher, android.R.drawable.ic_dialog_alert));
+            imageLoader.get(utils.getSliderImageUrl(), ImageLoader.getImageListener(imageView, R.drawable.banner_jualan, android.R.drawable.ic_dialog_alert));
         }
         ViewPager vp = (ViewPager) container ;
         vp.addView(view,0);

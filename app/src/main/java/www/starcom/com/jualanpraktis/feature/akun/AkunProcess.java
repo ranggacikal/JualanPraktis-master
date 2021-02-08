@@ -130,39 +130,39 @@ class AkunProcess {
                             //JSONObject userJson = obj.getJSONObject("login");
 
                             JSONObject object = response.getJSONObject(0);
-                                loginuser user = new loginuser(
-                                        object.getString("id_member"),
-                                        object.getString("kode"),
-                                        object.getString("nama"),
-                                        object.getString("nama_toko"),
-                                        object.getString("provinsi"),
-                                        object.getString("kota"),
-                                        object.getString("kecamatan"),
-                                        object.getString("alamat"),
-                                        object.getString("no_ktp"),
-                                        object.getString("no_npwp"),
-                                        object.getString("no_hp"),
-                                        object.getString("email"),
-
-
-                                        object.getString("nama_bank"),
-                                        object.getString("atas_nama"),
-                                        object.getString("no_rek"),
-                                        object.getString("foto")
-
-//                                        object.getString("id_customer"),
+//                                loginuser user = new loginuser(
+//                                        object.getString("id_member"),
+//                                        object.getString("kode"),
 //                                        object.getString("nama"),
-//                                        object.getString("email"),
-//                                        object.getString("no_hp"),
-//                                        object.getString("jk"),
+//                                        object.getString("nama_toko"),
+//                                        object.getString("provinsi"),
+//                                        object.getString("kota"),
+//                                        object.getString("kecamatan"),
 //                                        object.getString("alamat"),
+//                                        object.getString("no_ktp"),
+//                                        object.getString("no_npwp"),
+//                                        object.getString("no_hp"),
+//                                        object.getString("email"),
 //
 //
-//                                        object.getString("nama_provinsi"),
-//                                        object.getString("nama_kota"),
-//                                        object.getString("nama_kecamatan")
-                                );
-                                SharedPrefManager.getInstance(activity).userLogin(user);
+//                                        object.getString("nama_bank"),
+//                                        object.getString("atas_nama"),
+//                                        object.getString("no_rek"),
+//                                        object.getString("foto")
+//
+////                                        object.getString("id_customer"),
+////                                        object.getString("nama"),
+////                                        object.getString("email"),
+////                                        object.getString("no_hp"),
+////                                        object.getString("jk"),
+////                                        object.getString("alamat"),
+////
+////
+////                                        object.getString("nama_provinsi"),
+////                                        object.getString("nama_kota"),
+////                                        object.getString("nama_kecamatan")
+//                                );
+//                                SharedPrefManager.getInstance(activity).userLogin(user);
 
                                 Toast.makeText(activity,"Berhasil Ubah Profile",Toast.LENGTH_SHORT).show();
 

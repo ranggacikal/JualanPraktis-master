@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -267,6 +269,32 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
         EditText edtMasukanSandi = dialog.findViewById(R.id.edt_dialog_kata_sandi);
         TextView txtBatal = dialog.findViewById(R.id.text_dialog_batal);
         TextView txtOke = dialog.findViewById(R.id.text_dialog_ok);
+        ImageView imgHide = dialog.findViewById(R.id.img_hide_password_rekening);
+
+        View view = imgHide;
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.img_hide_password_rekening){
+
+                    if(edtMasukanSandi.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        edtMasukanSandi.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        edtMasukanSandi.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
+
 
         dialog.show();
 
@@ -334,6 +362,12 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void showHidePass(View view){
+
+
+
     }
 
     private void kirimData() {

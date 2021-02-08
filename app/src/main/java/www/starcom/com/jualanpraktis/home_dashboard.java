@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +71,7 @@ import www.starcom.com.jualanpraktis.feature.produk.ListProdukDiskonActivity;
 import www.starcom.com.jualanpraktis.model.ListProduk;
 
 import static com.android.volley.VolleyLog.TAG;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by ADMIN on 06/02/2018.
@@ -94,8 +98,6 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private Timer timer ;
-
     //produk
     private RecyclerView recyclerView,rv_produk1,rv_produk2,rv_produk3,rv_produk4, recyclerTerlaris, recyclerTerfavorit ;
     private objectsub.ObjectSub objectSub;
@@ -121,6 +123,11 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     Context context;
     Spinner spinnerFilter;
     String image_flash_sale;
+
+    int currentPage = 0;
+    private Timer timer ;
+    final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 3000;
 
     //Cart
     private ImageView imgKeranjang;
@@ -193,7 +200,7 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
        // gridLayoutManager = new GridLayoutManager(getContext(),3);
         int gridNumber = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
         rv_produk1.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
         rv_produk2.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
         rv_produk3.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
@@ -243,6 +250,13 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
+        img_flash_sale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), FlashSaleActivity.class));
+            }
+        });
+
         getAllProduk();
 
         recyclerTerlaris = rootView.findViewById(R.id.rv_produk_terlaris);
@@ -288,9 +302,11 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                                 image_flash_sale = jsonObject.getString("file");
                             }
 
+                            swipeRefreshLayout.setRefreshing(false);
+
                             String urlImage = "https://jualanpraktis.net/file-uploads/flashsale/"+image_flash_sale;
 
-                            Glide.with(getActivity())
+                            Glide.with(getApplicationContext())
                                     .load(urlImage)
                                     .into(img_flash_sale);
 
@@ -311,12 +327,15 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                             // error.getErrorDetail() - just an error detail
 
                             // get parsed error object (If ApiError is your class)
+                            swipeRefreshLayout.setRefreshing(false);
                             Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                         } else {
                             // error.getErrorDetail() : connectionError, parseError, requestCancelledError
                             if (anError.getErrorDetail().equals("connectionError")){
+                                swipeRefreshLayout.setRefreshing(false);
                                 Toast.makeText(getActivity(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
                             }else {
+                                swipeRefreshLayout.setRefreshing(false);
                                 Toast.makeText(getActivity(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -421,8 +440,51 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                     sliderimg.add(sliderUtils);
                 }
 
+                swipeRefreshLayout.setRefreshing(false);
+
                 viewPagerAdapter = new ViewPagerAdapter(sliderimg, getActivity());
                 viewPager.setAdapter(viewPagerAdapter);
+
+//                dotscount = sliderimg.size();
+//                dots = new ImageView[dotscount];
+//
+//                for(int i = 0; i < dotscount; i++){
+//
+//                    dots[i] = new ImageView(getContext());
+//                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.non_active_dot));
+//
+//                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//
+//                    params.setMargins(8, 0, 8, 0);
+//
+//                    sliderDotspanel.addView(dots[i], params);
+//
+//                }
+//
+//                dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
+//
+//                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//                    @Override
+//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageSelected(int position) {
+//
+//                        for(int i = 0; i< dotscount; i++){
+//                            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.non_active_dot));
+//                        }
+//
+//                        dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageScrollStateChanged(int state) {
+//
+//                    }
+//                });
                 /*
                 dotscount = viewPagerAdapter.getCount();
                 dots = new ImageView[dotscount];
@@ -442,6 +504,9 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -491,6 +556,8 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                             shimmer_kategori.stopShimmerAnimation();
                             shimmer_kategori.setVisibility(View.GONE);
                             ll_kategori.setVisibility(View.VISIBLE);
+
+                            swipeRefreshLayout.setRefreshing(false);
 
 
                             KategoriAdapter adapter = new KategoriAdapter(getActivity(),kategoriList);

@@ -106,9 +106,23 @@
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
+            <TextView
+                android:id="@+id/text_kosong_keranjang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
+                android:layout_above="@+id/card"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:textAlignment="center"
+                android:visibility="gone"
+                android:text="Keranjang Anda Masih Kosong"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:visibility="gone"
                 android:id="@+id/list_belanja"
+                android:layout_below="@+id/text_kosong_keranjang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/text"
@@ -116,20 +130,9 @@
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent" />
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="10dp"
-                android:layout_margin="10dp"
-                android:layout_above="@+id/card"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:textAlignment="textStart"
-                android:text="Belanja 200rb FREE ONGKIR (Khusus Batam)"/>
-
 
             <LinearLayout
+                android:id="@+id/linear_button_keranjang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

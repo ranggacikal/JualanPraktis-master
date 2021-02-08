@@ -7,8 +7,8 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="10dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
         android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/img_item_panduan"
         android:layout_width="160dp"
         android:layout_height="120dp"
         android:src="@drawable/banner_jualan"
@@ -34,14 +35,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nama Video"
-            android:textStyle="bold"
-            android:textSize="20sp" />
+            android:fontFamily="@font/nuunito_reguler"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/text_item_waktu_panduan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Waktu upload"
+            android:fontFamily="@font/nuunito_reguler"
+            android:textSize="10sp"
             android:layout_marginTop="10dp"/>
 
     </LinearLayout>

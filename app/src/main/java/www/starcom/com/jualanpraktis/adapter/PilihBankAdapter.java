@@ -14,22 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.feature.akun.DetailRekeningBankActivity;
 import www.starcom.com.jualanpraktis.feature.akun.PilihBankDetailRekeningActivity;
 import www.starcom.com.jualanpraktis.interfaces.PilihBankClickInterface;
 import www.starcom.com.jualanpraktis.model.ListBank;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_populer.DataItem;
 
 public class PilihBankAdapter extends RecyclerView.Adapter<PilihBankAdapter.PilihBankViewHolder> {
 
     Context context;
-    ListBank[] listBank;
+    List<DataItem> listBank;
     PilihBankDetailRekeningActivity pilihBankDetailRekeningActivity;
 //    private PilihBankClickInterface onItemClickListener;
 //    private PilihBankDetailRekeningActivity pilihBankDetailRekeningActivity;
 
 
-    public PilihBankAdapter(Context context, ListBank[] listBank, PilihBankDetailRekeningActivity pilihBankDetailRekeningActivity) {
+    public PilihBankAdapter(Context context, List<DataItem> listBank, PilihBankDetailRekeningActivity pilihBankDetailRekeningActivity) {
         this.context = context;
         this.listBank = listBank;
         this.pilihBankDetailRekeningActivity = pilihBankDetailRekeningActivity;
@@ -45,22 +48,14 @@ public class PilihBankAdapter extends RecyclerView.Adapter<PilihBankAdapter.Pili
     @Override
     public void onBindViewHolder(@NonNull PilihBankViewHolder holder, int position) {
 
-        final String urlImage = listBank[position].getGambar();
-        final String namaBank = listBank[position].getNama_bank();
+        final String urlImage = "https://jualanpraktis.net/img2/bank/"+listBank.get(position).getIcon();
+        final String namaBank = listBank.get(position).getNamaBank();
 
         Glide.with(context)
                 .load(urlImage)
                 .into(holder.imgBank);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
-        holder.imgBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String intentNama = pilihBankDetailRekeningActivity.nama;
@@ -82,7 +77,7 @@ public class PilihBankAdapter extends RecyclerView.Adapter<PilihBankAdapter.Pili
 
     @Override
     public int getItemCount() {
-        return listBank.length;
+        return listBank.size();
     }
 
     public class PilihBankViewHolder extends RecyclerView.ViewHolder {

@@ -22,8 +22,8 @@ public class RiwayatPencairanActivity extends AppCompatActivity {
     RecyclerView recyclerRiwayatPencairan;
 
     ListPencairan[] listPencairan = new ListPencairan[]{
-            new ListPencairan("29 Des 2020", "17 : 00", "-Rp. 450.000"),
-            new ListPencairan("28 Des 2020", "14 : 00", "-Rp.750.000")
+            new ListPencairan("29 Des 2020", "17 : 00", "Rp. 450.000"),
+            new ListPencairan("28 Des 2020", "14 : 00", "Rp.750.000")
     };
 
     @Override

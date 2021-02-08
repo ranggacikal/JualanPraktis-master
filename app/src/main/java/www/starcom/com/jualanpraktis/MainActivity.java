@@ -109,12 +109,29 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(MainActivity.this, ServiceTask.class)
                 .putExtra("proses","home")
         );
+
+
+
       //  startWorkManager();
         checkUpdate();
         instance=this;
         getAllWidgets();
         bindWidgetsWithAnEvent();
         setupTabLayout();
+
+        String handleKeranjang = getIntent().getStringExtra("extraKeranjang");
+
+        if (handleKeranjang!=null){
+
+            if (handleKeranjang.equals("produkDetail")) {
+
+                tabLayout.setScrollPosition(3, 0f, true);
+                setCurrentTabFragment(3);
+                Keranjang = new keranjang();
+                replaceFragment(Keranjang);
+
+            }
+        }
 
 
     }
@@ -217,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
        // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.icon_jualan_praktis_red));
         tabLayout.addTab(tabLayout.newTab().setText("Kategori").setIcon(R.drawable.icon_kategori));
-        tabLayout.addTab(tabLayout.newTab().setText("Panduan").setIcon(R.drawable.icon_panduan));
+        tabLayout.addTab(tabLayout.newTab().setText("Panduan").setIcon(R.drawable.ic_panduan_red));
         tabLayout.addTab(tabLayout.newTab().setText("Keranjang").setIcon(R.drawable.icon_keranjang));
 //        int tab = getIntent().getIntExtra("tab",0);
 //        if (tab==2){

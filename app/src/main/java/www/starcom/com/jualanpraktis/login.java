@@ -1,11 +1,14 @@
 package www.starcom.com.jualanpraktis;
 
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -115,6 +119,8 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     Pref pref;
     CustomProgressDialog progress;
 
+    AlertDialog.Builder alertdialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +151,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         txt_lupa_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertdialog = new AlertDialog.Builder(login.this);
+                alertdialog = new AlertDialog.Builder(login.this);
                 alertdialog.setTitle("Masukan Email yang terdaftar");
 
                 final EditText edt_email = new EditText(login.this);
@@ -919,7 +925,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     void postLupaPassword(String email) {
         progress.progress("Mengirim Email", "Loading...");
-        AndroidNetworking.post("https://jualanpraktis.net/android/lupa_password.php")
+        AndroidNetworking.post("https://jualanpraktis.net/android/forgot-password.php")
                 .addBodyParameter("email", email)
                 .setPriority(Priority.MEDIUM)
                 .setTag(login.this)
@@ -929,16 +935,26 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         progress.dismiss();
 
-                        new AlertDialog.Builder(login.this)
-                                .setTitle("Berhasil Mengirim ke Email")
-                                .setMessage("Silahkan cek email anda untuk melanjutkan proses dari lupa password.")
-                                .setIcon(R.drawable.ic_baseline_email_24)
-                                .setPositiveButton("Selesai", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                        Dialog dialog = new Dialog(login.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.dialog_check_email_forgot_pass);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.show();
 
+                        Button btnDone = dialog.findViewById(R.id.btn_done_dialog_check_email_forgot);
+
+                        btnDone.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                alertdialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        dialog.dismiss();
                                     }
-                                }).show();
+                                });
+                            }
+                        });
                     }
 
                     @Override

@@ -80,7 +80,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
     LinearLayoutManager linearLayoutManager;
 
     TextView total;
-    LinearLayout btnSubmit, btn_belanja_lagi;
+    public LinearLayout btnSubmit, btn_belanja_lagi, linear_button;
     loginuser user;
 
     List<order> list = new ArrayList<>();
@@ -110,6 +110,8 @@ public class keranjang extends Fragment implements View.OnClickListener {
     Pref pref;
 
     String status_user;
+
+    TextView txtKosong;
 
     public int[] hargaItem;
 
@@ -148,8 +150,12 @@ public class keranjang extends Fragment implements View.OnClickListener {
         imgSearch = rootView.findViewById(R.id.img_search_keranjang);
         imgFav = rootView.findViewById(R.id.img_favorit_keranjang);
         imgNotif = rootView.findViewById(R.id.img_notif_keranjang);
+        txtKosong = rootView.findViewById(R.id.text_kosong_keranjang);
+        linear_button = rootView.findViewById(R.id.linear_button_keranjang);
 
         btn_belanja_lagi = rootView.findViewById(R.id.btn_belanja_lagi);
+
+        linear_button.setVisibility(View.GONE);
 
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +178,11 @@ public class keranjang extends Fragment implements View.OnClickListener {
             }
         });
 
+        Bundle bundle = getArguments();
+        if(bundle!=null) {
+            String value = bundle.getString("key");
+        }
+
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-message"));
 
@@ -183,10 +194,15 @@ public class keranjang extends Fragment implements View.OnClickListener {
         btn_belanja_lagi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
-                getActivity().overridePendingTransition(0, 0);
-                getActivity().startActivity(getActivity().getIntent().setFlags(getActivity().getIntent().FLAG_ACTIVITY_NO_ANIMATION));
-                getActivity().overridePendingTransition(0, 0);
+//                getActivity().finish();
+//                getActivity().overridePendingTransition(0, 0);
+//                getActivity().startActivity(getActivity().getIntent().setFlags(getActivity().getIntent().FLAG_ACTIVITY_NO_ANIMATION));
+//                getActivity().overridePendingTransition(0, 0);
+                Fragment home= new home_dashboard();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, home, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -342,9 +358,15 @@ public class keranjang extends Fragment implements View.OnClickListener {
 
                                     }
                                 }).show();
-                    } else {
+                    }else if(dataHarga.size() < 1) {
+                        Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+
+                    }else {
                         proccess();
                     }
+                }else if(dataHarga.size() < 1) {
+                    Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+
                 } else {
                     proccess();
                 }
@@ -355,6 +377,9 @@ public class keranjang extends Fragment implements View.OnClickListener {
         }else if(status_user.equals("0")){
             Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), EditAkunActivity.class));
+        }else if(dataHarga.size() < 1) {
+            Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+
         } else{
             startActivity(new Intent(getActivity(), login.class));
             Toast.makeText(getActivity(), "Harap masuk terlebih dahulu", Toast.LENGTH_SHORT).show();
@@ -415,13 +440,21 @@ public class keranjang extends Fragment implements View.OnClickListener {
                                 item.put("total_belanja", String.valueOf(hasil));
 //                                item.put("bbl",object.getString("bbl"));
                                 cartList.add(item);
+                                Log.d("dataItem", "item: ");
                             }
 
                             recyclerView.setVisibility(View.VISIBLE);
+                            linear_button.setVisibility(View.VISIBLE);
                             adapterCart = new CartAdapter(getActivity(), cartList, keranjang.this);
                             recyclerView.setAdapter(adapterCart);
                             recyclerView.setItemViewCacheSize(cartList.size());
-                            Log.d("dataItem", "onResponse: "+cartList);
+                            Log.d("dataItem", "cartList: "+cartList);
+
+                            if (cartList.size()<1){
+                                txtKosong.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                                linear_button.setVisibility(View.GONE);
+                            }
 
 //                            dataHarga = new ArrayList<>(cartList.size());
 
@@ -509,6 +542,8 @@ public class keranjang extends Fragment implements View.OnClickListener {
 //            Toast.makeText(getActivity(), harga, Toast.LENGTH_SHORT).show();
 //        }
 
+        ArrayList<String> listHargaJual = new ArrayList<>();
+
         HashMap<String, String> param = new HashMap<>();
         param.put("customer", user.getId());
 
@@ -519,10 +554,13 @@ public class keranjang extends Fragment implements View.OnClickListener {
             param.put("berat[" + i + "]", data.get("berat_item"));
             param.put("fee[" + i + "]", data.get("fee"));
             param.put("harga_dropshipper[" + i + "]", dataHarga.get(i));
+            listHargaJual.add(dataHarga.get(i));
             param.put("harga_jual_item[" + i + "]", data.get("harga"));
             param.put("ket1[" + i + "]", data.get("id_variasi"));
             i++;
         }
+
+
 
         AndroidNetworking.post("https://jualanpraktis.net/android/pesan2.php")
                 .addBodyParameter(param)
@@ -534,6 +572,8 @@ public class keranjang extends Fragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         progressDialog.dismiss();
                         String id_transaksi = "";
+
+
 
                         try {
                             id_transaksi = response.getString("id_transaksi");
@@ -548,9 +588,12 @@ public class keranjang extends Fragment implements View.OnClickListener {
                         intent.putExtra("berat", Integer.toString(berat));
                         intent.putExtra("id_transaksi", id_transaksi);
                         intent.putExtra("dataList", cartList);
+                        intent.putExtra("hargaJualList", listHargaJual);
                         startActivity(intent);
                         Log.d(TAG, "Total = " + totalbelanja);
                         Log.d(TAG, "Berat = " + Integer.toString(berat));
+                        Log.d("paramTransaksi", "onResponse: "+param.toString());
+                        Log.d("checkListHargaJual", "proccess: "+cartList);
                     }
 
                     @Override

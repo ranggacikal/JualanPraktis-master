@@ -50,6 +50,7 @@ public class PenerimaRincianAdapter extends RecyclerView.Adapter<PenerimaRincian
         holder.txtNohp.setText(item.get("no_hp"));
         holder.txtAlamat.setText(alamt_full);
         holder.txtKodePos.setText(item.get("kode_pos"));
+        holder.txtOpsiBayar.setText(item.get("opsi_pembayaran"));
 
     }
 
@@ -60,7 +61,7 @@ public class PenerimaRincianAdapter extends RecyclerView.Adapter<PenerimaRincian
 
     public class PenerimaRincianViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtNama, txtNohp, txtAlamat, txtKodePos;
+        TextView txtNama, txtNohp, txtAlamat, txtKodePos, txtOpsiBayar;
 
         public PenerimaRincianViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +69,7 @@ public class PenerimaRincianAdapter extends RecyclerView.Adapter<PenerimaRincian
             txtNohp = itemView.findViewById(R.id.text_item_nohp_rincian);
             txtAlamat = itemView.findViewById(R.id.text_item_alamat_rincian);
             txtKodePos = itemView.findViewById(R.id.text_item_kodepos_rincian);
+            txtOpsiBayar = itemView.findViewById(R.id.text_item_opsi_bayar_rincian);
         }
     }
 }

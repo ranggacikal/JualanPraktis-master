@@ -59,7 +59,7 @@ public class PanduanFragment extends Fragment {
         penggunaanAppFragment = new PenggunaanAppFragment();
         tipsTrickFragment = new TipsTrickFragment();
         // tabLayout.removeAllTabs();
-        tabLayoutPanduan.addTab(tabLayoutPanduan.newTab().setText("Panduan"));
+        tabLayoutPanduan.addTab(tabLayoutPanduan.newTab().setText("Penggunaan App"));
         tabLayoutPanduan.addTab(tabLayoutPanduan.newTab().setText("Tips & Trick"));
 
     }

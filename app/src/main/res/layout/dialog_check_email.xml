@@ -13,7 +13,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="170dp"
         android:layout_marginTop="60dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
@@ -31,19 +31,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CHECK YOUR EMAIL"
+                android:text="CEK EMAIL ANDA"
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/nuunito_bold"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="We've send a message to email provided with a link\nto active your account. this helps us verify your identity"
+                android:text="Kami telah mengirimkan pesan ke email yang dilengkapi dengan tautan untuk mengaktifkan akun Anda. ini membantu kami memverifikasi identitas Anda"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textSize="12sp"
+                android:fontFamily="@font/nuunito_bold"
                 android:layout_marginBottom="40dp"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="25dp"/>
@@ -72,11 +75,11 @@
         android:background="@drawable/background_button_circle_red"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:text="DONE"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:fontFamily="@font/arialrounded"
+        android:fontFamily="@font/nuunito_bold"
         android:layout_below="@+id/logo_dialog"/>
 
 </RelativeLayout>

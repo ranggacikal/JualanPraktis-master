@@ -122,12 +122,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/image_profile"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginBottom="5dp"
+                                android:layout_marginBottom="10dp"
                                 android:fontFamily="@font/nuunito_bold"
                                 android:gravity="center"
                                 android:hint="Nama User"
                                 android:textColor="@color/white"
-                                android:textSize="30dp"/>
+                                android:textSize="20sp"/>
 
                             <Button
                                 android:visibility="gone"
@@ -217,7 +217,7 @@
                             android:layout_marginRight="30dp"
                             android:layout_marginBottom="15dp"
                             app:cardCornerRadius="30dp"
-                            app:cardElevation="20dp">
+                            app:cardElevation="6dp">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -305,7 +305,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/relative_rincian_rekening_saya"
@@ -331,7 +331,7 @@
                             android:fontFamily="@font/nuunito_bold"
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_rincian_rekening"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:textSize="15sp" />
 
@@ -349,7 +349,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/relative_status_transaksi"
@@ -360,8 +360,8 @@
 
                         <ImageView
                             android:id="@+id/img_status_transaksi"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_status_transaksi"
                             android:layout_marginLeft="20dp"/>
@@ -373,7 +373,7 @@
                             android:layout_marginLeft="20dp"
                             android:text="Status Transaksi"
                             android:fontFamily="@font/nuunito_bold"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:textSize="15sp" />
 
@@ -391,7 +391,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/relative_produk_favorit"
@@ -405,7 +405,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/heart"
+                            android:src="@drawable/icon_fav_solid_red"
                             android:layout_marginLeft="20dp"/>
 
                         <TextView
@@ -414,7 +414,7 @@
                             android:layout_marginLeft="20dp"
                             android:text="Produk Favorit"
                             android:layout_toRightOf="@id/img_produk_favorit"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nuunito_bold"
                             android:textSize="15sp" />
@@ -433,7 +433,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/relative_bantuan"
@@ -456,7 +456,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_bantuan"
                             android:text="Bantuan"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nuunito_bold"
                             android:textSize="15sp"/>
@@ -475,7 +475,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/relative_nilai_kami"
@@ -498,7 +498,8 @@
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_nilai"
                             android:text="Nilai Kami"
-                            android:textColor="@color/colorPrimary"
+                            android:fontFamily="@font/nuunito_bold"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:textSize="15sp"/>
 
@@ -516,7 +517,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray" />
+                        android:background="#F5F5F5" />
 
                     <RelativeLayout
                         android:id="@+id/btn_ubah_password"
@@ -539,7 +540,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_kata_sandi"
                             android:text="Ubah Kata Sandi"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nuunito_bold"
                             android:textSize="15sp" />
@@ -558,7 +559,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
+                        android:background="#F5F5F5"
                         android:layout_marginBottom="10dp"/>
 
                     <RelativeLayout
@@ -582,7 +583,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@+id/img_keluar_akun"
                             android:text="Keluar"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nuunito_bold"
                             android:textSize="15sp" />
@@ -601,7 +602,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
+                        android:background="#F5F5F5"
                         android:layout_marginBottom="10dp"/>
 
                     <TableLayout

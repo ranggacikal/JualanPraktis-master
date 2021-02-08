@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +69,8 @@ public class UbahKataSandiActivity extends AppCompatActivity {
 
     loginuser user;
 
+    ImageView showPassLama, showPassBaru, showPassKonfirmasi;
+
     ArrayList<HashMap<String, String>> responsePassword = new ArrayList<>();
 
 
@@ -78,6 +82,9 @@ public class UbahKataSandiActivity extends AppCompatActivity {
 
         txtTidakCocok = findViewById(R.id.text_ubah_kata_sandi_tidak_cocok);
         txtCocok = findViewById(R.id.text_ubah_kata_sandi_cocok);
+        showPassLama = findViewById(R.id.show_pass_btn_pass_lama);
+        showPassBaru = findViewById(R.id.show_pass_btn_pass_baru);
+        showPassKonfirmasi = findViewById(R.id.show_pass_btn_pass_konfirmasi);
 
         user = SharedPrefManager.getInstance(UbahKataSandiActivity.this).getUser();
 
@@ -85,6 +92,13 @@ public class UbahKataSandiActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validasiPassword();
+            }
+        });
+
+        imgBackUbahPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -97,6 +111,88 @@ public class UbahKataSandiActivity extends AppCompatActivity {
                 validasiPasswordBaru();
             }
         });
+
+        showHidePassLama(showPassLama);
+        showHidePassBaru(showPassBaru);
+        showHidePassKonfirmasi(showPassKonfirmasi);
+    }
+
+    private void showHidePassKonfirmasi(View view) {
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.show_pass_btn_pass_konfirmasi){
+
+                    if(edtPasswordKonfirmasiUbah.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        edtPasswordKonfirmasiUbah.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        edtPasswordKonfirmasiUbah.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    private void showHidePassBaru(View view) {
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.show_pass_btn_pass_baru){
+
+                    if(edtPasswordBaruUbah.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        edtPasswordBaruUbah.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        edtPasswordBaruUbah.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    private void showHidePassLama(View view) {
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(view.getId()==R.id.show_pass_btn_pass_lama){
+
+                    if(edtPasswordLamaUbah.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye);
+                        //Show Password
+                        edtPasswordLamaUbah.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else{
+                        ((ImageView)(view)).setImageResource(R.drawable.icon_awesome_eye_slash);
+
+                        //Hide Password
+                        edtPasswordLamaUbah.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+
+            }
+        });
+
     }
 
     private void validasiPasswordBaru() {

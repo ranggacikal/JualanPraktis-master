@@ -30,6 +30,9 @@ public class ResultsProduk implements Serializable {
     @SerializedName("stok")
     public String stok;
 
+    @SerializedName("total_stok")
+    public String total_stok;
+
     @SerializedName("harga_jual")
     public String harga_jual;
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".feature.akun.BantuanActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -33,7 +34,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/arialbold"
+                android:fontFamily="@font/nuunito_bold"
                 android:text="Bantuan"
                 android:textColor="@color/colorPrimary"
                 android:textSize="25sp" />
@@ -41,184 +42,9 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/linear_email"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_email">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/email_icon"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_fb"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_grup_dukungan">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_fb"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Facebook"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_ig"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_instagram">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_ig"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Instagram"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_twitter"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_twitter">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_twitter"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Twitter"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_tiktok"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_tiktok">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_tiktok"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tiktok"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_linkedin"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/background_bantuan_linkdein">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_linkedin"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Linked In"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_centerHorizontal="true"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_bantuan"/>
 
 </LinearLayout>

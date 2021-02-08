@@ -29,6 +29,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,8 +52,11 @@ import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.SubKategori.order;
 import www.starcom.com.jualanpraktis.adapter.CartAdapter;
+import www.starcom.com.jualanpraktis.adapter.CheckoutAdapter;
 import www.starcom.com.jualanpraktis.adapter.PilihPengirimanAdapter;
+import www.starcom.com.jualanpraktis.adapter.ProdukRincianTransaksiAdapter;
 import www.starcom.com.jualanpraktis.databinding.ActivityFormTransaksiBinding;
+import www.starcom.com.jualanpraktis.feature.akun.RincianTransaksiActivity;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
 import www.starcom.com.jualanpraktis.interfaces.PilihPengirimanClickInterface;
 import www.starcom.com.jualanpraktis.service.ServiceTask;
@@ -71,11 +75,13 @@ public class FormTransaksiActivity extends AppCompatActivity {
     String[] total_berat1;
     String onngkir_ro;
     ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> listProduk = new ArrayList<>();
     //    String idVendor;
     ArrayList<String> idVendor1 = new ArrayList<>();
     ArrayList<String> beratItem = new ArrayList<>();
     ArrayList<String> jumlahItem = new ArrayList<>();
     ArrayList<String> hargaItem = new ArrayList<>();
+    ArrayList<String> hargaItem2 = new ArrayList<>();
     ArrayList<String> grandTotal = new ArrayList<>();
     String idTransaksi;
     String total_belanja;
@@ -127,7 +133,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
 
     String ongkir, kurirFix;
 
-    String totalOngkir2;
+    String totalOngkir2, total_harga_produk, total_keuntungan;
 
     private static final int REQUEST_PENGIRIMAN = 4;
 
@@ -163,6 +169,21 @@ public class FormTransaksiActivity extends AppCompatActivity {
         idTransaksi = getIntent().getExtras().getString("id_transaksi");
         dataList.clear();
         dataList = (ArrayList<HashMap<String, String>>) getIntent().getExtras().getSerializable("dataList");
+
+        hargaItem.clear();
+        hargaItem = (ArrayList<String>) getIntent().getExtras().getSerializable("hargaJualList");
+
+        Log.d("checkIntentList", "onCreate: "+hargaItem);
+
+
+        Log.d("dataList", "onCreate: "+dataList);
+
+        binding.imgBackFormTransaksi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         binding.idTransaksi.setText(idTransaksi);
 //         binding.lblNamaPenerima.setText(user.getNama());
@@ -217,13 +238,20 @@ public class FormTransaksiActivity extends AppCompatActivity {
                 txtPerlokasiRodaEmpat.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
 
                 ongkir = "10000";
-                kurirFix = "Roda Dua";
+                kurirFix = "Motor";
 
                 int ongkirRodaDua = Integer.valueOf(ongkir);
-                binding.lblNominalOngkir.setText(formatRupiah.format(ongkirRodaDua));
+                binding.lblTotalOngkir.setText("Rp"+NumberFormat.getInstance().format(ongkirRodaDua));
 
-                int jumlahTotal = ongkirRodaDua + Integer.parseInt(total_belanja);
-                binding.lblNominalTotal.setText(formatRupiah.format(jumlahTotal));
+                int totalProduk = Integer.parseInt(total_harga_produk);
+                int totalKeuntungan = Integer.parseInt(total_keuntungan);
+
+                binding.lblMetodePengiriman.setText(kurirFix);
+
+
+                int jumlahTotal = ongkirRodaDua + totalProduk + totalKeuntungan;
+                binding.lblTotalBayarPenerima.setText("Rp"+NumberFormat.getInstance().format(jumlahTotal));
+                binding.lblHargaTotal.setText("Rp"+NumberFormat.getInstance().format(jumlahTotal));
 
 
             }
@@ -246,33 +274,42 @@ public class FormTransaksiActivity extends AppCompatActivity {
                 txtPerlokasiRodaDua.setTextColor(ContextCompat.getColor(FormTransaksiActivity.this, R.color.colorPrimary));
 
                 ongkir = "50000";
-                kurirFix = "Roda Empat";
+                kurirFix = "Mobil";
 
                 int ongkirRodaEmpat = Integer.valueOf(ongkir);
-                binding.lblNominalOngkir.setText(formatRupiah.format(ongkirRodaEmpat));
+                binding.lblTotalOngkir.setText("Rp"+NumberFormat.getInstance().format(ongkirRodaEmpat));
 
-                int jumlahTotal2 = ongkirRodaEmpat + Integer.parseInt(total_belanja);
-                binding.lblNominalTotal.setText(formatRupiah.format(jumlahTotal2));
+                int totalProduk = Integer.parseInt(total_harga_produk);
+                int totalKeuntungan = Integer.parseInt(total_keuntungan);
+
+                binding.lblMetodePengiriman.setText(kurirFix);
+
+
+                int jumlahTotal = ongkirRodaEmpat + totalProduk + totalKeuntungan;
+                binding.lblTotalBayarPenerima.setText("Rp"+NumberFormat.getInstance().format(jumlahTotal));
+                binding.lblHargaTotal.setText("Rp"+NumberFormat.getInstance().format(jumlahTotal));
 
             }
         });
 
 
-        CartAdapter adapter = new CartAdapter(activity, dataList, null);
-        binding.recyclerView.setAdapter(adapter);
+//        CartAdapter adapter = new CartAdapter(activity, dataList, null);
+//        binding.recyclerView.setAdapter(adapter);
 
 
         for (HashMap<String, String> item : dataList) {
 
             idVendor1.add(item.get("id_vendor"));
             beratItem.add(item.get("berat"));
-            hargaItem.add(item.get("total_belanja"));
+//            hargaItem.add(item.get("total_belanja"));
 
             jumlahItem.add(item.get("jumlah"));
 
         }
 
-        Log.d("IdVendor", "onCreate: "+idVendor1);
+        Log.d("IdVendor", "id: "+idVendor1);
+        Log.d("IdVendor", "harga: "+hargaItem);
+        Log.d("IdVendor", "berat: "+beratItem);
 
 
         for (int total1 = 0; total1 < hargaItem.size(); total1++) {
@@ -285,8 +322,10 @@ public class FormTransaksiActivity extends AppCompatActivity {
             total_berat_1 = beratItem.get(berat1);
         }
 
-        binding.lblNominalBelanja.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_belanj1[0]))));
-        binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_belanj1[0]))));
+//        binding.lblNominalBelanja.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_belanj1[0]))));
+//        binding.lblNominalTotal.setText(FormatText.rupiahFormat(Double.parseDouble(String.valueOf(total_belanj1[0]))));
+
+        getDataProduk();
 
 //        coorperate
 //        if (pref.getLoginMethod().equals("coorperate")) {
@@ -352,6 +391,97 @@ public class FormTransaksiActivity extends AppCompatActivity {
 //                cekAlamat(1);
 //            }
 //        }
+    }
+
+    private void getDataProduk() {
+
+        String url = "https://jualanpraktis.net/android/list-produk.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("id_transaksi", binding.idTransaksi.getText().toString())
+                .setTag(FormTransaksiActivity.this)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        listProduk.clear();
+                        try {
+
+//                            total_harga_produk = response.getString("total_harga");
+//                            total_keuntungan = response.getString("total_keuntungan");
+
+                            String testTotal = response.getString("total_harga");
+                            String testLKeuntungan = response.getString("total_untung");
+
+                            JSONArray array = response.getJSONArray("produk");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String,String> data = new HashMap<>();
+                                data.put("nama_produk",jsonObject.getString("nama_produk"));
+                                data.put("gambar",jsonObject.getString("image_o"));
+                                data.put("variasi",jsonObject.getString("ket2"));
+                                data.put("harga_item",jsonObject.getString("harga_item"));
+                                data.put("harga_jual",jsonObject.getString("harga_jual"));
+                                data.put("jumlah",jsonObject.getString("jumlah"));
+                                data.put("harga_item2",jsonObject.getString("harga_item2"));
+                                data.put("harga_jual2",jsonObject.getString("harga_jual2"));
+                                data.put("untung",jsonObject.getString("untung"));
+                                data.put("subtotal_untung",jsonObject.getString("subtotal_untung"));
+
+                                listProduk.add(data);
+
+                            }
+
+                            CheckoutAdapter adapter = new CheckoutAdapter(FormTransaksiActivity.this, listProduk);
+                            binding.recyclerView.setAdapter(adapter);
+                            int nominal_belanja = Integer.parseInt(testTotal);
+                            int nominal_keuntungan = Integer.parseInt(testLKeuntungan);
+                            total_harga_produk = testTotal;
+                            total_keuntungan = testLKeuntungan;
+                            binding.lblNominalBelanja.setText("Rp"+NumberFormat.getInstance().format(nominal_belanja));
+                            binding.lblTotalKeuntungan.setText("Rp"+NumberFormat.getInstance().format(nominal_keuntungan));
+                            int total_bayar_penerima = nominal_belanja + nominal_keuntungan;
+                            binding.lblTotalBayarPenerima.setText("Rp"+NumberFormat.getInstance().format(total_bayar_penerima));
+                            binding.lblHargaTotal.setText("Rp"+NumberFormat.getInstance().format(total_bayar_penerima));
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        listProduk.clear();
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(FormTransaksiActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                Toast.makeText(FormTransaksiActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(FormTransaksiActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
     }
 
     public void getStatusButton(String test) {
@@ -425,7 +555,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
 
                 String totalOngkirIntent = data.getStringExtra("totalOngkir");
-                binding.lblNominalOngkir.setText(totalOngkirIntent);
+//                binding.lblNominalOngkir.setText(totalOngkirIntent);
 //                String hargalayananIntent = data.getStringExtra("harga");
 //                harga_layanan = new String[]{hargalayananIntent};
 //                String layanan = data.getStringExtra("nama");
@@ -787,6 +917,8 @@ public class FormTransaksiActivity extends AppCompatActivity {
                 Toast.makeText(activity, "Silahkan Pilih Kurir", Toast.LENGTH_SHORT).show();
             } else if (ongkir==null) {
                 Toast.makeText(activity, "Silahkan Pilih Kurir", Toast.LENGTH_SHORT).show();
+            } else if (opsi_pembayaran==null) {
+                Toast.makeText(activity, "Silahkan pilih Metode Pembayaran", Toast.LENGTH_SHORT).show();
             } else {
                 new AlertDialog.Builder(activity)
                         .setTitle("Konfirmasi Pemesanan")
@@ -904,8 +1036,8 @@ public class FormTransaksiActivity extends AppCompatActivity {
         int total_seluruh = Integer.parseInt(total_belanja) + Integer.parseInt(ongkir);
         total_bayar_item = String.valueOf(total_seluruh);
 
-        for (int a = 0; a < idVendor1.size(); a++) {
-            id_member = idVendor1.get(a);
+//        for (int a = 0; a < idVendor1.size(); a++) {
+//            id_member = idVendor1.get(a);
 
 //            total_berat2 = beratItem.get(a);
 //            total_belanja_item = hargaItem.get(a);
@@ -950,14 +1082,21 @@ public class FormTransaksiActivity extends AppCompatActivity {
             params.put("province_destination", id_provinsi);
             params.put("no_hp", binding.lblNoTelpon.getText().toString());
             params.put("kode_pos", binding.lblKodePos.getText().toString());
-            params.put("id_vendor[]", id_member);
 
-            total_belanja_item = hargaItem.get(a);
-            params.put("total_belanja[]", total_belanja_item);
-            total_berat2 = beratItem.get(a);
-            params.put("weight[]", total_berat2);
+//        for (int a = 0; a < idVendor1.size(); a++) {
 
-            params.put("courier[]", kurirFix);
+//            id_member = idVendor1.get(a);
+//
+//            params.put("id_vendor["+a+"]", id_member);
+//
+//            total_belanja_item = hargaItem.get(a);
+//            params.put("total_belanja["+a+"]", total_belanja_item);
+//            total_berat2 = beratItem.get(a);
+//            params.put("weight["+a+"]", total_berat2);
+
+            params.put("courier", kurirFix);
+
+//        }
 
             params.put("ongkos_kirim", String.valueOf(ongkir));
 
@@ -1041,7 +1180,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
                     });
 
 //for idVendor
-        }
+//        }
 
     }
 

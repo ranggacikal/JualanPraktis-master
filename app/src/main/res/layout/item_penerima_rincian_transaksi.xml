@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nama"
-        android:textSize="17sp"
+        android:textSize="13sp"
         android:textStyle="bold"/>
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="No HP"
-        android:textSize="17sp"
+        android:textSize="13sp"
         android:textStyle="bold"/>
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Alamat"
-        android:textSize="17sp"
+        android:textSize="13sp"
         android:textStyle="bold"/>
 
     <TextView
@@ -39,7 +39,24 @@
         android:layout_marginTop="5dp"
         android:text="Kode Pos"
         android:layout_marginBottom="10dp"
-        android:textSize="17sp"
+        android:textSize="13sp"
         android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Jenis Pembayaran : "
+        android:textSize="13sp"/>
+
+    <TextView
+        android:id="@+id/text_item_opsi_bayar_rincian"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="COD/Transfer"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        android:textSize="13sp"/>
 
 </LinearLayout>

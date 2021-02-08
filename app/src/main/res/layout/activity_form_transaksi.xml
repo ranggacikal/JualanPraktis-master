@@ -23,7 +23,7 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -31,30 +31,22 @@
                         android:id="@+id/keranjang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
                         android:fontFamily="@font/arialbold"
                         android:text="Checkout"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:textStyle="bold" />
 
                     <ImageView
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/img_back_form_transaksi"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginEnd="16dp"
                         android:paddingTop="4dp"
-                        android:src="@drawable/white_logo"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:src="@drawable/ic_panah_kiri"/>
+                </RelativeLayout>
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -94,9 +86,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#"
-                        android:textStyle="bold"
                         android:textColor="@android:color/black"
                         android:textSize="20sp"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,10 +98,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/trans"
-                        android:textStyle="bold"
                         android:text="123456789876432"
                         android:textColor="@color/colorPrimary"
                         android:textSize="20sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/trans"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/trans"
@@ -124,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/trans"
                     android:text="00-Januari-0000"
+                    android:visibility="gone"
                     android:textColor="@color/colorPrimary"
                     android:textSize="17sp"
                     app:layout_constraintBottom_toBottomOf="@+id/trans"
@@ -150,11 +143,33 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Data Penerima Barang"
+                        android:text="PERHATIAN.."
                         android:textStyle="bold"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginStart="6dp"
+                        android:textAlignment="textStart"
                         android:textColor="@color/colorPrimary"
+                        style="@style/TextAppearance.AppCompat.Subhead"/>
+
+                    <TextView
+                        android:layout_marginTop="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:textAlignment="textStart"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginStart="6dp"
+                        android:text="Pastikan alamat anda benar dan HP/WA yang bisa dihubungi di AKTIFKAN"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Data Penerima Barang"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/outline_nama"
@@ -200,6 +215,16 @@
                             android:singleLine="true"
                             android:text="" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/nuunito_light"
+                        android:textColor="@color/black"
+                        android:text="Contoh : 081234567890"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="3dp"/>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_provinsi"
@@ -425,7 +450,6 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_ekspedisi"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
@@ -433,6 +457,7 @@
                         android:layout_marginBottom="4dp"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:visibility="gone"
                         app:cardBackgroundColor="@android:color/white"
                         app:cardCornerRadius="6dp"
                         app:cardElevation="3dp">
@@ -613,13 +638,13 @@
                             android:id="@+id/rv_pilih_pengiriman"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <LinearLayout
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:gravity="center"
                             android:orientation="horizontal">
 
@@ -628,38 +653,38 @@
                                 android:id="@+id/linear_ekspedisi_roda_dua"
                                 android:layout_width="170dp"
                                 android:layout_height="100dp"
-                                android:gravity="center"
                                 android:background="@drawable/background_pilih_pengiriman"
+                                android:gravity="center"
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/text_kendaraan_roda_dua"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Kendaraan Roda Dua"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="12sp"
                                     android:layout_marginBottom="10dp"
-                                    android:gravity="center"/>
+                                    android:gravity="center"
+                                    android:text="Motor"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/text_harga_kendaraan_roda_dua"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:text="RP. 10.000"
                                     android:textColor="@color/colorPrimary"
-                                    android:textStyle="bold"
                                     android:textSize="30sp"
-                                    android:gravity="center"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/text_perlokasi_kendaraan_roda_dua"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:gravity="center"
                                     android:text="per lokasi"
-                                    android:textSize="9sp"
-                                    android:gravity="center"/>
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="9sp" />
 
                             </LinearLayout>
 
@@ -668,126 +693,126 @@
                                 android:layout_width="170dp"
                                 android:layout_height="100dp"
                                 android:layout_marginLeft="10dp"
-                                android:gravity="center"
                                 android:background="@drawable/background_pilih_pengiriman"
+                                android:gravity="center"
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/text_kendaraan_roda_empat"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
-                                    android:text="Kendaraan Roda Empat"
-                                    android:textSize="12sp"
                                     android:layout_marginBottom="10dp"
-                                    android:gravity="center"/>
+                                    android:gravity="center"
+                                    android:text="Mobil"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/text_harga_kendaraan_roda_empat"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:gravity="center"
                                     android:text="RP. 50.000"
-                                    android:textStyle="bold"
+                                    android:textColor="@color/colorPrimary"
                                     android:textSize="30sp"
-                                    android:gravity="center"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/text_perlokasi_kendaraan_roda_empat"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:gravity="center"
                                     android:text="per lokasi"
-                                    android:textSize="9sp"
-                                    android:gravity="center"/>
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="9sp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:gravity="center"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:orientation="horizontal">-->
+                        <!--                        <LinearLayout-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:gravity="center"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:orientation="horizontal">-->
 
 
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/linear_ekspedisi_roda_dua"-->
-<!--                                android:layout_width="170dp"-->
-<!--                                android:layout_height="100dp"-->
-<!--                                android:gravity="center"-->
-<!--                                android:background="@drawable/background_pilih_pengiriman"-->
-<!--                                android:orientation="vertical">-->
+                        <!--                            <LinearLayout-->
+                        <!--                                android:id="@+id/linear_ekspedisi_roda_dua"-->
+                        <!--                                android:layout_width="170dp"-->
+                        <!--                                android:layout_height="100dp"-->
+                        <!--                                android:gravity="center"-->
+                        <!--                                android:background="@drawable/background_pilih_pengiriman"-->
+                        <!--                                android:orientation="vertical">-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_kendaraan_roda_dua"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="Kendaraan Roda Dua"-->
-<!--                                    android:layout_marginTop="10dp"-->
-<!--                                    android:textSize="12sp"-->
-<!--                                    android:layout_marginBottom="10dp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_kendaraan_roda_dua"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="Kendaraan Roda Dua"-->
+                        <!--                                    android:layout_marginTop="10dp"-->
+                        <!--                                    android:textSize="12sp"-->
+                        <!--                                    android:layout_marginBottom="10dp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_harga_kendaraan_roda_dua"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="RP. 10.000"-->
-<!--                                    android:textStyle="bold"-->
-<!--                                    android:textSize="30sp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_harga_kendaraan_roda_dua"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="RP. 10.000"-->
+                        <!--                                    android:textStyle="bold"-->
+                        <!--                                    android:textSize="30sp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_perlokasi_kendaraan_roda_dua"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="per lokasi"-->
-<!--                                    android:textSize="9sp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_perlokasi_kendaraan_roda_dua"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="per lokasi"-->
+                        <!--                                    android:textSize="9sp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                            </LinearLayout>-->
+                        <!--                            </LinearLayout>-->
 
-<!--                            <LinearLayout-->
-<!--                                android:id="@+id/linear_ekspedisi_roda_empat"-->
-<!--                                android:layout_width="170dp"-->
-<!--                                android:layout_height="100dp"-->
-<!--                                android:layout_marginLeft="10dp"-->
-<!--                                android:gravity="center"-->
-<!--                                android:background="@drawable/background_pilih_pengiriman"-->
-<!--                                android:orientation="vertical">-->
+                        <!--                            <LinearLayout-->
+                        <!--                                android:id="@+id/linear_ekspedisi_roda_empat"-->
+                        <!--                                android:layout_width="170dp"-->
+                        <!--                                android:layout_height="100dp"-->
+                        <!--                                android:layout_marginLeft="10dp"-->
+                        <!--                                android:gravity="center"-->
+                        <!--                                android:background="@drawable/background_pilih_pengiriman"-->
+                        <!--                                android:orientation="vertical">-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_kendaraan_roda_empat"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="Kendaraan Roda Empat"-->
-<!--                                    android:textSize="12sp"-->
-<!--                                    android:layout_marginBottom="10dp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_kendaraan_roda_empat"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="Kendaraan Roda Empat"-->
+                        <!--                                    android:textSize="12sp"-->
+                        <!--                                    android:layout_marginBottom="10dp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_harga_kendaraan_roda_empat"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="RP. 50.000"-->
-<!--                                    android:textStyle="bold"-->
-<!--                                    android:textSize="30sp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_harga_kendaraan_roda_empat"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="RP. 50.000"-->
+                        <!--                                    android:textStyle="bold"-->
+                        <!--                                    android:textSize="30sp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                                <TextView-->
-<!--                                    android:id="@+id/text_perlokasi_kendaraan_roda_empat"-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="per lokasi"-->
-<!--                                    android:textSize="9sp"-->
-<!--                                    android:gravity="center"/>-->
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/text_perlokasi_kendaraan_roda_empat"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="per lokasi"-->
+                        <!--                                    android:textSize="9sp"-->
+                        <!--                                    android:gravity="center"/>-->
 
-<!--                            </LinearLayout>-->
+                        <!--                            </LinearLayout>-->
 
-<!--                        </LinearLayout>-->
+                        <!--                        </LinearLayout>-->
 
                     </LinearLayout>
 
@@ -848,13 +873,12 @@
                     </androidx.cardview.widget.CardView>
 
 
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:id="@+id/ll_harga"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Body1"
@@ -863,86 +887,144 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="8dp"
                             android:layout_marginTop="2dp"
-                            android:text="Nominal Belanja"
+                            android:text="Total"
                             android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/lbl_nominal_belanja"
-                            style="@style/TextAppearance.AppCompat.Body2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            android:textColor="@android:color/black"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            style="@style/TextAppearance.AppCompat.Body1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Ongkir"
-                            android:textColor="@android:color/black"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/lbl_nominal_belanja" />
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="2dp"
+                                android:text="Total harga produk "
+                                android:textColor="@android:color/black"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/lbl_nominal_ongkir"
-                            style="@style/TextAppearance.AppCompat.Body2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            android:textColor="@android:color/black"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/lbl_nominal_belanja" />
+                            <TextView
+                                android:id="@+id/lbl_nominal_belanja"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="0"
+                                android:textColor="@android:color/black"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            style="@style/TextAppearance.AppCompat.Body2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="16dp"
-                            android:text="Total (belanja + ongkir)"
-                            android:textColor="@android:color/black"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/lbl_nominal_ongkir" />
+                        </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/lbl_nominal_total"
-                            style="@style/TextAppearance.AppCompat.Medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="14dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            android:textColor="@color/colorPrimary"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/lbl_nominal_ongkir" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="2dp"
+                                android:text="Total Keuntungan "
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/lbl_total_keuntungan"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="0"
+                                android:textColor="@android:color/black"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="2dp"
+                                android:id="@+id/metodePengiriman"
+                                android:text="Metode Pengiriman : "
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@+id/metodePengiriman"
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/lbl_metode_pengiriman"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:id="@+id/lbl_total_ongkir"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="0"
+                                android:textColor="@android:color/black" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="2dp"
+                                android:textStyle="bold"
+                                android:text="Total yang dibayar penerima "
+                                android:textColor="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/lbl_total_bayar_penerima"
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="0"
+                                android:textColor="@android:color/black"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
 
 
-                    <TextView
-                        android:id="@+id/text"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="*Pengiriman luar Batam belum termasuk Pajak dan Biaya Packing"
-                        android:textAlignment="textStart"
-                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -954,9 +1036,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lbl_harga_total"
+                    android:layout_width="200dp"
+                    android:layout_height="60dp"
+                    android:text="Rp000000"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="25sp"/>
+
+                <Button
+                    android:id="@+id/btn_konfirmasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/bg_masuk"
+                    android:text="Pesan"
+                    android:fontFamily="@font/nuunito_bold"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_lanjut"
@@ -966,18 +1074,10 @@
                 android:background="@drawable/bg_masuk"
                 android:backgroundTint="@android:color/holo_orange_dark"
                 android:text="Lanjut"
-                android:visibility="gone"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btn_konfirmasi"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/bg_masuk"
-                android:backgroundTint="@android:color/holo_orange_dark"
-                android:text="Beli"
-                android:textColor="@android:color/white"/>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

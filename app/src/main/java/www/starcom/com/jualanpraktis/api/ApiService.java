@@ -11,6 +11,8 @@ import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataFavorite;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseDataVideo;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseRegister;
 import www.starcom.com.jualanpraktis.model_retrofit.ResponseUpdateRekening;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_lainnya.ResponseBankLainnya;
+import www.starcom.com.jualanpraktis.model_retrofit.bank_populer.ResponseBankPopuler;
 import www.starcom.com.jualanpraktis.model_retrofit.datacheck.ResponseDataCheck;
 import www.starcom.com.jualanpraktis.model_retrofit.editakun.ResponseInsertEditAkun;
 import www.starcom.com.jualanpraktis.model_retrofit.model_bantuan.ResponseDataBantuan;
@@ -80,5 +82,11 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("data-check.php")
     Call<ResponseDataCheck> dataCheck(@Field("id_member") String id_member);
+
+    @GET("list-bank-populer.php")
+    Call<ResponseBankPopuler> bankPopuler();
+
+    @GET("list-bank-lainnya.php")
+    Call<ResponseBankLainnya> bankLainnya();
 
 }

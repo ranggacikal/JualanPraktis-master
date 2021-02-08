@@ -135,8 +135,9 @@ public class SemuaPesananFragment extends Fragment {
                             rvSemuaPesanan.setVisibility(View.VISIBLE);
                             StatusTransaksiAdapter adapter = new StatusTransaksiAdapter(getActivity(), dataSemuaPesanan);
                             rvSemuaPesanan.setAdapter(adapter);
-                            if (dataSemuaPesanan.isEmpty()){
+                            if (dataSemuaPesanan.size()<1){
                                 txtKosong.setVisibility(View.VISIBLE);
+                                rvSemuaPesanan.setVisibility(View.GONE);
                             }
 
                         } catch (JSONException e) {

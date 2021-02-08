@@ -192,7 +192,7 @@ public class ListSubKategoriProdukActivity extends AppCompatActivity {
         HashMap<String,String> param = new HashMap<>();
         String url = "";
 
-            url = "https://jualanpraktis.net/android/subkategori1.php?page="+currentPage+"&id_sub_kategori_produk="+id;
+            url = "https://jualanpraktis.net/android/produk_subkategori.php?page="+currentPage+"&id_sub_kategori_produk="+id;
 
 
         AndroidNetworking.get(url)
@@ -229,8 +229,8 @@ public class ListSubKategoriProdukActivity extends AppCompatActivity {
                             //      isLastPage = true;
 
                         }
-                        if (response.semuaproduk.size()!=0){
-                            produkPaginationAdapter.addAll(response.semuaproduk);
+                        if (response.produkdata.size()!=0){
+                            produkPaginationAdapter.addAll(response.produkdata);
                         }else{
                             produkPaginationAdapter.stop();
                         }

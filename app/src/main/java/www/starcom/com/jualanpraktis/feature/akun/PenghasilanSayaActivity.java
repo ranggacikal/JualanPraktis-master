@@ -290,7 +290,7 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
         pesananSelesaiFragment = new PesananSelesaiFragment();
         pesananDibatalkanFragment = new PesananDibatalkanFragment();
         // tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText("Pesanan Sedang Di Proses"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pesanan Sedang Diproses"));
         tabLayout.addTab(tabLayout.newTab().setText("Pesanan Selesai"));
         tabLayout.addTab(tabLayout.newTab().setText("Pesanan Dibatalkan"));
 

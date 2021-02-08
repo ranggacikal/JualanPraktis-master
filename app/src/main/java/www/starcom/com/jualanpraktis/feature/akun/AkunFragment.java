@@ -263,10 +263,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         imageProfile2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AkunFragment.this)
-                        .crop(340,340)
-                        .compress(512)
-                        .start();
+                startActivity(new Intent(getActivity(), EditAkunActivity.class));
             }
         });
 
@@ -659,22 +656,22 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                loginuser userr = new loginuser(
-                        user.getId(),
-                        user.getKode(),
-                        txtNama.getText().toString(),
-                        txtNamaToko.getText().toString(),
-                        nama_provinsi,nama_kota,nama_wilayah,txtalamat.getText().toString(),
-                        txtnoktp.getText().toString(),
-                        txtnonpwp.getText().toString(),
-                        txtNotelp.getText().toString(),
-                        txtEmail.getText().toString(),
-                        txtatas_nama.getText().toString(),
-                        txtno_rek.getText().toString(),
-                        txtnama_bank.getText().toString(),
-                        user.getFoto()
-                );
-               SharedPrefManager.getInstance(getContext()).userLogin(userr);
+//                loginuser userr = new loginuser(
+//                        user.getId(),
+//                        user.getKode(),
+//                        txtNama.getText().toString(),
+//                        txtNamaToko.getText().toString(),
+//                        nama_provinsi,nama_kota,nama_wilayah,txtalamat.getText().toString(),
+//                        txtnoktp.getText().toString(),
+//                        txtnonpwp.getText().toString(),
+//                        txtNotelp.getText().toString(),
+//                        txtEmail.getText().toString(),
+//                        txtatas_nama.getText().toString(),
+//                        txtno_rek.getText().toString(),
+//                        txtnama_bank.getText().toString(),
+//                        user.getFoto()
+//                );
+//               SharedPrefManager.getInstance(getContext()).userLogin(userr);
 
                 updateTest(txtNama.getText().toString(),txtEmail.getText().toString(),txtNotelp.getText().toString(), txtNamaToko.getText().toString(),
                         user.getId(), txtalamat.getText().toString(), txtnoktp.getText().toString(), txtnonpwp.getText().toString(),

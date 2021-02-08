@@ -6,8 +6,8 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="20dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -125,7 +125,7 @@
 
                     <TextView
                         android:id="@+id/text_hargaproduk_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nuunito_bold"
                         android:text="Harga Produk :"
@@ -151,7 +151,7 @@
 
                     <TextView
                         android:id="@+id/text_hargajual_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nuunito_bold"
                         android:text="Harga Jual :"
@@ -178,7 +178,7 @@
 
                     <TextView
                         android:id="@+id/text_keuntungan_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nuunito_bold"
                         android:text="Keuntungan :"

@@ -129,18 +129,21 @@ public class PesananSelesaiFragment extends Fragment {
                                 JSONObject jsonObject = array.getJSONObject(i);
                                 HashMap<String, String> data = new HashMap<>();
                                 data.put("id_transaksi", jsonObject.getString("id_transaksi"));
-
+                                data.put("tanggal",jsonObject.getString("tgl_transaksi"));
+                                data.put("status_pesanan",jsonObject.getString("status_pesanan"));
                                 listProdukSelesai.clear();
                                 JSONArray produk = jsonObject.getJSONArray("produk");
                                 for (int j = 0; j < produk.length(); j++) {
                                     JSONObject jsonObject1 = produk.getJSONObject(j);
                                     HashMap<String, String> data2 = new HashMap<>();
 //                                    data2.put("id_transaksi", jsonObject1.getString("id_transaksi"));
-                                    data2.put("nama_produk", jsonObject1.getString("nama_produk"));
-                                    data2.put("gambar", jsonObject1.getString("image_o"));
-                                    data2.put("keterangan", jsonObject1.getString("ket2"));
-                                    data2.put("tanggal_transaksi", jsonObject1.getString("tgl_transaksi"));
-                                    data2.put("untung", jsonObject1.getString("untung"));
+                                    data.put("nama_produk", jsonObject1.getString("nama_produk"));
+                                    data.put("gambar", jsonObject1.getString("image_o"));
+                                    data.put("variasi", jsonObject1.getString("ket2"));
+                                    data.put("jumlah", jsonObject1.getString("jumlah"));
+                                    data.put("harga_produk", jsonObject1.getString("harga_produk"));
+                                    data.put("harga_jual", jsonObject1.getString("harga_jual"));
+                                    data.put("untung", jsonObject1.getString("untung"));
 //                                    dataProdukSemuaPesanan.add(data);
 //                                    listProdukSelesai.add(data);
                                     listProdukSelesai.add(data2);
@@ -148,22 +151,23 @@ public class PesananSelesaiFragment extends Fragment {
                                 }
 
                                 penghasilanSayaSelesai.add(data);
+                                Log.d("listProduk", "onResponse: " + data.toString());
                             }
 
                             Log.d("penghasilanSaya", "onResponse: " + penghasilan);
                             Log.d("dataPesananSelesai", "onResponse: " + penghasilanSayaSelesai);
                             rvPesananSelesai.setVisibility(View.VISIBLE);
-                            PenghasilanSelesaiAdapter adapter = new PenghasilanSelesaiAdapter(listProdukSelesai, getActivity());
+                            PenghasilanSelesaiAdapter adapter = new PenghasilanSelesaiAdapter(penghasilanSayaSelesai, getActivity());
                             rvPesananSelesai.setAdapter(adapter);
 
-                            if (listProdukSelesai.isEmpty()){
+                            if (penghasilanSayaSelesai.isEmpty()){
                                 txtKosong.setVisibility(View.VISIBLE);
                             }
 
                             int penghasilanInt = Integer.parseInt(penghasilan);
                             Locale localID = new Locale("in", "ID");
                             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
-                            txtTotalPenghasilan.setText(formatRupiah.format(penghasilanInt));
+                            txtTotalPenghasilan.setText("Rp"+NumberFormat.getInstance().format(penghasilanInt));
                             txtTotalPenghasilan.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {

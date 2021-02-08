@@ -23,6 +23,13 @@ public class SharedPrefManager {
     private static final String KEY_NAMATOKO = "keynamatoko";
     private static final String KEY_NOKTP = "keynoktp";
     private static final String KEY_NONPWP = "keynopwp";
+    private static final String KEY_JENISKELAMIN = "keyjeniskelamin";
+    private static final String KEY_TANGGALLAHIR = "keytanggallahir";
+    private static final String KEY_STATUSPERKAWINAN = "keystatusperkawinan";
+    private static final String KEY_JUMLAHANAK = "keyjumlahanak";
+    private static final String KEY_PENDIDIKAN = "keypendidikan";
+    private static final String KEY_PEKERJAAN = "keypekerjaan";
+    private static final String KEY_PENGHASILAN = "keypenghasilan";
 
     private static final String KEY_ATASNAMA = "keyatasnama";
     private static final String KEY_NAMABANK = "keynamabank";

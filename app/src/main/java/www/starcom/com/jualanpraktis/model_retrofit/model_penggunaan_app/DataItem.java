@@ -19,6 +19,9 @@ public class DataItem{
 	@SerializedName("title")
 	private String title;
 
+	@SerializedName("durasi")
+	private String durasi;
+
 	public void setIdPanduan(String idPanduan){
 		this.idPanduan = idPanduan;
 	}
@@ -59,6 +62,14 @@ public class DataItem{
 		return title;
 	}
 
+	public void setDurasi(String durasi){
+		this.durasi = durasi;
+	}
+
+	public String getDurasi(){
+		return durasi;
+	}
+
 	@Override
  	public String toString(){
 		return 
@@ -68,6 +79,7 @@ public class DataItem{
 			",created_at = '" + createdAt + '\'' + 
 			",kategori = '" + kategori + '\'' + 
 			",title = '" + title + '\'' + 
+			",durasi = '" + durasi + '\'' + 
 			"}";
 		}
 }

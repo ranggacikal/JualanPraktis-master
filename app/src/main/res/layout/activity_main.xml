@@ -25,7 +25,8 @@
         app:tabTextAppearance="@style/MineCustomTabText"
         app:tabIndicatorColor="@color/darkRed"
         app:tabSelectedTextColor="@color/darkRed"
-        android:background="@android:color/white"/>
+        style="@style/MineCustomTabText"
+        android:background="@android:color/white" />
 
 <!--    <fragment-->
 <!--        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"-->

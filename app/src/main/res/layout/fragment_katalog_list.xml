@@ -69,9 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                app:layout_constraintBottom_toBottomOf="@id/cari"
+                app:layout_constraintBottom_toBottomOf="@id/cariKategori"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/cari"
+                app:layout_constraintTop_toTopOf="@id/cariKategori"
                 tools:ignore="MissingConstraints">
 
                 <ImageView
@@ -80,6 +80,7 @@
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
+                    android:visibility="gone"
                     android:src="@drawable/icon_chat_grey" />
 
                 <ImageView
@@ -87,7 +88,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="15dp"
                     android:src="@drawable/icon_fav_grey" />
 
                 <ImageView
@@ -95,7 +96,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="15dp"
                     android:src="@drawable/icon_notif_grey" />
 
             </LinearLayout>
@@ -144,7 +146,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -174,7 +176,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
 

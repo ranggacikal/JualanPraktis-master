@@ -147,7 +147,7 @@ public class UploadBuktiTransferActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             progressDialog.dismiss();
-                            if (response.contains("Data Berhasil Dikirim")) {
+                            if (response.contains("Data Berhasil Di Kirim")) {
                                 Toast.makeText(UploadBuktiTransferActivity.this,
                                         "Berhasil Upload Bukti Transfer", Toast.LENGTH_LONG).show();
                                 finish();

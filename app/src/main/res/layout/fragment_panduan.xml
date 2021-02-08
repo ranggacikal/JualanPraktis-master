@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabTextAppearance="@style/MineCustomTabText"
+        style="@style/CustomTabTextPanduan"
+        app:tabTextAppearance="@style/CustomTabTextPanduan"
         app:tabIndicatorColor="@color/darkRed"
         app:tabSelectedTextColor="@color/darkRed"
         android:background="@android:color/white"/>

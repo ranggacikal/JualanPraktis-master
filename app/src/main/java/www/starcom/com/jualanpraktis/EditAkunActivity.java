@@ -7,6 +7,8 @@ import androidx.cardview.widget.CardView;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +26,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
@@ -31,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,9 +62,12 @@ import www.starcom.com.jualanpraktis.Spinner.Penghasilan;
 import www.starcom.com.jualanpraktis.Spinner.Provinsi;
 import www.starcom.com.jualanpraktis.Spinner.StatusPerkawinan;
 import www.starcom.com.jualanpraktis.adapter.FavoritAdapter;
+import www.starcom.com.jualanpraktis.adapter.PenerimaRincianAdapter;
 import www.starcom.com.jualanpraktis.api.ConfigRetrofit;
 import www.starcom.com.jualanpraktis.feature.akun.AkunFragment;
 import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
+import www.starcom.com.jualanpraktis.feature.akun.RincianTransaksiActivity;
+import www.starcom.com.jualanpraktis.feature.akun.UploadBuktiTransferActivity;
 import www.starcom.com.jualanpraktis.model_retrofit.editakun.ResponseInsertEditAkun;
 
 import static www.starcom.com.jualanpraktis.alamat_pengiriman.BASE_URL;
@@ -70,17 +79,24 @@ public class EditAkunActivity extends AppCompatActivity {
     LinearLayout linearTambahFoto, linearSimpanEditAkun;
     TextView txtEditFotoProfile, txtjenisKelamin, txttanggalLahjr, txtProvinsi, txtKota, txtKecamatan,
             txtStatusPerkawinan, txtPendidikan, txtPekerjaan, txtPenghasilan;
-    CardView cardJenisKelamin, cardTanggalLahir, cardProvinsi, cardKota, cardKecamatan, cardStatusPerkawinan, cardPendidikanTerakhir,
+    LinearLayout cardTanggalLahir, cardProvinsi, cardKota, cardKecamatan, cardStatusPerkawinan, cardPendidikanTerakhir,
             cardPenghasilan, cardPekerjaan;
+
+    LinearLayout cardJenisKelamin;
+
+    LinearLayout cardJenisKelaminAwal;
 
     Spinner spinnerProvinsi, spinnerKotaKabupaten, spinnerKecamatan, spinnerJenisKelamin, spinnerStatusPerkawinan
             , spinnerPendidikan, spinnerPekerjaan, spinnerPenghasilan;
 
-    CardView cardJenisKelaminAwal, cardProvinsiAwal, cardKotaAwal, cardKecamatanAwal, cardStatusPerkawinanAwal, cardPendidikanAwal
+    LinearLayout  cardProvinsiAwal, cardKotaAwal, cardKecamatanAwal, cardStatusPerkawinanAwal, cardPendidikanAwal
             , cardPekerjaanAwal, cardPenghasilanAwal;
 
     EditText edtTanggalLahir, edtPassword, edtNama, edtEmail, edtNoHp, edtAlamat, edtJumlahAnak, edtNamaToko, edtNoKtp, edtNoNpwp;
     ImageView imgBack;
+
+    TextView txtJenisKelaminPlace, txtTanggalLahirPlace, txtProvinsiPlace, txtKotaPlace, txtKecamatanPlace, txtStatusPerkawinanPlace
+            , txtPendidikanPlace, txtPekerjaanPlace, txtPenghasilanPlace;
 
     List<Provinsi> provinsiList = new ArrayList<>();
     List<KotaKabupaten> kotaKabupatenList = new ArrayList<>();
@@ -98,7 +114,16 @@ public class EditAkunActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
 
+    TextView lblJenisKelamin, lblProvinsi, lblKota, lblKecamatan, lblStatusKawin, lblPendidikan, lblPekerjaan, lblPenghasilan;
+
+    String get_nama, get_email, get_no_hp, get_gender, get_tgl_lahir, get_provinsi, get_kota, get_kecamatan,
+            get_id_provinsi, get_id_kota, get_id_kecamatan, get_alamat, get_status_kawin, get_jumlah_anak,
+            get_pendidikan, get_pekerjaan, get_penghasilan;
+
     loginuser user;
+
+    String PicturePath;
+    String nama_file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +179,35 @@ public class EditAkunActivity extends AppCompatActivity {
         edtNoKtp = findViewById(R.id.edt_noKTP_edit_akun);
         edtNoNpwp = findViewById(R.id.edt_noNPWP_edit_akun);
         imgBack = findViewById(R.id.imgBackEditAkun);
+        txtJenisKelaminPlace = findViewById(R.id.text_jenis_kelamin_place_holder);
+        txtTanggalLahirPlace = findViewById(R.id.text_tanggal_lahir_place_holder);
+        txtProvinsiPlace = findViewById(R.id.text_provinsi_place_holder);
+        txtKotaPlace = findViewById(R.id.text_kota_place_holder);
+        txtKecamatanPlace = findViewById(R.id.text_kecamatan_place_holder);
+        txtStatusPerkawinanPlace = findViewById(R.id.text_statusperkawinan_place_holder);
+        txtPendidikanPlace = findViewById(R.id.text_pendidikan_place_holder);
+        txtPekerjaanPlace = findViewById(R.id.text_pekerjaan_place_holder);
+        txtPenghasilanPlace = findViewById(R.id.text_penghasilan_place_holder);
+        lblJenisKelamin = findViewById(R.id.lbl_jenis_kelamin);
+        lblProvinsi = findViewById(R.id.lbl_provinsi_edit);
+        lblKota = findViewById(R.id.lbl_kota_edit);
+        lblKecamatan = findViewById(R.id.lbl_kecamatan_edit);
+        lblStatusKawin = findViewById(R.id.lbl_status_perkawinan_edit);
+        lblPendidikan = findViewById(R.id.lbl_pendidikan_edit);
+        lblPekerjaan = findViewById(R.id.lbl_pekerjaan_edit);
+        lblPenghasilan = findViewById(R.id.lbl_penghasilan_edit);
+
         user = SharedPrefManager.getInstance(EditAkunActivity.this).getUser();
+
+        getDataDiri();
+
+        String no_ktp2 = user.getNo_ktp();
+
+        if (no_ktp2.equals("null")) {
+            edtNoKtp.setText("");
+        }else{
+            edtNoKtp.setText(user.getNo_ktp());
+        }
 
         AndroidNetworking.initialize(getApplicationContext());
 
@@ -165,12 +218,6 @@ public class EditAkunActivity extends AppCompatActivity {
                 .error(R.mipmap.ic_launcher)
                 .into(imgProfileEditaKUN);
 
-        edtNama.setText(user.getNama());
-        edtEmail.setText(user.getEmail());
-        edtNamaToko.setText(user.getNama_toko());
-        edtNoHp.setText(user.getNo_hp());
-        edtNoKtp.setText(user.getNo_ktp());
-        edtNoNpwp.setText(user.getNo_npwp());
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,11 +229,10 @@ public class EditAkunActivity extends AppCompatActivity {
         txtEditFotoProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ImagePicker.Companion.with(EditAkunActivity.this)
-//                        .crop(340,340)
-//                        .compress(512)
-//                        .start();
-                Toast.makeText(EditAkunActivity.this, "Already soon", Toast.LENGTH_SHORT).show();
+                ImagePicker.Companion.with(EditAkunActivity.this)
+                        .crop(340,340)
+                        .compress(512)
+                        .start();
             }
         });
 
@@ -195,6 +241,7 @@ public class EditAkunActivity extends AppCompatActivity {
             public void onClick(View v) {
                 cardJenisKelaminAwal.setVisibility(View.GONE);
                 cardJenisKelamin.setVisibility(View.VISIBLE);
+                txtJenisKelaminPlace.setVisibility(View.VISIBLE);
                 getGender();
                 getSelectedGender();
             }
@@ -203,6 +250,7 @@ public class EditAkunActivity extends AppCompatActivity {
         cardProvinsiAwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtProvinsiPlace.setVisibility(View.VISIBLE);
                 cardProvinsi.setVisibility(View.VISIBLE);
                 cardProvinsiAwal.setVisibility(View.GONE);
                 getProvinsi(spinnerProvinsi);
@@ -215,6 +263,7 @@ public class EditAkunActivity extends AppCompatActivity {
         cardStatusPerkawinanAwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtStatusPerkawinanPlace.setVisibility(View.VISIBLE);
                 cardStatusPerkawinanAwal.setVisibility(View.GONE);
                 cardStatusPerkawinan.setVisibility(View.VISIBLE);
                 getStatusPerkawinan();
@@ -225,6 +274,7 @@ public class EditAkunActivity extends AppCompatActivity {
         cardPendidikanAwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtPendidikanPlace.setVisibility(View.VISIBLE);
                 cardPendidikanAwal.setVisibility(View.GONE);
                 cardPendidikanTerakhir.setVisibility(View.VISIBLE);
                 getPendidikan();
@@ -235,6 +285,7 @@ public class EditAkunActivity extends AppCompatActivity {
         cardPekerjaanAwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtPekerjaanPlace.setVisibility(View.VISIBLE);
                 cardPekerjaanAwal.setVisibility(View.GONE);
                 cardPekerjaan.setVisibility(View.VISIBLE);
                 getPekerjaan();
@@ -245,6 +296,7 @@ public class EditAkunActivity extends AppCompatActivity {
         cardPenghasilanAwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtPenghasilanPlace.setVisibility(View.VISIBLE);
                 cardPenghasilanAwal.setVisibility(View.GONE);
                 cardPenghasilan.setVisibility(View.VISIBLE);
                 getPenghasilan();
@@ -252,7 +304,7 @@ public class EditAkunActivity extends AppCompatActivity {
             }
         });
 
-        dateFormatter = new SimpleDateFormat("YYYY-mm-dd", Locale.US);
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         cardTanggalLahir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,9 +321,320 @@ public class EditAkunActivity extends AppCompatActivity {
 
     }
 
+
+    private void getDataDiri() {
+
+        ProgressDialog progressDialog = new ProgressDialog(EditAkunActivity.this);
+        progressDialog.setTitle("memuat data");
+        progressDialog.setMessage("Harap tunggu");
+        progressDialog.show();
+
+        String url = "http://jualanpraktis.net/android/profile.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("customer", user.getId())
+                .setTag(EditAkunActivity.this)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        progressDialog.dismiss();
+
+                        try {
+
+                            JSONArray array = response.getJSONArray("data");
+                            for (int i = 0;i<array.length();i++){
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                get_nama = jsonObject.getString("nama");
+                                get_email = jsonObject.getString("email");
+                                get_no_hp = jsonObject.getString("no_hp");
+                                get_gender = jsonObject.getString("gender");
+                                get_tgl_lahir = jsonObject.getString("tgl_lahir");
+                                get_id_provinsi = jsonObject.getString("id_provinsi");
+                                get_id_kota = jsonObject.getString("id_kota");
+                                get_id_kecamatan = jsonObject.getString("id_kecamatan");
+                                get_provinsi = jsonObject.getString("provinsi");
+                                get_kota = jsonObject.getString("kota");
+                                get_kecamatan = jsonObject.getString("kecamatan");
+                                get_alamat = jsonObject.getString("alamat");
+                                get_status_kawin = jsonObject.getString("status_kawin");
+                                get_jumlah_anak = jsonObject.getString("jumlah_anak");
+                                get_pendidikan = jsonObject.getString("pendidikan");
+                                get_pekerjaan = jsonObject.getString("pekerjaan");
+                                get_penghasilan = jsonObject.getString("penghasilan");
+
+                            }
+
+                            if (get_nama != null) {
+                                edtNama.setText(get_nama);
+                            }
+
+                            if (get_email != null) {
+                                edtEmail.setText(get_email);
+                            }
+
+                            if (user.getNama_toko() != null) {
+                                edtNamaToko.setText(user.getNama_toko());
+                            }
+
+                            if (get_no_hp != null) {
+                                edtNoHp.setText(get_no_hp);
+                            }
+
+                            if (user.getNo_npwp().equals("null")) {
+                                edtNoNpwp.setText("");
+                            }else{
+                                edtNoNpwp.setText(user.getNo_npwp());
+                            }
+
+                            if (get_gender.equals("")){
+                                lblJenisKelamin.setText("Jenis kelamin*");
+                                txtJenisKelaminPlace.setVisibility(View.GONE);
+                            }else{
+                                lblJenisKelamin.setText(get_gender);
+                                lblJenisKelamin.setTextColor(Color.parseColor("#000000"));
+                                txtJenisKelaminPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            Log.d("getDataDiri", "gender: "+get_gender);
+
+                            if (get_tgl_lahir.equals("")){
+                                cardTanggalLahir.setVisibility(View.VISIBLE);
+                                edtTanggalLahir.setVisibility(View.GONE);
+                                txtTanggalLahirPlace.setVisibility(View.GONE);
+                                edtTanggalLahir.setText("Tanggal lahir*");
+                            }else{
+                                cardTanggalLahir.setVisibility(View.GONE);
+                                edtTanggalLahir.setVisibility(View.VISIBLE);
+                                txtTanggalLahirPlace.setVisibility(View.VISIBLE);
+                                edtTanggalLahir.setText(get_tgl_lahir);
+                            }
+
+                            if (get_provinsi.equals("null")){
+                                lblProvinsi.setText("Provinsi*");
+                                txtProvinsiPlace.setVisibility(View.GONE);
+                            }else{
+                                lblProvinsi.setText(get_provinsi);
+                                lblProvinsi.setTextColor(Color.parseColor("#000000"));
+                                txtProvinsiPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            Log.d("getDataDiri", "provinsi: "+get_provinsi);
+
+                            if (get_kota.equals("null")){
+                                lblKota.setText("Kota/Kabupaten*");
+                                txtKotaPlace.setVisibility(View.GONE);
+                            }else{
+                                lblKota.setText(get_kota);
+                                txtKotaPlace.setVisibility(View.VISIBLE);
+                                lblProvinsi.setTextColor(Color.parseColor("#000000"));
+                            }
+
+                            if (get_status_kawin.equals("")){
+                                lblStatusKawin.setText("Status perkawinan*");
+                                txtStatusPerkawinanPlace.setVisibility(View.GONE);
+                            }else{
+                                lblStatusKawin.setText(get_status_kawin);
+                                lblStatusKawin.setTextColor(Color.parseColor("#000000"));
+                                txtStatusPerkawinanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            if (get_alamat.equals("null")){
+                                edtAlamat.setText("");
+                            }else{
+                                edtAlamat.setText(get_alamat);
+                            }
+
+                            if (get_kecamatan.equals("null")){
+                                lblKecamatan.setText("Kecamatan*");
+                                txtKecamatanPlace.setVisibility(View.GONE);
+                            }else{
+                                lblKecamatan.setText(get_kecamatan);
+                                lblKecamatan.setTextColor(Color.parseColor("#000000"));
+                                txtKecamatanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            if (get_jumlah_anak.equals("")){
+                                edtJumlahAnak.setText("");
+                            }else{
+                                edtJumlahAnak.setText(get_jumlah_anak);
+                            }
+
+                            if (get_pendidikan.equals("")){
+                                lblPendidikan.setText("Pendidikan Terakhir");
+                                txtPendidikanPlace.setVisibility(View.GONE);
+                            }else{
+                                lblPendidikan.setText(get_pendidikan);
+                                lblPendidikan.setTextColor(Color.parseColor("#000000"));
+                                txtPendidikanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            if (get_pekerjaan.equals("")){
+                                lblPekerjaan.setText("Pekerjaan*");
+                                txtPekerjaanPlace.setVisibility(View.GONE);
+                            }else{
+                                lblPekerjaan.setText(get_pekerjaan);
+                                lblPekerjaan.setTextColor(Color.parseColor("#000000"));
+                                txtPekerjaanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            if (get_penghasilan.equals("")){
+                                lblPenghasilan.setText("Penghasilan per-bulan*");
+                                txtPenghasilanPlace.setVisibility(View.GONE);
+                            }else{
+                                lblPenghasilan.setText(get_penghasilan);
+                                lblPenghasilan.setTextColor(Color.parseColor("#000000"));
+                                txtPenghasilanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            progressDialog.dismiss();
+                            Toast.makeText(EditAkunActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")){
+                                progressDialog.dismiss();
+                                Toast.makeText(EditAkunActivity.this, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                progressDialog.dismiss();
+                                Toast.makeText(EditAkunActivity.this, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        try{
+            if (resultCode==RESULT_OK){
+                Uri uri = data.getData();
+                nama_file = uri.getLastPathSegment();
+//                        data.getData().getLastPathSegment().toString();
+//                Log.d("readUri", "onActivityResult: "+nama_file);
+//                btn_update_photo.setVisibility(View.VISIBLE);
+                imgProfileEditaKUN.setImageURI(uri);
+                PicturePath = uri.getPath();
+                updateImage();
+            }else{
+                Toast.makeText(EditAkunActivity.this, "anda belum upload photo, silahkan upload terlebih dahulu", Toast.LENGTH_SHORT);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void updateImage(){
+        ProgressDialog progressDialog2 = new ProgressDialog(EditAkunActivity.this);
+        progressDialog2.setTitle("Upload Profile Picture");
+        progressDialog2.setMessage("Loading");
+        progressDialog2.show();
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_member", user.getId());
+        params.put("kode", user.getKode());
+        //params.put("password2",picturePath);
+
+        try {
+            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .build();
+
+
+            AndroidNetworking.upload("https://jualanpraktis.net/android/update_photo.php")
+                    .addMultipartParameter(params)
+                    .addMultipartFile("files", new File(PicturePath))
+                    .setTag(EditAkunActivity.this)
+                    .setPriority(Priority.HIGH)
+                    .setOkHttpClient(okHttpClient)
+                    .build()
+                    .setUploadProgressListener(new UploadProgressListener() {
+                        @Override
+                        public void onProgress(long bytesUploaded, long totalBytes) {
+
+                        }
+                    })
+                    .getAsString(new StringRequestListener() {
+                        @Override
+                        public void onResponse(String response) {
+                            progressDialog2.dismiss();
+                            if (response.contains("Perubahan profile berhasil disimpan")) {
+                                Toast.makeText(EditAkunActivity.this, "Profile Picture has succesfully changed.", Toast.LENGTH_LONG).show();
+                                Log.d("getFoto", "onResponse: "+new File(PicturePath));
+                                simpanFotoPreferences();
+                            } else {
+                                Toast.makeText(EditAkunActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+//                        progressDialog.dismiss();
+                            progressDialog2.dismiss();
+                            Toast.makeText(EditAkunActivity.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }catch (NullPointerException e){
+            //kalau kosong
+            e.printStackTrace();
+            Toast.makeText(EditAkunActivity.this, "Upload dulu Imagenya, tekan di bagian gambar.", Toast.LENGTH_SHORT).show();
+            progressDialog2.dismiss();
+        }
+
+    }
+
+    private void simpanFotoPreferences() {
+
+        loginuser userFoto = new loginuser(
+                user.getId(),
+                user.getKode(),
+                user.getNama(),
+                user.getNama_toko(),
+                user.getProvinsi(),
+                user.getKota(),
+                user.getKecamatan(),
+                user.getAlamat(),
+                user.getNo_ktp(),
+                user.getNo_npwp(),
+                user.getNo_hp(),
+                user.getEmail(),
+                user.getAtas_nama(),
+                user.getNo_rek(),
+                user.getNama_bank(),
+                nama_file
+        );
+
+        SharedPrefManager.getInstance(EditAkunActivity.this).userLogin(userFoto);
+//        Toast.makeText(getActivity(), "Berhasil Menjalankan Preferences", Toast.LENGTH_SHORT).show();
+
     }
 
     private void simpanEditAkun() {
@@ -286,6 +649,66 @@ public class EditAkunActivity extends AppCompatActivity {
         String tanggal_lahir = edtTanggalLahir.getText().toString();
         String alamat = edtAlamat.getText().toString();
         String jumlah_anak = edtJumlahAnak.getText().toString();
+        String id_jenis_kelamin_simpan = "";
+        String id_provinsi_simpan = "";
+        String tanggal_lahir_simpan ="";
+        String id_kota_simpan ="";
+        String id_kecamatan_simpan ="";
+        String id_status_kawin_simpan ="";
+        String id_pendidikan_simpan ="";
+        String id_pekerjaan_simpan ="";
+        String id_penghasilan_simpan ="";
+        String id_tanggal_lahir_simpan ="";
+
+
+        if (id_provinsi != null){
+            id_provinsi_simpan = id_provinsi;
+        }else{
+            id_provinsi_simpan = get_id_provinsi;
+        }
+
+        if (jenis_kelamin != null){
+            id_jenis_kelamin_simpan = jenis_kelamin;
+        }else{
+            id_jenis_kelamin_simpan = get_gender;
+        }
+
+        if (id_kota != null){
+            id_kota_simpan = id_kota;
+        }else{
+            id_kota_simpan = get_id_kota;
+        }
+
+        if (id_wilayah != null){
+            id_kecamatan_simpan = id_wilayah;
+        }else{
+            id_kecamatan_simpan = get_id_kecamatan;
+        }
+
+        if (status_perkawinan != null){
+            id_status_kawin_simpan = status_perkawinan;
+        }else{
+            id_status_kawin_simpan = get_status_kawin;
+        }
+
+        if (pendidikan != null){
+            id_pendidikan_simpan = pendidikan;
+        }else{
+            id_pendidikan_simpan = get_pendidikan;
+        }
+
+        if (pekerjaan != null){
+            id_pekerjaan_simpan = pekerjaan;
+        }else{
+            id_pekerjaan_simpan = get_pekerjaan;
+        }
+
+        if (penghasilan != null){
+            id_penghasilan_simpan = penghasilan;
+        }else{
+            id_penghasilan_simpan = get_penghasilan;
+        }
+
 
         String host = "http://jualanpraktis.net/android/update_akun.php";
 
@@ -353,21 +776,21 @@ public class EditAkunActivity extends AppCompatActivity {
         params.put("id_member", user.getId());
         params.put("nama", nama);
         params.put("nama_toko", nama_toko);
-        params.put("provinsi", nama_provinsi);
-        params.put("kota", nama_kota);
-        params.put("kecamatan", nama_wilayah);
+        params.put("provinsi", id_provinsi_simpan);
+        params.put("kota", id_kota_simpan);
+        params.put("kecamatan", id_kecamatan_simpan);
         params.put("alamat", alamat);
         params.put("no_ktp", no_ktp);
         params.put("no_npwp", no_npwp);
         params.put("no_hp", noHp);
         params.put("email", email);
-        params.put("gender", jenis_kelamin);
+        params.put("gender", id_jenis_kelamin_simpan);
         params.put("tgl_lahir", tanggal_lahir);
-        params.put("status_kawin", status_perkawinan);
+        params.put("status_kawin", id_status_kawin_simpan);
         params.put("jumlah_anak", jumlah_anak);
-        params.put("pendidikan", pendidikan);
-        params.put("pekerjaan", pekerjaan);
-        params.put("penghasilan", penghasilan);
+        params.put("pendidikan", id_pendidikan_simpan);
+        params.put("pekerjaan", id_pekerjaan_simpan);
+        params.put("penghasilan", id_penghasilan_simpan);
         params.put("password", password);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
@@ -527,6 +950,7 @@ public class EditAkunActivity extends AppCompatActivity {
 
                 cardTanggalLahir.setVisibility(View.GONE);
                 edtTanggalLahir.setVisibility(View.VISIBLE);
+                txtTanggalLahirPlace.setVisibility(View.VISIBLE);
                 edtTanggalLahir.setText(dateFormatter.format(newDate.getTime()));
 
             }
@@ -551,6 +975,7 @@ public class EditAkunActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             cardKotaAwal.setVisibility(View.GONE);
+                            txtKotaPlace.setVisibility(View.VISIBLE);
                             cardKota.setVisibility(View.VISIBLE);
                             getKotaKabupaten(id_provinsi, spinnerKotaKabupaten);
                         }
@@ -581,6 +1006,7 @@ public class EditAkunActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             cardKecamatanAwal.setVisibility(View.GONE);
+                            txtKecamatanPlace.setVisibility(View.VISIBLE);
                             cardKecamatan.setVisibility(View.VISIBLE);
                             getKecamatan(id_kota, spinnerKecamatan);
                         }

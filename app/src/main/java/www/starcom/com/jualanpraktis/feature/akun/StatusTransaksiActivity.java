@@ -96,8 +96,8 @@ public class StatusTransaksiActivity extends AppCompatActivity {
         belumDibayarFragment = new BelumDibayarFragment();
         // tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("Semua"));
-        tabLayout.addTab(tabLayout.newTab().setText("Dipesan"));
         tabLayout.addTab(tabLayout.newTab().setText("Belum Dibayar"));
+        tabLayout.addTab(tabLayout.newTab().setText("Dipesan"));
         tabLayout.addTab(tabLayout.newTab().setText("Dikemas"));
         tabLayout.addTab(tabLayout.newTab().setText("Dikirim"));
         tabLayout.addTab(tabLayout.newTab().setText("Diterima"));
@@ -130,10 +130,10 @@ public class StatusTransaksiActivity extends AppCompatActivity {
                 replaceFragment(semuaPesananFragment);
                 break;
             case 1 :
-                replaceFragment(dipesanFragment);
+                replaceFragment(belumDibayarFragment);
                 break;
             case 2 :
-                replaceFragment(belumDibayarFragment);
+                replaceFragment(dipesanFragment);
                 break;
             case 3 :
                 replaceFragment(dikemasFragment);
