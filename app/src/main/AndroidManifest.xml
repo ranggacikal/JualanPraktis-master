@@ -39,7 +39,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label">
-        <activity android:name=".FlashSaleActivity"></activity>
+        <activity android:name=".RincianTransaksiSemuaActivity"></activity>
+        <activity android:name=".FlashSaleActivity" />
         <activity android:name=".feature.akun.UploadBuktiTransferActivity" />
         <activity android:name=".feature.akun.TukarkanPesananActivity" />
         <activity android:name=".feature.akun.BatalkanTransaksiActivity" />

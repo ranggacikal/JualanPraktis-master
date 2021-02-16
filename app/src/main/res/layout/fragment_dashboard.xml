@@ -111,7 +111,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="2dp"
-                    app:cardCornerRadius="50dp"
+                    app:cardCornerRadius="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/linear_header_dashboard"
                     app:layout_constraintStart_toEndOf="@id/imgKeranjang"

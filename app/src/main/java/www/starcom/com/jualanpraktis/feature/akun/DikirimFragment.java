@@ -108,6 +108,7 @@ public class DikirimFragment extends Fragment {
                                 data.put("id_transaksi",jsonObject.getString("id_transaksi"));
                                 data.put("tanggal",jsonObject.getString("tgl_transaksi"));
                                 data.put("status_pesanan",jsonObject.getString("status_pesanan"));
+                                data.put("status_kirim",jsonObject.getString("status_kirim"));
 
 
 

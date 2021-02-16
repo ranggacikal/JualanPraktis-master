@@ -221,7 +221,7 @@ public class DetailRekeningBankActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
 
                         if (anError.getErrorCode() != 0) {
-                            Toast.makeText(DetailRekeningBankActivity.this, "Gagal Ambil Data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DetailRekeningBankActivity.this, "Anda belum mengisi detail rekening bank", Toast.LENGTH_SHORT).show();
                             edtNamaBukuTabungan.setText("");
                             edtNoRekening.setText("");
                             txtNamaBank.setText("---");

@@ -22,7 +22,7 @@ public class holdersub extends RecyclerView.ViewHolder {
     public Button btnWa;
     public TextView nama_produk,harga_jual,harga_asli,diskon,txtTerjual ;
     public CardView cardView;
-    public TextView txtStok;
+    public TextView txtStok, txtKota;
    // public SimpleDraweeView draweeView;
 
     public holdersub(View itemView) {
@@ -38,5 +38,6 @@ public class holdersub extends RecyclerView.ViewHolder {
         linearSalin = itemView.findViewById(R.id.share_salin_home);
         txtStok = itemView.findViewById(R.id.item_id_stock_produk);
         txtTerjual = itemView.findViewById(R.id.text_id_qty_produk_dibeli);
+        txtKota = itemView.findViewById(R.id.kota_produk);
     }
 }

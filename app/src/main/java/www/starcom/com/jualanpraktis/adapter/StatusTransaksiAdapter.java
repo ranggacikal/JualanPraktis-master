@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.R;
+import www.starcom.com.jualanpraktis.RincianTransaksiSemuaActivity;
 import www.starcom.com.jualanpraktis.feature.akun.RincianStatusTransaksiActivity;
 import www.starcom.com.jualanpraktis.feature.akun.RincianTransaksiActivity;
 import www.starcom.com.jualanpraktis.model.ListStatusTransaksi;
@@ -94,6 +95,8 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
 
         id_transaksi = holder.txtId.getText().toString();
 
+        String status_kirim = item.get("status_kirim");
+
 
         Log.d("checkId", "onBindViewHolder: "+id_transaksi);
 
@@ -103,10 +106,11 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
                 String id = holder.txtId.getText().toString();
                 String tanggal = holder.txtTanggal.getText().toString();
                 String status = holder.txtStatus.getText().toString();
-                Intent intent = new Intent(context, RincianTransaksiActivity.class);
+                Intent intent = new Intent(context, RincianTransaksiSemuaActivity.class);
                 intent.putExtra("id_transaksi", id);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("status", status);
+                intent.putExtra("status_kirim", status_kirim);
                 context.startActivity(intent);
             }
         });
@@ -125,13 +129,13 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
 //        });
 
         AndroidNetworking.initialize(context.getApplicationContext());
-        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya);
+        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya, status_kirim);
 
     }
 
-    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya) {
+    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya, String status_kirim) {
 
-        String url = "https://jualanpraktis.net/android/detail_pesanan.php";
+        String url = "http://jualanpraktis.net/android/detail_semua_pesanan.php";
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)

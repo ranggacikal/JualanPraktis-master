@@ -27,12 +27,17 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -42,6 +47,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
+import www.starcom.com.jualanpraktis.Login.loginuser;
+import www.starcom.com.jualanpraktis.MainActivity;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.feature.pembayaran.FormatText;
 import www.starcom.com.jualanpraktis.keranjang;
@@ -61,6 +69,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     String pengiriman;
     private List<HargaItem> hargaDropshipper;
     int hargaItem;
+    loginuser user ;
+
+    MainActivity mainActivity;
 
     public CartAdapter(Activity activity, ArrayList<HashMap<String, String>> data, keranjang keranjang) {
         this.data = data;
@@ -231,6 +242,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         if (!harga_jual.equals("")) {
 //                            Double harga_jual_double = Double.parseDouble(harga_jual);
                             String str = harga_jual.replace(".", "");
+                            String str2 = harga_jual.replace(",", "");
 //                            int intValue = (int) Math.round(harga_jual_double);
                             hargaJual = Integer.parseInt(str);
                         }
@@ -336,6 +348,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 deleteItem(finalItem.get("nomor"));
+                                MainActivity.getInstance().getCountCart();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -367,6 +380,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
                     viewHolder.lbl_nominal.setText(FormatText.rupiahFormat(hargaItem));
                     keranjang.onChangeData();
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -385,6 +399,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     hargaItem = Integer.parseInt(finalItem.get("harga")) * Integer.parseInt(finalItem.get("jumlah"));
                     viewHolder.lbl_nominal.setText(FormatText.rupiahFormat(hargaItem));
                     keranjang.onChangeData();
+                    notifyDataSetChanged();
                 }
             }
         });

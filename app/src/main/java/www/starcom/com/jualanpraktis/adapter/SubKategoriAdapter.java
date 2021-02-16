@@ -65,7 +65,7 @@ public class SubKategoriAdapter extends RecyclerView.Adapter<SubKategoriAdapter.
 //
 //        viewHolder.linear_item_kategori.setBackgroundColor(currentColor2);
 
-        String img_url = "https://trading.my.id/img2/"+item.get("gambar");
+        String img_url = "https://jualanpraktis.net/img2/"+item.get("gambar");
         Glide.with(activity.getApplicationContext())
                 .load(img_url)
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))

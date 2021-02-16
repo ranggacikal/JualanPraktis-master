@@ -125,6 +125,7 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
         holder.harga_jual.setText("Rp"+NumberFormat.getInstance().format(harga_disc));
         holder.txtStok.setText(results.get(position).total_stok);
         holder.txtTerjual.setText(results.get(position).terjual+" Produk Terjual");
+        holder.txtKota.setText(results.get(position).kota);
 
         Glide.with(context)
                 .load(uri)

@@ -123,12 +123,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:visibility="gone"
-                    android:src="@drawable/ic_checked"/>
+                    android:src="@drawable/ic_check"/>
 
                 <TextView
+                    android:id="@+id/text_kebijakan_privasi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    style="@style/TextAppearance.AppCompat.Body1"
                     android:fontFamily="@font/nuunito_bold"
                     android:text="Saya Setuju Terhadap Kebijakan Privasi"
                     android:layout_centerHorizontal="true"/>

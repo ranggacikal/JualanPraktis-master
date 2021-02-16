@@ -19,6 +19,7 @@ import www.starcom.com.jualanpraktis.model_retrofit.model_bantuan.ResponseDataBa
 import www.starcom.com.jualanpraktis.model_retrofit.model_penggunaan_app.ResponseListPanduan;
 import www.starcom.com.jualanpraktis.model_retrofit.model_penghasilan_selesai.ResponseDataPenghasilanSelesai;
 import www.starcom.com.jualanpraktis.model_retrofit.model_tips.ResponseDataTips;
+import www.starcom.com.jualanpraktis.model_retrofit.periode.ResponseDataPeriode;
 
 public interface ApiService {
 
@@ -88,5 +89,8 @@ public interface ApiService {
 
     @GET("list-bank-lainnya.php")
     Call<ResponseBankLainnya> bankLainnya();
+
+    @GET("date-picker.php")
+    Call<ResponseDataPeriode> dataPeriode();
 
 }

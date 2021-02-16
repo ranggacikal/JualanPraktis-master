@@ -74,6 +74,11 @@
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -284,5 +289,7 @@
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

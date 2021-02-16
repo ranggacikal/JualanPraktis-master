@@ -64,6 +64,9 @@ public class objectsub {
             @SerializedName("terjual")
             public String terjual;
 
+            @SerializedName("city_name")
+            public String kota;
+
             @SerializedName("start_disc") public  String start_disc;
             @SerializedName("end_disc") public  String end_disc;
 

@@ -6,8 +6,8 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="20dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
@@ -214,19 +214,9 @@
             android:id="@+id/linear_list_pesanan_selesai"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/white"
             android:gravity="center"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="PESANAN SELESAI"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:fontFamily="@font/nuunito_bold"
-                android:textStyle="bold" />
 
         </LinearLayout>
 

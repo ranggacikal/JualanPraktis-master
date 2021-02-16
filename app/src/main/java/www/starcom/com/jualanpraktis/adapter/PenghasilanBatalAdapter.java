@@ -79,6 +79,7 @@ public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBat
         holder.txtStatus.setText(item.get("status_pesanan"));
 
         id_transaksi = holder.txtId.getText().toString();
+        String status_kirim = item.get("status_kirim");
 
 
         Log.d("checkId", "onBindViewHolder: "+id_transaksi);
@@ -93,16 +94,17 @@ public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBat
                 intent.putExtra("id_transaksi", id);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("status", status);
+                intent.putExtra("status_kirim", status_kirim);
                 context.startActivity(intent);
             }
         });
 
         AndroidNetworking.initialize(context.getApplicationContext());
-        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya);
+        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya, status_kirim);
 
     }
 
-    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya) {
+    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya, String status_kirim) {
 
         String url = "https://jualanpraktis.net/android/detail_pesanan.php";
 
@@ -114,6 +116,7 @@ public class PenghasilanBatalAdapter extends RecyclerView.Adapter<PenghasilanBat
 
         AndroidNetworking.post(url)
                 .addBodyParameter("id_transaksi", id_transaksi)
+                .addBodyParameter("status_kirim", status_kirim)
                 .setTag(context)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)

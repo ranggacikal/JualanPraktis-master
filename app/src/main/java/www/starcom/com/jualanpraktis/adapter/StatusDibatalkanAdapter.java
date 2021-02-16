@@ -87,8 +87,10 @@ public class StatusDibatalkanAdapter extends RecyclerView.Adapter<StatusDibatalk
 
         id_transaksi = holder.txtId.getText().toString();
 
+        String status_kirim = item.get("status_kirim");
         AndroidNetworking.initialize(context.getApplicationContext());
-        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya);
+        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya, status_kirim);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,13 +102,14 @@ public class StatusDibatalkanAdapter extends RecyclerView.Adapter<StatusDibatalk
                 intent.putExtra("id_transaksi", id);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("status", status);
+                intent.putExtra("status_kirim", status_kirim);
                 context.startActivity(intent);
             }
         });
 
     }
 
-    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya) {
+    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya, String status_kirim) {
 
         String url = "https://jualanpraktis.net/android/detail_pesanan.php";
 
@@ -118,6 +121,7 @@ public class StatusDibatalkanAdapter extends RecyclerView.Adapter<StatusDibatalk
 
         AndroidNetworking.post(url)
                 .addBodyParameter("id_transaksi", id_transaksi)
+                .addBodyParameter("status_kirim", status_kirim)
                 .setTag(context)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)

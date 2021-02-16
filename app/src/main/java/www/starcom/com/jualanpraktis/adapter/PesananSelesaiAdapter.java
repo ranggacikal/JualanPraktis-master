@@ -71,7 +71,7 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
         user = SharedPrefManager.getInstance(context).getUser();
 
         String image = item.get("gambar");
-        String url = "https://trading.my.id/img/"+image;
+        String url = "https://jualanpraktis.net/img/"+image;
 
 
         Glide.with(context)

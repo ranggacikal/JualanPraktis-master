@@ -170,6 +170,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder.harga_asli.setPaintFlags(viewHolder.harga_asli.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
                 viewHolder.harga_jual.setText(FormatText.rupiahFormat(harga_disc));
                 viewHolder.txtStok.setText(item.total_stok);
+                viewHolder.txtKota.setText(item.kota);
 
                 //  Picasso.get().load(UrlImage+Image).into(holder.gambar);
 
@@ -246,7 +247,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
                         intent.putExtra("image_o",data.get(position).gambar);
                         intent.putExtra("berat",data.get(position).berat);
                         intent.putExtra("harga_jual",Integer.toString(harga_disc));
-                        intent.putExtra("stok","0");
+                        intent.putExtra("stok",data.get(position).total_stok);
                         intent.putExtra("diskon",data.get(position).diskon);
                         v.getContext().startActivity(intent);
                     }
@@ -363,7 +364,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView gambar ;
-        public TextView nama_produk,harga_jual,harga_asli,diskon,txtStok ;
+        public TextView nama_produk,harga_jual,harga_asli,diskon,txtStok, txtKota ;
         public CardView cardView;
         public LinearLayout shareWa, shareFb, shareSalin;
 
@@ -379,6 +380,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
             shareSalin = itemView.findViewById(R.id.share_salin_home);
             shareFb = itemView.findViewById(R.id.share_fb_home);
             txtStok = itemView.findViewById(R.id.item_id_stock_produk);
+            txtKota = itemView.findViewById(R.id.kota_produk);
         }
     }
 

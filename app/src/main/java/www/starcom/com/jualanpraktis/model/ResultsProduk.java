@@ -45,6 +45,9 @@ public class ResultsProduk implements Serializable {
     @SerializedName("keterangan_produk")
     public String keterangan;
 
+    @SerializedName("city_name")
+    public String kota;
+
     @SerializedName("start_disc") public  String start_disc;
     @SerializedName("end_disc") public  String end_disc;
 

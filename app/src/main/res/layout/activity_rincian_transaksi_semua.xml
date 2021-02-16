@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".feature.akun.RincianTransaksiActivity">
+    tools:context=".RincianTransaksiSemuaActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarStatusTransaksi"
+        android:id="@+id/toolbarStatusTransaksiSemua"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imgBackRincianTransaksi"
+                android:id="@+id/imgBackRincianTransaksiSemua"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
@@ -55,7 +55,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_id_rincian_transaksi"
+                android:id="@+id/text_id_rincian_transaksi_semua"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -71,7 +71,7 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
-                    android:id="@+id/text_tanggal_rincian_transaksi"
+                    android:id="@+id/text_tanggal_rincian_transaksi_semua"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -81,7 +81,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/text_status_rincian_transaksi"
+                    android:id="@+id/text_status_rincian_transaksi_semua"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -105,7 +105,7 @@
                 android:orientation="vertical">
 
                 <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmerRincianProduk"
+                    android:id="@+id/shimmerRincianProdukSemua"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
@@ -131,7 +131,7 @@
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_list_produk_rincian_transaksi"
+                    android:id="@+id/rv_list_produk_rincian_transaksi_semua"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -157,7 +157,7 @@
                     android:textStyle="bold" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmerRincianTransaksi"
+                    android:id="@+id/shimmerRincianTransaksiSemua"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
@@ -183,7 +183,7 @@
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_list_penerima_rincian_transaksi"
+                    android:id="@+id/rv_list_penerima_rincian_transaksi_semua"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp" />
@@ -221,7 +221,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/text_hargaproduk_rincian"
+                        android:id="@+id/text_hargaproduk_rincian_semua"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -246,7 +246,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/text_totalkeuntungan_rincian"
+                        android:id="@+id/text_totalkeuntungan_rincian_semua"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -271,7 +271,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/text_ongkir_rincian"
+                        android:id="@+id/text_ongkir_rincian_semua"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -298,7 +298,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/text_totalbayar_rincian"
+                        android:id="@+id/text_totalbayar_rincian_semua"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -341,7 +341,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_tukar_pesanan"
+                android:id="@+id/linear_tukar_pesanan_semua"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -367,7 +367,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_update_status"
+                android:id="@+id/linear_update_status_semua"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -394,7 +394,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_belum_dibayar"
+                android:id="@+id/linear_belum_dibayar_semua"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"

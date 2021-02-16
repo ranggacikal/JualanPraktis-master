@@ -388,7 +388,7 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
                             int penghasilanSayaInt = Integer.parseInt(penghasilan_saya);
                             Locale localID = new Locale("in", "ID");
                             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
-                            txtPesnghasilanSayaAkun.setText(formatRupiah.format(penghasilanSayaInt));
+                            txtPesnghasilanSayaAkun.setText("Rp" + NumberFormat.getInstance().format(penghasilanSayaInt));
 
                         } catch (JSONException e) {
                             e.printStackTrace();

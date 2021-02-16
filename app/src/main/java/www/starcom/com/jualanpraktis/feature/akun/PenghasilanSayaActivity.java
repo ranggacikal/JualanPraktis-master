@@ -64,6 +64,7 @@ import www.starcom.com.jualanpraktis.interfaces.PilihPeriodeClickInterface;
 import www.starcom.com.jualanpraktis.katalog;
 import www.starcom.com.jualanpraktis.keranjang;
 import www.starcom.com.jualanpraktis.model.ListPenghasilanSaya;
+import www.starcom.com.jualanpraktis.model.Periode;
 
 public class PenghasilanSayaActivity extends AppCompatActivity {
 
@@ -90,11 +91,9 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
 
     public Dialog alertDialog;
 
-    public String tanggalAwal, tanggalAkhir;
+    public String tanggalAwal, tanggalAkhir, semuaPeriode;
 
     public String range_periode;
-
-    PilihPeriodeClickInterface pilihPeriodeClickInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +108,14 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
         linearRiwayatPencairan = findViewById(R.id.linear_riwayat_pencairan);
         txtTotalPenghasilan = findViewById(R.id.text_total_penghasilan_anda);
         txtButton = findViewById(R.id.text_button_periode);
+
+        Periode getPeriode = new Periode();
+
+        String start = getPeriode.getStart_date();
+        String end = getPeriode.getEnd_date();
+
+        Log.d("testDataModel", "start: "+start);
+        Log.d("testDataModel", "end: "+end);
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +150,15 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
 
         Log.d("rangePeriode", "onCreate: "+range_periode);
 
+        if (tanggalAwal != null && tanggalAkhir != null){
+
+            Log.d("periodeCheck", "onCreate: "+tanggalAwal+" - "+tanggalAkhir);
+
+        }
+
         getPenghasilanSaya();
+
+        String id_member = user.getId();
 
         instance=this;
         getAllWidgets();
@@ -161,10 +176,44 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
         alertDialog.show();
 
         RecyclerView rv_periode = alertDialog.findViewById(R.id.rv_periode);
+        TextView txtSemuaPeriode = alertDialog.findViewById(R.id.text_semua_periode);
         rv_periode.setHasFixedSize(true);
         rv_periode.setLayoutManager(new LinearLayoutManager(PenghasilanSayaActivity.this));
 
         loadDataPeriode(rv_periode);
+
+        txtSemuaPeriode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtButton.setText("Semua Periode");
+                semuaPeriode = "semua periode";
+                tanggalAwal = "semua periode";
+                tanggalAkhir = "semua periode";
+                alertDialog.dismiss();
+
+
+            }
+        });
+
+        if (tanggalAwal!=null && tanggalAkhir!=null){
+
+            Log.d("cekPeriode", "tampilDialog: "+tanggalAwal +" - "+tanggalAkhir);
+
+//            reloadFragment();
+
+        }
+
+    }
+
+    public void reloadFragment() {
+
+        Fragment currentFragment = PenghasilanSayaActivity.this.getSupportFragmentManager()
+                .findFragmentById(R.id.framePenghasilanSaya);
+        FragmentManager manager = PenghasilanSayaActivity.this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = manager.beginTransaction();
+        fragmentTransaction.detach(currentFragment);
+        fragmentTransaction.attach(currentFragment);
+        fragmentTransaction.commit();
 
     }
 
@@ -194,6 +243,7 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
                             PeriodeAdapter adapterPeriode = new PeriodeAdapter(PenghasilanSayaActivity.this, dataPeriode,
                                     PenghasilanSayaActivity.this);
                             rv_periode.setAdapter(adapterPeriode);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -240,7 +290,7 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
                             int penghasilanSayaInt = Integer.parseInt(penghasilanSaya);
                             Locale localID = new Locale("in", "ID");
                             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localID);
-                            txtTotalPenghasilan.setText(formatRupiah.format(penghasilanSayaInt));
+                            txtTotalPenghasilan.setText("Rp" + NumberFormat.getInstance().format(penghasilanSayaInt));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -326,10 +376,19 @@ public class PenghasilanSayaActivity extends AppCompatActivity {
         }
     }
     public void replaceFragment(Fragment fragment) {
+        Bundle bundle = new Bundle();
+        bundle.putString("start_date", tanggalAwal);
+        bundle.putString("end_date", tanggalAkhir);
+        bundle.putString("semua_periode", semuaPeriode);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.framePenghasilanSaya, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragment.setArguments(bundle);
         ft.commit();
+    }
+
+    public interface FragmentRefreshListener{
+        void onRefresh();
     }
 }

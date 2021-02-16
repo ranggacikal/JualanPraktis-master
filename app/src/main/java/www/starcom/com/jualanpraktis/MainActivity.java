@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private katalog Katalog;
     private PanduanFragment panduanFragment;
 
-    private TabLayout tabLayout;
+    public TabLayout tabLayout;
 
     List<order> list = new ArrayList<>();
     keranjangAdapter adapter ;
@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
         setContentView(R.layout.activity_main);
+
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
 
 
         int PERMISSION_ALL = 1;
@@ -301,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    void getCountCart(){
+   public void getCountCart(){
         HashMap<String,String> param = new HashMap<>();
         param.put("customer", user.getId());
 

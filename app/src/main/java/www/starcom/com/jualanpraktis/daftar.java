@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -107,6 +108,12 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 
     ImageView imghidePassword;
 
+    ImageView imgKebijakanUncheck, imgKebijakanChecked;
+
+    TextView txtKebijakaPrivasi;
+
+    boolean checked = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +151,9 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
         edtPassword = findViewById(R.id.edt_password_daftar);
         btn_daftar = findViewById(R.id.card_daftar);
         imghidePassword = findViewById(R.id.img_hide_password);
+        imgKebijakanUncheck = findViewById(R.id.img_uncheck_daftar);
+        imgKebijakanChecked = findViewById(R.id.img_checked_daftar);
+        txtKebijakaPrivasi = findViewById(R.id.text_kebijakan_privasi);
 
 //        jenis_kelamin = findViewById(R.id.RG);
 //        laki = findViewById(R.id.laki);
@@ -218,6 +228,18 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
 //            }
 //        });
 
+        txtKebijakaPrivasi.setPaintFlags(txtKebijakaPrivasi.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        txtKebijakaPrivasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(daftar.this, WebLawActivity.class);
+                intent.putExtra("title", "Kebijakan Privasi");
+                intent.putExtra("url", "file:///android_asset/kebijakan_privasi.html");
+                startActivity(intent);
+            }
+        });
+
         showHidePass(imghidePassword);
 
     }
@@ -251,6 +273,22 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+        imgKebijakanUncheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgKebijakanUncheck.setVisibility(View.GONE);
+                imgKebijakanChecked.setVisibility(View.VISIBLE);
+            }
+        });
+
+        imgKebijakanChecked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgKebijakanUncheck.setVisibility(View.VISIBLE);
+                imgKebijakanChecked.setVisibility(View.GONE);
+            }
+        });
+
         String password = edtPassword.getText().toString();
         int min_length = 6;
 
@@ -269,6 +307,12 @@ public class daftar extends AppCompatActivity implements View.OnClickListener {
             edtPassword.requestFocus();
             return;
         }
+
+        if (imgKebijakanChecked.getVisibility() == View.GONE){
+            Toast.makeText(activity, "Anda belum menyetujui kebijakan dan privasi", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         signUp();
 //        signUpRetrofit();
 //        Daftar();

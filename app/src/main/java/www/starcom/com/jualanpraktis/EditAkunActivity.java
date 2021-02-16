@@ -84,7 +84,7 @@ public class EditAkunActivity extends AppCompatActivity {
 
     LinearLayout cardJenisKelamin;
 
-    LinearLayout cardJenisKelaminAwal;
+    LinearLayout cardJenisKelaminAwal, linearPassword;
 
     Spinner spinnerProvinsi, spinnerKotaKabupaten, spinnerKecamatan, spinnerJenisKelamin, spinnerStatusPerkawinan
             , spinnerPendidikan, spinnerPekerjaan, spinnerPenghasilan;
@@ -118,7 +118,7 @@ public class EditAkunActivity extends AppCompatActivity {
 
     String get_nama, get_email, get_no_hp, get_gender, get_tgl_lahir, get_provinsi, get_kota, get_kecamatan,
             get_id_provinsi, get_id_kota, get_id_kecamatan, get_alamat, get_status_kawin, get_jumlah_anak,
-            get_pendidikan, get_pekerjaan, get_penghasilan;
+            get_pendidikan, get_pekerjaan, get_penghasilan, getPassword;
 
     loginuser user;
 
@@ -196,6 +196,7 @@ public class EditAkunActivity extends AppCompatActivity {
         lblPendidikan = findViewById(R.id.lbl_pendidikan_edit);
         lblPekerjaan = findViewById(R.id.lbl_pekerjaan_edit);
         lblPenghasilan = findViewById(R.id.lbl_penghasilan_edit);
+        linearPassword = findViewById(R.id.linear_password);
 
         user = SharedPrefManager.getInstance(EditAkunActivity.this).getUser();
 
@@ -371,6 +372,7 @@ public class EditAkunActivity extends AppCompatActivity {
                                 get_pendidikan = jsonObject.getString("pendidikan");
                                 get_pekerjaan = jsonObject.getString("pekerjaan");
                                 get_penghasilan = jsonObject.getString("penghasilan");
+                                getPassword = jsonObject.getString("password");
 
                             }
 
@@ -494,6 +496,12 @@ public class EditAkunActivity extends AppCompatActivity {
                                 lblPenghasilan.setText(get_penghasilan);
                                 lblPenghasilan.setTextColor(Color.parseColor("#000000"));
                                 txtPenghasilanPlace.setVisibility(View.VISIBLE);
+                            }
+
+                            if (!getPassword.equals("")){
+                                linearPassword.setVisibility(View.GONE);
+                            }else{
+                                linearPassword.setVisibility(View.VISIBLE);
                             }
 
                         } catch (JSONException e) {
@@ -659,6 +667,7 @@ public class EditAkunActivity extends AppCompatActivity {
         String id_pekerjaan_simpan ="";
         String id_penghasilan_simpan ="";
         String id_tanggal_lahir_simpan ="";
+        String password_update = "";
 
 
         if (id_provinsi != null){
@@ -707,6 +716,12 @@ public class EditAkunActivity extends AppCompatActivity {
             id_penghasilan_simpan = penghasilan;
         }else{
             id_penghasilan_simpan = get_penghasilan;
+        }
+
+        if (password.isEmpty()){
+            password_update = "0";
+        }else{
+            password_update = password;
         }
 
 
@@ -791,7 +806,7 @@ public class EditAkunActivity extends AppCompatActivity {
         params.put("pendidikan", id_pendidikan_simpan);
         params.put("pekerjaan", id_pekerjaan_simpan);
         params.put("penghasilan", id_penghasilan_simpan);
-        params.put("password", password);
+        params.put("password", password_update);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)

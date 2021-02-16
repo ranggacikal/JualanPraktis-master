@@ -85,6 +85,8 @@ public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSaya
 
         Log.d("checkId", "onBindViewHolder: "+id_transaksi);
 
+        String status_kirim = item.get("status_kirim");
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,16 +97,17 @@ public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSaya
                 intent.putExtra("id_transaksi", id);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("status", status);
+                intent.putExtra("status_kirim", status_kirim);
                 context.startActivity(intent);
             }
         });
 
         AndroidNetworking.initialize(context.getApplicationContext());
-        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya);
+        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya, status_kirim);
 
     }
 
-    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya) {
+    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya, String status_kirim) {
 
         String url = "https://jualanpraktis.net/android/detail_pesanan.php";
 
@@ -116,6 +119,7 @@ public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSaya
 
         AndroidNetworking.post(url)
                 .addBodyParameter("id_transaksi", id_transaksi)
+                .addBodyParameter("status_kirim", status_kirim)
                 .setTag(context)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)

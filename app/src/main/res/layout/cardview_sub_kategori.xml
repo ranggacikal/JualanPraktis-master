@@ -236,6 +236,20 @@
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/kota_produk"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nuunito_bold"
+                android:text="Kota"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@+id/linearCardviewSubKategori"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

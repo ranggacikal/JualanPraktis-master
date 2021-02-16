@@ -1179,6 +1179,12 @@ public class ProdukDetailActivity extends AppCompatActivity {
 //    }
 
     private void getDataGambar(){
+
+        dataGambar.clear();
+        HashMap<String,String> item3 = new HashMap<>();
+        item3.put("gambar", getIntent().getStringExtra("image_o"));
+        dataGambar.add(item3);
+
         AndroidNetworking.post(urlbase_api+"detail_gambar.php")
                 .addBodyParameter("kode", kode)
                 .setTag(ProdukDetailActivity.this)
