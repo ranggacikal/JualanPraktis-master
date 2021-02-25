@@ -69,7 +69,7 @@ public class StatusTransaksiAdapter extends RecyclerView.Adapter<StatusTransaksi
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
 

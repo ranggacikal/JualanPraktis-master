@@ -66,18 +66,32 @@ public class PenghasilanSayaAdapter extends RecyclerView.Adapter<PenghasilanSaya
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
+        String id = item.get("id_transaksi");
+        String tanggal = item.get("tanggal");
+        String nama = item.get("nama");
+        String variasi = item.get("variasi");
+        String harga_jual = item.get("harga_jual");
+        String harga_produk = item.get("harga_produk");
+        String keuntungan = item.get("untung");
+        String status = item.get("status");
 
+        if (id!=null && tanggal!=null && nama!=null && variasi!=null && harga_jual!=null && harga_produk!=null
+                && keuntungan!=null && status!=null) {
 
-        holder.txtId.setText(item.get("id_transaksi"));
-        holder.txtTanggal.setText(item.get("tanggal"));
-        holder.txtNama.setText(item.get("nama_produk"));
-        holder.txtVariasi.setText(item.get("variasi"));
-        holder.txtHargaJual.setText("Rp"+ NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_jual"))));
-        holder.txthargaProduk.setText("Rp"+ NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_produk"))));
-        holder.txtKeuntungan.setText("Rp"+ NumberFormat.getInstance().format(Integer.parseInt(item.get("untung"))));
+            holder.txtId.setText(item.get("id_transaksi"));
+            holder.txtTanggal.setText(item.get("tanggal"));
+            holder.txtNama.setText(item.get("nama_produk"));
+            holder.txtVariasi.setText(item.get("variasi"));
+            holder.txtHargaJual.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_jual"))));
+            holder.txthargaProduk.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_produk"))));
+            holder.txtKeuntungan.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("untung"))));
+
+        }else{
+            Toast.makeText(context, "Data Null", Toast.LENGTH_SHORT).show();
+        }
         holder.txtStatus.setText(item.get("status_pesanan"));
 
         id_transaksi = holder.txtId.getText().toString();

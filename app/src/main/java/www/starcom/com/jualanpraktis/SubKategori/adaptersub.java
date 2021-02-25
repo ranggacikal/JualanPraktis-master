@@ -51,6 +51,7 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
 
     private List<objectsub.ObjectSub.Results> results;
     private List<objectsub.ObjectSub.Results> dataFilter;
+    ArrayList<List<objectsub.ObjectSub.Results>> produkList = new ArrayList<List<objectsub.ObjectSub.Results>>();
     public Context context;
 
     private static final String RP = "Rp.";
@@ -66,13 +67,17 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
 
     @Override
     public holdersub onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_sub_kategori, null);
         holdersub holder = new holdersub(view);
         return holder;
+
+
     }
 
     @Override
     public void onBindViewHolder(holdersub holder, final int position) {
+
 
         final String UrlImage = "https://jualanpraktis.net/img/";
         final String Image = results.get(position).gambar;
@@ -119,16 +124,18 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
         final String hrg = nf.format(Integer.parseInt(harga));
         holder.nama_produk.setText(results.get(position).nama_produk);
         //   holder.harga_jual.setText(String.format("%s%s", RP, hrg));
-        holder.harga_asli.setText("Rp"+NumberFormat.getInstance().format(Double.parseDouble(results.get(position).harga_asli)));
+        holder.harga_asli.setText("Rp" + NumberFormat.getInstance().format(Double.parseDouble(results.get(position).harga_asli)));
         holder.diskon.setText("(" + results.get(position).diskon + "%)");
         holder.harga_asli.setPaintFlags(holder.harga_asli.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.harga_jual.setText("Rp"+NumberFormat.getInstance().format(harga_disc));
+        holder.harga_jual.setText("Rp" + NumberFormat.getInstance().format(harga_disc));
         holder.txtStok.setText(results.get(position).total_stok);
-        holder.txtTerjual.setText(results.get(position).terjual+" Produk Terjual");
+        holder.txtTerjual.setText(results.get(position).terjual + " Produk Terjual");
         holder.txtKota.setText(results.get(position).kota);
 
+        String linkGambar = results.get(position).gambar;
+
         Glide.with(context)
-                .load(uri)
+                .load(linkGambar)
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 200).skipMemoryCache(false))
                 .into(holder.gambar);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +204,7 @@ public class adaptersub extends RecyclerView.Adapter<holdersub> {
                 ClipData clip = ClipData.newPlainText(nama, detailProduk);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(context,"Berhasil menyalin deskripsi",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Berhasil menyalin deskripsi", Toast.LENGTH_SHORT).show();
             }
         });
     }

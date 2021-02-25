@@ -126,7 +126,7 @@
 
                     <TextView
                         android:id="@+id/text_hargaproduk_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="Harga Produk :"
                         android:fontFamily="@font/nuunito_bold"
@@ -152,7 +152,7 @@
 
                     <TextView
                         android:id="@+id/text_hargajual_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="Harga Jual :"
                         android:fontFamily="@font/nuunito_bold"
@@ -179,7 +179,7 @@
 
                     <TextView
                         android:id="@+id/text_keuntungan_status_transaksi"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="Keuntungan :"
                         android:textColor="#000"
@@ -199,6 +199,16 @@
                         android:fontFamily="@font/nuunito_bold"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/text_list_status_transaksi_selesai"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/nuunito_bold"
+                        android:layout_marginRight="20dp"
+                        android:text="Dipesan"
+                        android:textSize="10sp" />
+
                 </RelativeLayout>
 
             </LinearLayout>
@@ -217,6 +227,12 @@
             android:background="@color/white"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_jumlah_produk_lainnya_selesai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
 
         </LinearLayout>
 

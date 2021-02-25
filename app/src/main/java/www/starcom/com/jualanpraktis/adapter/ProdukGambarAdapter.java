@@ -46,7 +46,7 @@ public class ProdukGambarAdapter extends RecyclerView.Adapter<ProdukGambarAdapte
 
         final String url = "https://jualanpraktis.net/img/" ;
         Glide.with(activity.getApplicationContext())
-                .load(url+ item.get("gambar"))
+                .load(item.get("gambar"))
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(200,200).skipMemoryCache(false))
                 .into(viewHolder.gambar);
 

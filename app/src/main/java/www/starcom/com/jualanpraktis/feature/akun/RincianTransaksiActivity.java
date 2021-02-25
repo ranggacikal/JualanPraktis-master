@@ -59,6 +59,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
     String opsi_pembayaran;
     LinearLayout linearBatalkanPesanan, linearTukarkanPesanan, linearBelumDibayar, linearUpdateStatus;
     Dialog alertDialog;
+    String id_member2;
 
     loginuser user ;
 
@@ -121,6 +122,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
                 intent.putExtra("id_transaksi", txtId.getText().toString());
                 intent.putExtra("tanggal", txtTanggal.getText().toString());
                 intent.putExtra("status", txtStatus.getText().toString());
+                intent.putExtra("status_kirim", getIntent().getStringExtra("status_kirim"));
                 startActivity(intent);
             }
         });
@@ -132,6 +134,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
                 intent.putExtra("id_transaksi", txtId.getText().toString());
                 intent.putExtra("tanggal", txtTanggal.getText().toString());
                 intent.putExtra("status", txtStatus.getText().toString());
+                intent.putExtra("status_kirim", getIntent().getStringExtra("status_kirim"));
                 startActivity(intent);
             }
         });
@@ -195,8 +198,9 @@ public class RincianTransaksiActivity extends AppCompatActivity {
 
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("id_member", id_member);
+        params.put("id_customer", id_member);
         params.put("id_transaksi", id_transaksi);
+        params.put("id_member["+"]", id_member2);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -394,6 +398,7 @@ public class RincianTransaksiActivity extends AppCompatActivity {
                                 data.put("id_member",jsonObject.getString("id_member"));
                                 data.put("untung1",jsonObject.getString("untung1"));
                                 data.put("untung2",jsonObject.getString("untung2"));
+                                id_member2 = jsonObject.getString("id_member");
 
                                 listProduk.add(data);
                                 rvProduk.setVisibility(View.VISIBLE);

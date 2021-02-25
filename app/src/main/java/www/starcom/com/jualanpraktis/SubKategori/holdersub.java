@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -24,6 +25,7 @@ public class holdersub extends RecyclerView.ViewHolder {
     public CardView cardView;
     public TextView txtStok, txtKota;
    // public SimpleDraweeView draweeView;
+
 
     public holdersub(View itemView) {
         super(itemView);

@@ -221,6 +221,7 @@ public class TukarkanPesananActivity extends AppCompatActivity {
 
         AndroidNetworking.post(url)
                 .addBodyParameter("id_transaksi", getIntent().getStringExtra("id_transaksi"))
+                .addBodyParameter("status_kirim", getIntent().getStringExtra("status_kirim"))
                 .setTag(TukarkanPesananActivity.this)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)

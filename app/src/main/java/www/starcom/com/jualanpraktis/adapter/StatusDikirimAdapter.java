@@ -65,7 +65,7 @@ public class StatusDikirimAdapter extends RecyclerView.Adapter<StatusDikirimAdap
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
         holder.txtId.setText(item.get("id_transaksi"));

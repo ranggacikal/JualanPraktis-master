@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class Kategori2Adapter extends RecyclerView.Adapter<Kategori2Adapter.View
         Random rnd = new Random();
         int currentColor2 = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
-        String hex_color = item.get("color");
+        String hex_color = item.get("color").toUpperCase();
 
         viewHolder.linear_item_kategori.setBackgroundColor(Color.parseColor(hex_color));
 
@@ -92,6 +93,7 @@ public class Kategori2Adapter extends RecyclerView.Adapter<Kategori2Adapter.View
             @Override
             public void onClick(View view) {
                 if (finalItem.get("jumlah").equals("0")){
+                    Log.d("checkColor", "onBindViewHolder: "+hex_color);
                     new AlertDialog.Builder(activity)
                             .setTitle("Segera Hadir")
 
@@ -106,6 +108,7 @@ public class Kategori2Adapter extends RecyclerView.Adapter<Kategori2Adapter.View
                             .setIcon(R.drawable.ic_info_black_24dp)
                             .show();
                 }else {
+                    Log.d("checkColor", "onBindViewHolder: "+hex_color);
                     Intent intent = new Intent(activity, ListProdukActivity.class);
                     intent.putExtra("status","produkKategori");
                     intent.putExtra("id",finalItem.get("id"));

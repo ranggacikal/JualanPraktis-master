@@ -60,6 +60,8 @@ import www.starcom.com.jualanpraktis.adapter.ProdukEndlessScrollAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukPaginationAdapter;
 import www.starcom.com.jualanpraktis.adapter.SubKategoriAdapter;
 import www.starcom.com.jualanpraktis.databinding.ActivityListProdukBinding;
+import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
+import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
 import www.starcom.com.jualanpraktis.model.ListProduk;
 import www.starcom.com.jualanpraktis.model.ResultsProduk;
 import www.starcom.com.jualanpraktis.utils.EndlessRecyclerOnScrollListener;
@@ -94,7 +96,7 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
     ProdukEndlessScrollAdapter recyclerViewAdapter;
     List<ListProduk.ObjectSub.Results> rowsArrayList = new ArrayList<>();
 
-    ImageView imgListProduk;
+    ImageView imgListProduk, ic_back, imgSearch, imgNotif, imgFavorit;
     TextView txtKategoriProduk;
 
     GridLayoutManager gridLayoutManager, gridLayoutManager2;
@@ -129,6 +131,39 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
         imgListProduk = findViewById(R.id.img_list_produk);
         txtKategoriProduk = findViewById(R.id.text_nama_kategori);
         spinnerFilter = findViewById(R.id.spinner_filter_produk_kategori);
+        ic_back = findViewById(R.id.icback);
+        imgSearch = findViewById(R.id.img_search_list_kategori);
+        imgFavorit = findViewById(R.id.img_favorite_list_kategori);
+        imgNotif = findViewById(R.id.img_notif_list_kategori);
+
+        ic_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListProdukActivity.this, SearchResultsActivity.class));
+            }
+        });
+
+        imgFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListProdukActivity.this, ProdukFavoritActivity.class));
+            }
+        });
+
+        imgNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListProdukActivity.this, NotifikasiActivity.class));
+            }
+        });
+
 
         Glide.with(ListProdukActivity.this)
                 .load(urlGambar)
@@ -431,7 +466,7 @@ public class ListProdukActivity extends AppCompatActivity implements SearchView.
                                     SubKategoriAdapter adapter = new SubKategoriAdapter(activity, subKategoriList, binding.showmore,"bottom");
                                     recyclerViewSub = findViewById(R.id.recyclerViewSub);
                                     ImageView close = findViewById(R.id.close);
-                                    recyclerViewSub.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
+                                    recyclerViewSub.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
                                     recyclerViewSub.setAdapter(adapter);
 
                                     close.setOnClickListener(new View.OnClickListener() {

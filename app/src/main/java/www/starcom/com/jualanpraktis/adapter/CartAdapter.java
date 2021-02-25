@@ -3,7 +3,9 @@ package www.starcom.com.jualanpraktis.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import www.starcom.com.jualanpraktis.EditAkunActivity;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.MainActivity;
@@ -100,6 +103,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         HashMap<String, String> item = new HashMap<>();
         item = this.data.get(i);
+
+
 
         if (keranjang == null) {
             viewHolder.card_item_jumlah.setVisibility(View.VISIBLE);
@@ -160,7 +165,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
 
         Glide.with(activity.getApplicationContext())
-                .load(urlImage)
+                .load(item.get("gambar"))
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(150, 150).skipMemoryCache(false))
                 .into(viewHolder.gambar);
 
@@ -237,19 +242,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
                         Log.d("hargaItem", "jumlahData: "+hargaItem);
 
-                        int hargaJual = 0;
+                        Double hargaJual = 0.0;
+                        DecimalFormat format = new DecimalFormat("0.#");
 
                         if (!harga_jual.equals("")) {
 //                            Double harga_jual_double = Double.parseDouble(harga_jual);
-                            String str = harga_jual.replace(".", "");
-                            String str2 = harga_jual.replace(",", "");
+                            int sdk = Build.VERSION.SDK_INT;
+                            Log.d("checkSDK", "sdk int: "+sdk);
+
+                            String str = "";
+                            if (sdk <= 28) {
+                                str = harga_jual.replace(",", "");
+                            }else{
+                                str = harga_jual.replace(".", "");
+                            }
 //                            int intValue = (int) Math.round(harga_jual_double);
-                            hargaJual = Integer.parseInt(str);
+
+                            hargaJual = Double.parseDouble(str);
                         }
 
-                        keranjang.dataHarga.add(i, String.valueOf(hargaJual));
+                        keranjang.dataHarga.add(i, String.valueOf(format.format(hargaJual)));
 
-                        Log.d("checkValue", "onTextChanged: "+hargaJual);
+                        Log.d("checkValue", "onTextChanged: "+keranjang.dataHarga);
 
                         if (hargaJual<hargaItem2){
                             viewHolder.harga_dropshipper.setError("Harga Jual Tidak Boleh Di bawah Harga Item");
@@ -259,6 +273,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                                     Toast.makeText(activity, "Harga Jual Tidak Boleh Di bawah Harga Item", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                        } else if (keranjang.status_user.equals("0")) {
+
+                            keranjang.btnSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(activity, "Anda Belum Melengkapi Data Diri", Toast.LENGTH_SHORT).show();
+                                    activity.startActivity(new Intent(activity, EditAkunActivity.class));
+                                }
+                            });
+
                         }else{
                             keranjang.btnSubmit.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -274,9 +298,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     @Override
                     public void afterTextChanged(Editable editable) {
 
-                        df = new DecimalFormat("#,###.##");
+                        df = new DecimalFormat("###,###,###,###.##");
                         df.setDecimalSeparatorAlwaysShown(true);
-                        dfnd = new DecimalFormat("#,###");
+                        dfnd = new DecimalFormat("##,###,###,###");
                         hasFractionalPart = false;
 
                         viewHolder.harga_dropshipper.removeTextChangedListener(this);

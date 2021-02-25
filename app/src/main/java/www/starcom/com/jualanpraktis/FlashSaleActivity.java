@@ -2,6 +2,7 @@ package www.starcom.com.jualanpraktis;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
 import www.starcom.com.jualanpraktis.SubKategori.objectsub;
+import www.starcom.com.jualanpraktis.adapter.FlashSaleAdapter;
 
 public class FlashSaleActivity extends AppCompatActivity {
 
@@ -43,7 +45,7 @@ public class FlashSaleActivity extends AppCompatActivity {
         });
 
         rv_flash_sale.setHasFixedSize(true);
-        rv_flash_sale.setLayoutManager(new GridLayoutManager(FlashSaleActivity.this, 2, GridLayoutManager.VERTICAL, false));
+        rv_flash_sale.setLayoutManager(new LinearLayoutManager(FlashSaleActivity.this));
         getDataFlashSale();
     }
 
@@ -64,8 +66,8 @@ public class FlashSaleActivity extends AppCompatActivity {
                         shimmerFlashSale.stopShimmerAnimation();
                         shimmerFlashSale.setVisibility(View.GONE);
                         rv_flash_sale.setVisibility(View.VISIBLE);
-                        adaptersub = new adaptersub(FlashSaleActivity.this, response.data);
-                        rv_flash_sale.setAdapter(adaptersub);
+                        FlashSaleAdapter adapter = new FlashSaleAdapter(FlashSaleActivity.this, response.data);
+                        rv_flash_sale.setAdapter(adapter);
 
 
                     }

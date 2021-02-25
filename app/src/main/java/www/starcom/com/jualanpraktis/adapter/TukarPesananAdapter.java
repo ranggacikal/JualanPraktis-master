@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,12 +28,16 @@ public class TukarPesananAdapter extends RecyclerView.Adapter<TukarPesananAdapte
     ArrayList<HashMap<String, String>> listProdukTukar = new ArrayList<>();
     private Pref pref;
 
+    int index;
+    private int selectedItem;
+
     TukarkanPesananActivity tukarkanPesananActivity;
 
     public TukarPesananAdapter(Context context, ArrayList<HashMap<String, String>> listProdukTukar, TukarkanPesananActivity tukarkanPesananActivity) {
         this.context = context;
         this.listProdukTukar = listProdukTukar;
         this.tukarkanPesananActivity = tukarkanPesananActivity;
+        selectedItem = -1;
     }
 
     @NonNull
@@ -49,11 +54,13 @@ public class TukarPesananAdapter extends RecyclerView.Adapter<TukarPesananAdapte
         item = this.listProdukTukar.get(position);
         pref = new Pref(context.getApplicationContext());
 
+        index = position;
+
         String gambar = item.get("gambar");
-        String url = "https://trading.my.id/img/"+gambar;
+        String url = "https://jualanpraktis.net/img/"+gambar;
 
         Glide.with(context)
-                .load(url)
+                .load(gambar)
                 .error(R.drawable.logo_jualan_merah)
                 .into(holder.imgProdukRincian);
 
@@ -81,12 +88,16 @@ public class TukarPesananAdapter extends RecyclerView.Adapter<TukarPesananAdapte
 
         String nomor = item.get("nomor");
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tukarkanPesananActivity.dataNomor.add(nomor);
-            }
-        });
+        holder.imgChecked.setVisibility(View.GONE);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tukarkanPesananActivity.dataNomor.add(nomor);
+                    holder.imgChecked.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, "Selected"+nomor, Toast.LENGTH_SHORT).show();
+                }
+            });
 
     }
 
@@ -96,7 +107,7 @@ public class TukarPesananAdapter extends RecyclerView.Adapter<TukarPesananAdapte
     }
 
     public class TukarPesananViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgProdukRincian;
+        ImageView imgProdukRincian, imgChecked;
         TextView txtNamaBarang, txtVariasi, txtHargaJual, txtJumlahJual, txtTotalJual
                 , txtHargaProduk, txtJumlahProduk, txtTotalProduk, txtKeuntungan, txtJumlahKeuntungan, txtTotalKeuntungan;
 
@@ -114,6 +125,7 @@ public class TukarPesananAdapter extends RecyclerView.Adapter<TukarPesananAdapte
             txtKeuntungan = itemView.findViewById(R.id.text_keuntungan_rincian);
             txtJumlahKeuntungan = itemView.findViewById(R.id.text_jumlah_keuntungan_rincian);
             txtTotalKeuntungan = itemView.findViewById(R.id.text_total_keuntungan_rincian);
+            imgChecked = itemView.findViewById(R.id.img_checked_tukar);
         }
     }
 }

@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.cardview.widget.CardView;
@@ -18,12 +19,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -57,11 +61,9 @@ import www.starcom.com.jualanpraktis.Kategori.ViewPagerAdapter;
 import www.starcom.com.jualanpraktis.Kategori.adapterkategori;
 import www.starcom.com.jualanpraktis.Kategori.objectkategori;
 import www.starcom.com.jualanpraktis.SubKategori.adaptersub;
-import www.starcom.com.jualanpraktis.SubKategori.adaptersubTerlaris;
-import www.starcom.com.jualanpraktis.SubKategori.objectSubTerlaris;
 import www.starcom.com.jualanpraktis.SubKategori.objectsub;
+import www.starcom.com.jualanpraktis.adapter.DashboardAdapter;
 import www.starcom.com.jualanpraktis.adapter.KategoriAdapter;
-import www.starcom.com.jualanpraktis.adapter.NotifikasiAdapter;
 import www.starcom.com.jualanpraktis.adapter.ProdukAdapter;
 import www.starcom.com.jualanpraktis.feature.akun.NotifikasiActivity;
 import www.starcom.com.jualanpraktis.feature.akun.ProdukFavoritActivity;
@@ -69,6 +71,7 @@ import www.starcom.com.jualanpraktis.feature.chat.ChatActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukActivity;
 import www.starcom.com.jualanpraktis.feature.produk.ListProdukDiskonActivity;
 import www.starcom.com.jualanpraktis.model.ListProduk;
+import www.starcom.com.jualanpraktis.utils.EndlessRecyclerOnScrollListener;
 
 import static com.android.volley.VolleyLog.TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -115,6 +118,8 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     //kategori
     private RecyclerView rv_kategori;
     ArrayList<HashMap<String,String>> kategoriList = new ArrayList<>();
+    ArrayList<HashMap<String,String>> produkList2 = new ArrayList<>();
+    ArrayList<List<objectsub.ObjectSub.Results>> produkList = new ArrayList<List<objectsub.ObjectSub.Results>>();
 
     //diskon
     private ImageView imgDiskon;
@@ -123,11 +128,28 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
     Context context;
     Spinner spinnerFilter;
     String image_flash_sale;
+    TextView txtKosong;
+    NestedScrollView scroll_data;
+
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+    boolean isLoading = false;
+
+    int page = 0;
+    int limit = 100;
+    ProgressBar progressBar;
+
+    DashboardAdapter dashboardAdapter;
+    NestedScrollView nestedDashboard;
+    ProgressBar progressBarDashboard;
 
     int currentPage = 0;
     private Timer timer ;
     final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 3000;
+
+    private EndlessRecyclerOnScrollListener scrollListener;
 
     //Cart
     private ImageView imgKeranjang;
@@ -200,7 +222,9 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
        // gridLayoutManager = new GridLayoutManager(getContext(),3);
         int gridNumber = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
         rv_produk1.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
         rv_produk2.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
         rv_produk3.setLayoutManager(new GridLayoutManager(getContext(),gridNumber));
@@ -210,6 +234,10 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
         shimmerAllProduk = rootView.findViewById(R.id.shimmerAllProduk);
         shimmer_kategori = rootView.findViewById(R.id.shimmer_kategori);
         lllistproudk.setVisibility(View.GONE);
+        txtKosong = rootView.findViewById(R.id.text_data_kosong_home);
+        scroll_data = rootView.findViewById(R.id.scroll_view);
+        nestedDashboard = rootView.findViewById(R.id.nested_home_dashboard);
+        progressBarDashboard = rootView.findViewById(R.id.progressBar_dashboard);
 
         imgDiskon = rootView.findViewById(R.id.imgDiskon);
         imgDiskon.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +285,41 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
+//        getSemuaProduk();
+//        getAllProdukWithLimit(1);
+//        initScrollListener();
         getAllProduk();
+
+//        nestedDashboard.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged()
+//            {
+//                View view = (View)nestedDashboard.getChildAt(nestedDashboard.getChildCount() - 1);
+//
+//                int diff = (view.getBottom() - (nestedDashboard.getHeight() + nestedDashboard
+//                        .getScrollY()));
+//
+//                if (diff == 0) {
+//                    Log.d("test", "onScrollChanged: "+"pagination added");
+//                    page = 2;
+//                    getAllProdukWithLimit(page);
+//                }
+//            }
+//        });
+
+//        getSemuaProduk();
+//
+//        scrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+//            @Override
+//            public void onLoadMore(int current_page) {
+//                page = 2;
+//                getAllProdukWithLimit(page);
+//            }
+//        };
+//
+//        recyclerView.addOnScrollListener(scrollListener);
+
+
 
         recyclerTerlaris = rootView.findViewById(R.id.rv_produk_terlaris);
         recyclerTerfavorit = rootView.findViewById(R.id.rv_produk_terfavorit);
@@ -273,8 +335,169 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
        // getProdykPerBaris();
         getKategori();
         loadImageFlashSale();
+        getJumlahProduk();
         return rootView;
     }
+
+    private void getSemuaProduk() {
+
+        recyclerView.setVisibility(View.GONE);
+        // shimmerAllProduk.setVisibility(View.VISIBLE);
+        // shimmerAllProduk.startShimmerAnimation();
+        String url = "https://jualanpraktis.net/android/produk.php";
+        Log.d("checkUrl", "getAllProdukWithLimit: "+url);
+        AndroidNetworking.get(url)
+                .setTag(getActivity())
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        shimmer.stopShimmerAnimation();
+                        shimmer.setVisibility(View.GONE);
+
+                        try{
+                            JSONArray array = response.getJSONArray("sub1_kategori1");
+                            for (int i = 0;i<array.length();i++) {
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String, String> data = new HashMap<>();
+                                data.put("id_produk", jsonObject.getString("id_produk"));
+                                data.put("harga", jsonObject.getString("harga"));
+                                data.put("kode", jsonObject.getString("kode"));
+                                data.put("id_kategori_produk", jsonObject.getString("id_kategori_produk"));
+                                data.put("id_sub_kategori_produk", jsonObject.getString("id_sub_kategori_produk"));
+                                data.put("id_brand", jsonObject.getString("id_brand"));
+                                data.put("id_jenis", jsonObject.getString("id_jenis"));
+                                data.put("status_produk1", jsonObject.getString("status_produk1"));
+                                data.put("status_produk2", jsonObject.getString("status_produk2"));
+                                data.put("id_supplier", jsonObject.getString("id_supplier"));
+                                data.put("nama_produk", jsonObject.getString("nama_produk"));
+                                data.put("size", jsonObject.getString("size"));
+                                data.put("warna", jsonObject.getString("warna"));
+                                data.put("berat", jsonObject.getString("berat"));
+                                data.put("keterangan_produk", jsonObject.getString("keterangan_produk"));
+                                data.put("image_o", jsonObject.getString("image_o"));
+                                data.put("image2_o", jsonObject.getString("image2_o"));
+                                data.put("disc", jsonObject.getString("disc"));
+                                data.put("harga_disc", jsonObject.getString("harga_disc"));
+                                data.put("stok", jsonObject.getString("stok"));
+                                data.put("status_disc", jsonObject.getString("status_disc"));
+                                data.put("image_disc", jsonObject.getString("image_disc"));
+                                data.put("created_by", jsonObject.getString("created_by"));
+                                data.put("id_member", jsonObject.getString("id_member"));
+                                data.put("sku", jsonObject.getString("sku"));
+                                data.put("date", jsonObject.getString("date"));
+                                data.put("start_disc", jsonObject.getString("start_disc"));
+                                data.put("end_disc", jsonObject.getString("end_disc"));
+                                data.put("total_stok", jsonObject.getString("total_stok"));
+                                data.put("terjual", jsonObject.getString("terjual"));
+                                data.put("city_name", jsonObject.getString("city_name"));
+
+                                produkList2.add(data);
+                            }
+
+                            swipeRefreshLayout.setRefreshing(false);
+                            shimmer.stopShimmerAnimation();
+                            shimmer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            dashboardAdapter = new DashboardAdapter(getActivity(), produkList2);
+                            recyclerView.setAdapter(dashboardAdapter);
+
+
+
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+    }
+
+    private void getAllProdukWithLimit(int page) {
+
+        recyclerView.setVisibility(View.GONE);
+        // shimmerAllProduk.setVisibility(View.VISIBLE);
+        // shimmerAllProduk.startShimmerAnimation();
+        String url = "https://jualanpraktis.net/android/produk.php?page="+page;
+        Log.d("checkUrl", "getAllProdukWithLimit: "+url);
+        AndroidNetworking.get(url)
+                .setTag(getActivity())
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        shimmer.stopShimmerAnimation();
+                        shimmer.setVisibility(View.GONE);
+
+                        try{
+                            JSONArray array = response.getJSONArray("sub1_kategori1");
+                            for (int i = 0;i<array.length();i++) {
+                                JSONObject jsonObject = array.getJSONObject(i);
+                                HashMap<String, String> data = new HashMap<>();
+                                data.put("id_produk", jsonObject.getString("id_produk"));
+                                data.put("harga", jsonObject.getString("harga"));
+                                data.put("kode", jsonObject.getString("kode"));
+                                data.put("id_kategori_produk", jsonObject.getString("id_kategori_produk"));
+                                data.put("id_sub_kategori_produk", jsonObject.getString("id_sub_kategori_produk"));
+                                data.put("id_brand", jsonObject.getString("id_brand"));
+                                data.put("id_jenis", jsonObject.getString("id_jenis"));
+                                data.put("status_produk1", jsonObject.getString("status_produk1"));
+                                data.put("status_produk2", jsonObject.getString("status_produk2"));
+                                data.put("id_supplier", jsonObject.getString("id_supplier"));
+                                data.put("nama_produk", jsonObject.getString("nama_produk"));
+                                data.put("size", jsonObject.getString("size"));
+                                data.put("warna", jsonObject.getString("warna"));
+                                data.put("berat", jsonObject.getString("berat"));
+                                data.put("keterangan_produk", jsonObject.getString("keterangan_produk"));
+                                data.put("image_o", jsonObject.getString("image_o"));
+                                data.put("image2_o", jsonObject.getString("image2_o"));
+                                data.put("disc", jsonObject.getString("disc"));
+                                data.put("harga_disc", jsonObject.getString("harga_disc"));
+                                data.put("stok", jsonObject.getString("stok"));
+                                data.put("status_disc", jsonObject.getString("status_disc"));
+                                data.put("image_disc", jsonObject.getString("image_disc"));
+                                data.put("created_by", jsonObject.getString("created_by"));
+                                data.put("id_member", jsonObject.getString("id_member"));
+                                data.put("sku", jsonObject.getString("sku"));
+                                data.put("date", jsonObject.getString("date"));
+                                data.put("start_disc", jsonObject.getString("start_disc"));
+                                data.put("end_disc", jsonObject.getString("end_disc"));
+                                data.put("total_stok", jsonObject.getString("total_stok"));
+                                data.put("terjual", jsonObject.getString("terjual"));
+                                data.put("city_name", jsonObject.getString("city_name"));
+
+                                produkList2.add(data);
+                            }
+
+                            swipeRefreshLayout.setRefreshing(false);
+                            shimmer.stopShimmerAnimation();
+                            shimmer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            dashboardAdapter = new DashboardAdapter(getActivity(), produkList2);
+                            recyclerView.setAdapter(dashboardAdapter);
+                            Log.d("jumlahData", "onResponse: "+produkList2.size());
+
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+    }
+
 
     private void loadImageFlashSale() {
 
@@ -555,6 +778,8 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                             }
                             shimmer_kategori.stopShimmerAnimation();
                             shimmer_kategori.setVisibility(View.GONE);
+                            shimmer.stopShimmerAnimation();
+                            shimmer.setVisibility(View.GONE);
                             ll_kategori.setVisibility(View.VISIBLE);
 
                             swipeRefreshLayout.setRefreshing(false);
@@ -724,6 +949,66 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                 });
     }
 
+    private void getJumlahProduk() {
+
+        String url = "https://jualanpraktis.net/android/produk.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        AndroidNetworking.get(url)
+                .setTag(context)
+                .setPriority(Priority.MEDIUM)
+                .setOkHttpClient(okHttpClient)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        try {
+
+
+                            JSONArray array = response.getJSONArray("sub1_kategori1");
+
+
+                            String jumlah_data2 = String.valueOf(array.length());
+                            int jumlah_data = Integer.parseInt(jumlah_data2);
+
+                            Log.d("jumlahData", "onResponse: "+jumlah_data2);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(getContext(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")) {
+                                Toast.makeText(getContext(), "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
+    }
+
     private void getAllProduk(){
 
         recyclerView.setVisibility(View.GONE);
@@ -743,8 +1028,23 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                         shimmer.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         imgDiskon.setVisibility(View.GONE);
+                        produkList.add(response.sub1_kategori1);
                         adaptersub = new adaptersub(getActivity(), response.sub1_kategori1);
                         recyclerView.setAdapter(adaptersub);
+
+
+                        Log.d("dataObjectSub", "onResponse: "+response.sub1_kategori1);
+                        Log.d("dataObjectSub", "sub: "+produkList);
+//                        Log.d("dataObjectSub", "sub1: "+objectSub.sub1_kategori1);
+
+//                        initScrollListener();
+
+                        if (response.sub1_kategori1.isEmpty()){
+                            txtKosong.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            shimmer.setVisibility(View.GONE);
+                            shimmer.stopShimmerAnimation();
+                        }
 
 
                     }
@@ -761,6 +1061,105 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
 
                     }
                 });
+    }
+
+    private void initScrollListener() {
+
+        if (nestedDashboard != null) {
+
+            nestedDashboard.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    String TAG = "nested_sync";
+                    if (scrollY > oldScrollY) {
+                        Log.i(TAG, "Scroll DOWN");
+                    }
+                    if (scrollY < oldScrollY) {
+                        Log.i(TAG, "Scroll UP");
+                    }
+
+                    if (scrollY == 0) {
+                        Log.i(TAG, "TOP SCROLL");
+                    }
+
+                    if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                        Log.i("nestedScrollListener", "BOTTOM SCROLL");
+
+                        progressBarDashboard.setVisibility(View.VISIBLE);
+                        loadMore();
+
+                    }
+                }
+            });
+        }
+
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+//
+//                if (!isLoading) {
+//                    if (gridLayoutManager != null && gridLayoutManager.findLastCompletelyVisibleItemPosition() == produkList.size() - 1) {
+//                        //bottom of list!
+//                        loadMore();
+//                        isLoading = true;
+//                    }
+//                }
+//            }
+//        });
+
+    }
+
+    private void loadMore() {
+
+        getAllProdukWithLimit(2);
+        dashboardAdapter.notifyDataSetChanged();
+        Log.d("jumlahData", "loadMore: "+produkList2.size());
+
+//        produkList2.add(null);
+//        dashboardAdapter.notifyItemInserted(produkList2.size() - 1);
+//
+//
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                getProdukTerlaris();
+//                produkList2.remove(produkList2.size() - 1);
+//                int scrollPosition = produkList2.size();
+//                dashboardAdapter.notifyItemRemoved(scrollPosition);
+//                int currentSize = scrollPosition;
+//                int nextLimit = currentSize + 80;
+////                int page = 0;
+////
+////                for (int i = 0; i<800; i ++){
+////
+////                    if (currentSize < currentSize * i){
+////                        page = i;
+////                    }
+////
+////                }
+////
+////                Log.d("page", "run: "+page);
+////
+//                while (currentSize - 1 < nextLimit) {
+//                    getAllProdukWithLimit(2);
+//                    currentSize++;
+//                }
+//
+//                dashboardAdapter.notifyDataSetChanged();
+//                isLoading = false;
+//            }
+//        }, 2000);
+
     }
 
     private void getProdukTerlaris(){
@@ -784,6 +1183,13 @@ public class home_dashboard extends Fragment implements SwipeRefreshLayout.OnRef
                         imgDiskon.setVisibility(View.GONE);
                         adaptersub = new adaptersub(getActivity(), response.sub1_kategori1);
                         recyclerView.setAdapter(adaptersub);
+
+                        if (response.sub1_kategori1.isEmpty()){
+                            txtKosong.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            shimmer.stopShimmerAnimation();
+                            shimmer.setVisibility(View.GONE);
+                        }
 
 
                     }

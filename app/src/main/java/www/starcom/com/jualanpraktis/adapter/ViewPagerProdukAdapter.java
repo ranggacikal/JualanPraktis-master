@@ -59,7 +59,7 @@ public class ViewPagerProdukAdapter extends PagerAdapter {
         String imgUrl = item.get("gambar");
 
         Glide.with(context)
-                .load(url+imgUrl)
+                .load(imgUrl)
                 .into(imageView);
 
         ViewPager viewPager = (ViewPager) container;

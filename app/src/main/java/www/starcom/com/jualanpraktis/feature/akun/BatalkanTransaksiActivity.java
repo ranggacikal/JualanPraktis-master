@@ -59,9 +59,13 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
     private static final int IMG_REQUEST3 = 3;
     private static final int IMG_REQUEST4  = 4;
 
-    private String PicturePath1, PicturePath2, PicturePath3;
+    private String PicturePath1 = "";
+    private String PicturePath2 = "";
+    private String PicturePath3 = "";
 
     String nama_file1, nama_file2, nama_file3;
+
+    Uri uri1;
 
     ProgressDialog progressDialog;
 
@@ -98,36 +102,57 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ImagePicker.Companion.with(BatalkanTransaksiActivity.this)
-                        .crop(340,340)
+                        .crop(340, 340)
                         .compress(512)
                         .start(0);
             }
         });
 
-        linearTambahMedia2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.Companion.with(BatalkanTransaksiActivity.this)
-                        .crop(340,340)
-                        .compress(512)
-                        .start(1);
-            }
-        });
 
-        linearTambahMedia3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.Companion.with(BatalkanTransaksiActivity.this)
-                        .crop(340,340)
-                        .compress(512)
-                        .start(2);
-            }
-        });
+            linearTambahMedia2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (PicturePath1.equals("")){
+                        Toast.makeText(BatalkanTransaksiActivity.this, "Silahkanupload dahulu Dikolom pertama", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        ImagePicker.Companion.with(BatalkanTransaksiActivity.this)
+                                .crop(340, 340)
+                                .compress(512)
+                                .start(1);
+
+                    }
+                }
+            });
+
+            linearTambahMedia3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (PicturePath1.equals("")){
+                        Toast.makeText(BatalkanTransaksiActivity.this, "Silahkanupload dahulu Dikolom pertama", Toast.LENGTH_SHORT).show();
+                    }else {
+                        ImagePicker.Companion.with(BatalkanTransaksiActivity.this)
+                                .crop(340, 340)
+                                .compress(512)
+                                .start(2);
+                    }
+                }
+            });
 
         linearAjukanPembatalan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ajukanBatalkanPesanan();
+
+                if (PicturePath1.equals("")){
+                    Toast.makeText(BatalkanTransaksiActivity.this, "Upload Gambar Minimal 1", Toast.LENGTH_SHORT).show();
+                }else if (edtAlasan.getText().toString().isEmpty()){
+                    Toast.makeText(BatalkanTransaksiActivity.this, "Alasan Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+                }else {
+                    ajukanBatalkanPesanan();
+                }
+
             }
         });
 
@@ -146,6 +171,9 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
         params.put("id_member", user.getId());
         params.put("id_transaksi", txtId.getText().toString());
         params.put("alasan", edtAlasan.getText().toString());
+        params.put("file1", PicturePath1);
+        params.put("file2", PicturePath2);
+        params.put("file13", PicturePath3);
         //params.put("password2",picturePath);
 
         try {
@@ -158,9 +186,6 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
 
             AndroidNetworking.upload("https://jualanpraktis.net/android/batalkan_pesanan.php")
                     .addMultipartParameter(params)
-                    .addMultipartFile("file1", new File(PicturePath1))
-                    .addMultipartFile("file2", new File(PicturePath2))
-                    .addMultipartFile("file3", new File(PicturePath3))
                     .setTag(BatalkanTransaksiActivity.this)
                     .setPriority(Priority.HIGH)
                     .setOkHttpClient(okHttpClient)
@@ -191,11 +216,9 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
                             Toast.makeText(BatalkanTransaksiActivity.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        }catch (NullPointerException e){
-            //kalau kosong
+        }catch (Exception e){
+
             e.printStackTrace();
-            Toast.makeText(BatalkanTransaksiActivity.this,
-                    "Upload dulu Imagenya, tekan di bagian gambar.", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
 
@@ -210,12 +233,17 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
             if (resultCode==RESULT_OK && requestCode == 0){
 
 
-                    Uri uri1 = data.getData();
+                    uri1 = data.getData();
                     nama_file1 = uri1.getLastPathSegment();
                     linearTambahMedia1.setVisibility(View.GONE);
                     imgBatal1.setVisibility(View.VISIBLE);
                     imgBatal1.setImageURI(uri1);
-                    PicturePath1 = uri1.getPath();
+
+                    if (uri1.getPath()!=null) {
+                        PicturePath1 = uri1.getPath();
+                    }else if (uri1.getPath()==null){
+                        PicturePath1 = "";
+                    }
 
             }
 
@@ -232,7 +260,11 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
                 linearTambahMedia2.setVisibility(View.GONE);
                 imgBatal2.setVisibility(View.VISIBLE);
                 imgBatal2.setImageURI(uri2);
-                PicturePath2 = uri2.getPath();
+                if (uri2.getPath()!=null) {
+                    PicturePath2 = uri2.getPath();
+                }else if (uri2.getPath()==null){
+                    PicturePath2 = "";
+                }
 
             }
 
@@ -249,7 +281,12 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
                 linearTambahMedia3.setVisibility(View.GONE);
                 imgBatal3.setVisibility(View.VISIBLE);
                 imgBatal3.setImageURI(uri3);
-                PicturePath3 = uri3.getPath();
+
+                if (uri3.getPath()!=null) {
+                    PicturePath3 = uri3.getPath();
+                }else if (uri3.getPath()==null){
+                    PicturePath3 = "";
+                }
 
             }
 
@@ -276,6 +313,7 @@ public class BatalkanTransaksiActivity extends AppCompatActivity {
 
         AndroidNetworking.post(url)
                 .addBodyParameter("id_transaksi", getIntent().getStringExtra("id_transaksi"))
+                .addBodyParameter("status_kirim", getIntent().getStringExtra("status_kirim"))
                 .setTag(BatalkanTransaksiActivity.this)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)

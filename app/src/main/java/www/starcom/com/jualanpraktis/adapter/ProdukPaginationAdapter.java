@@ -227,7 +227,7 @@ public class ProdukPaginationAdapter extends RecyclerView.Adapter<RecyclerView.V
 
 
                 Glide.with(context)
-                        .load(UrlImage+Image)
+                        .load(Image)
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).override(200,200).skipMemoryCache(false))
                         .into(viewHolder.gambar);
                 Log.d("gambarKategori", "onBindViewHolder: "+UrlImage+Image);

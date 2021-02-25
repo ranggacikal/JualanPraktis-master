@@ -3,8 +3,10 @@ package www.starcom.com.jualanpraktis.adapter;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +26,11 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +43,7 @@ import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.loginuser;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.daftar;
+import www.starcom.com.jualanpraktis.feature.akun.RincianTransaksiActivity;
 
 public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAdapter.PesananSelesaiViewHolder> {
 
@@ -75,73 +80,68 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
         holder.txtId.setText(item.get("id_transaksi"));
         holder.txtTanggal.setText(item.get("tanggal"));
         holder.txtNama.setText(item.get("nama_produk"));
         holder.txtVariasi.setText(item.get("variasi"));
-        holder.txthargaProduk.setText(item.get("harga_produk"));
-        holder.txtHargaJual.setText(item.get("harga_jual"));
-        holder.txtKeuntungan.setText(item.get("untung"));
+
+        if (item.get("harga_jual")!=null) {
+            holder.txtHargaJual.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_jual"))));
+        }
+
+        if (item.get("harga_produk")!=null) {
+            holder.txthargaProduk.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("harga_produk"))));
+        }
+
+        if (item.get("untung")!=null) {
+            holder.txtKeuntungan.setText("Rp" + NumberFormat.getInstance().format(Integer.parseInt(item.get("untung"))));
+        }
+
+        holder.txtStatus.setText(item.get("status_pesanan"));
 
         String id_member = user.getId();
         String id_transaksi = item.get("id_transaksi");
 
-        holder.linearPesananSelesai.setOnClickListener(new View.OnClickListener() {
+        String status_kirim = item.get("status_kirim");
+
+        id_transaksi = holder.txtId.getText().toString();
+        AndroidNetworking.initialize(context.getApplicationContext());
+
+        getJumlahProdukLainnya(id_transaksi, holder.txtProdukLainnya, status_kirim);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog = new Dialog(context);
-                alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                alertDialog.setContentView(R.layout.dialog_pesanan_selesai);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                Button btnSelesai = alertDialog.findViewById(R.id.btn_selesaikan_pesanan_selesai);
-                Button btnBatal = alertDialog.findViewById(R.id.btn_batal_pesanan_selesai);
-
-                alertDialog.show();
-
-                btnBatal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                    }
-                });
-
-                btnSelesai.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        updateStatusTransaksi(id_member, id_transaksi);
-                    }
-                });
+                String id = holder.txtId.getText().toString();
+                String tanggal = holder.txtTanggal.getText().toString();
+                String status = holder.txtStatus.getText().toString();
+                Intent intent = new Intent(context, RincianTransaksiActivity.class);
+                intent.putExtra("id_transaksi", id);
+                intent.putExtra("tanggal", tanggal);
+                intent.putExtra("status", status);
+                intent.putExtra("status_kirim", status_kirim);
+                context.startActivity(intent);
             }
         });
 
     }
 
-    private void updateStatusTransaksi(String id_member, String id_transaksi) {
+    private void getJumlahProdukLainnya(String id_transaksi, TextView txtProdukLainnya, String status_kirim) {
 
-        String host = "https://jualanpraktis.net/android/update_status_transaksi.php";
-
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Menyelesaikan pesanan");
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("id_member", id_member);
-        params.put("id_transaksi", id_transaksi);
+        String url = "https://jualanpraktis.net/android/detail_pesanan.php";
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
-        AndroidNetworking.post(host)
-                .addBodyParameter(params)
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("id_transaksi", id_transaksi)
+                .addBodyParameter("status_kirim", status_kirim)
                 .setTag(context)
                 .setPriority(Priority.MEDIUM)
                 .setOkHttpClient(okHttpClient)
@@ -149,29 +149,55 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
-                        Toast.makeText(context, "Berhasil Menyelesaikan pesanan", Toast.LENGTH_SHORT).show();
-                        alertDialog.dismiss();
 
 
                         try {
-                            Toast.makeText(context, response.getString("response"), Toast.LENGTH_SHORT).show();
+
+
+                            JSONArray array = response.getJSONArray("data_produk");
+
+
+                            String jumlah_data2 = String.valueOf(array.length());
+                            int jumlah_data = Integer.parseInt(jumlah_data2);
+                            int totalJumlahData = jumlah_data - 1;
+
+                            if (totalJumlahData<1){
+                                txtProdukLainnya.setText("");
+                            }else if (totalJumlahData>=1){
+                                txtProdukLainnya.setText("+ "+totalJumlahData+" Produk Lainnya");
+                            }
+
+                            Log.d("jumlahData", "onResponse: "+jumlah_data2);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
-
 
                     @Override
                     public void onError(ANError anError) {
-                        progressDialog.dismiss();
-                        Toast.makeText(context, anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
-                    }
 
+                        if (anError.getErrorCode() != 0) {
+                            // received error from server
+                            // error.getErrorCode() - the error code from server
+                            // error.getErrorBody() - the error body from server
+                            // error.getErrorDetail() - just an error detail
+
+                            // get parsed error object (If ApiError is your class)
+                            Toast.makeText(context, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            if (anError.getErrorDetail().equals("connectionError")) {
+                                Toast.makeText(context, "Tidak ada koneksi internet.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Gagal mendapatkan data.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
                 });
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -181,7 +207,7 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
     public class PesananSelesaiViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout linearPesananSelesai, linearAfterUpdate;
-        TextView txtId, txtTanggal, txtNama, txtVariasi, txthargaProduk, txtHargaJual, txtKeuntungan;
+        TextView txtId, txtTanggal, txtNama, txtVariasi, txthargaProduk, txtHargaJual, txtKeuntungan, txtProdukLainnya, txtStatus;
         ImageView imgBarang;
 
         public PesananSelesaiViewHolder(@NonNull View itemView) {
@@ -196,6 +222,8 @@ public class PesananSelesaiAdapter extends RecyclerView.Adapter<PesananSelesaiAd
             txtHargaJual = itemView.findViewById(R.id.text_list_hargajual_status_transaksi_selesai);
             txtKeuntungan = itemView.findViewById(R.id.text_list_keuntungan_status_transaksi_selesai);
             imgBarang = itemView.findViewById(R.id.img_list_gambar_status_transaksi_selesai);
+            txtProdukLainnya = itemView.findViewById(R.id.text_jumlah_produk_lainnya_selesai);
+            txtStatus = itemView.findViewById(R.id.text_list_status_transaksi_selesai);
         }
     }
 }

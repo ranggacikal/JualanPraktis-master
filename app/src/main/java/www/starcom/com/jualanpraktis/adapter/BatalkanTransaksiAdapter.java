@@ -51,7 +51,7 @@ public class BatalkanTransaksiAdapter extends RecyclerView.Adapter<BatalkanTrans
         String url = "https://trading.my.id/img/"+gambar;
 
         Glide.with(context)
-                .load(url)
+                .load(gambar)
                 .error(R.drawable.logo_jualan_merah)
                 .into(holder.imgProdukRincian);
 

@@ -931,7 +931,9 @@ public class FormTransaksiActivity extends AppCompatActivity {
             Toast.makeText(activity, "Silahkan Pilih Kurir", Toast.LENGTH_SHORT).show();
         } else if (opsi_pembayaran == null) {
             Toast.makeText(activity, "Silahkan pilih Metode Pembayaran", Toast.LENGTH_SHORT).show();
-        } else {
+        }else if (binding.lblCatatan.getText().toString().isEmpty()) {
+            Toast.makeText(activity, "Catatan Tidak boleh kosong", Toast.LENGTH_SHORT).show();
+        }else {
             new AlertDialog.Builder(activity)
                     .setTitle("Konfirmasi Pemesanan")
                     .setMessage("Anda yakin ingin melakukan pemesanan ini?")
@@ -1094,6 +1096,7 @@ public class FormTransaksiActivity extends AppCompatActivity {
         params.put("province_destination", id_provinsi);
         params.put("no_hp", binding.lblNoTelpon.getText().toString());
         params.put("kode_pos", binding.lblKodePos.getText().toString());
+        params.put("catatan", binding.lblCatatan.getText().toString());
 
 //        for (int a = 0; a < idVendor1.size(); a++) {
 

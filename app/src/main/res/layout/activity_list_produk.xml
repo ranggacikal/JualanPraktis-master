@@ -137,6 +137,7 @@
                                 android:id="@+id/rv_sub_kategori"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:background="@color/white"
                                 android:padding="4dp" />
 
@@ -222,21 +223,21 @@
                                     tools:ignore="MissingConstraints">
 
                                     <ImageView
-                                        android:id="@+id/img_search_list_produk"
+                                        android:id="@+id/img_search_list_kategori"
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_marginLeft="10dp"
                                         android:src="@drawable/ic_search_white" />
 
                                     <ImageView
-                                        android:id="@+id/img_favorite_list_produk"
+                                        android:id="@+id/img_favorite_list_kategori"
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_marginLeft="5dp"
                                         android:src="@drawable/ic_favorite_white_border" />
 
                                     <ImageView
-                                        android:id="@+id/img_notif_list_produk"
+                                        android:id="@+id/img_notif_list_kategori"
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_marginLeft="5dp"

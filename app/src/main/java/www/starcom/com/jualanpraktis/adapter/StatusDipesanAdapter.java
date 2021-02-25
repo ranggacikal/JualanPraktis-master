@@ -68,7 +68,7 @@ public class StatusDipesanAdapter extends RecyclerView.Adapter<StatusDipesanAdap
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
         holder.txtId.setText(item.get("id_transaksi"));

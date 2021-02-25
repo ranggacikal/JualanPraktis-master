@@ -76,7 +76,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.FavoritV
         holder.txtTerjual.setText(item.get("terjual")+" Produk Terjual");
 
         Glide.with(context)
-                .load(imageUrl)
+                .load(imagename)
                 .into(holder.imgFavorit);
 
         String id_sub_kategori_produk = item.get("id_sub_kategori_produk");

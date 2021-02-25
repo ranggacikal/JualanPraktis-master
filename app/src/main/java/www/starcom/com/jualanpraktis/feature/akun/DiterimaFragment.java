@@ -74,6 +74,12 @@ public class DiterimaFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDataDiterima();
+    }
+
     private void loadDataDiterima() {
 
         rvDiterima.setVisibility(View.GONE);

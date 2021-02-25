@@ -57,49 +57,49 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/cari" />
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/img_contact"-->
-<!--                    android:layout_width="56dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:src="@drawable/wishlist_icon__red_"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@id/cari"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="@id/cari" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/img_contact"-->
+                <!--                    android:layout_width="56dp"-->
+                <!--                    android:layout_height="40dp"-->
+                <!--                    android:src="@drawable/wishlist_icon__red_"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@id/cari"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="@id/cari" />-->
 
                 <LinearLayout
                     android:id="@+id/linear_header_dashboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
                     android:layout_alignParentRight="true"
-                    tools:ignore="MissingConstraints"
+                    android:layout_marginRight="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/cari"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/cari" >
+                    app:layout_constraintTop_toTopOf="@id/cari"
+                    tools:ignore="MissingConstraints">
 
                     <ImageView
                         android:id="@+id/img_chat_dashboard"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_centerVertical="true"
-                        android:visibility="gone"
-                        android:src="@drawable/icon_chat_grey" />
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/icon_chat_grey"
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/img_favorite_dashboard"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/icon_fav_grey" />
 
                     <ImageView
                         android:id="@+id/img_notif_dashboard"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/icon_notif_grey" />
 
                 </LinearLayout>
@@ -109,8 +109,8 @@
                     android:layout_width="0dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginStart="2dp"
+                    android:layout_marginLeft="5dp"
                     app:cardCornerRadius="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/linear_header_dashboard"
@@ -126,8 +126,8 @@
                             android:id="@+id/img"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="10dp"
                             android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
                             android:contentDescription="@null"
                             android:src="@drawable/ic_cari" />
 
@@ -159,6 +159,7 @@
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/nested_home_dashboard"
                 android:orientation="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -175,14 +176,14 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/pagerslide"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"/>
+                            android:layout_height="200dp" />
 
                         <LinearLayout
                             android:id="@+id/SliderDots"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="180dp"
                             android:layout_centerHorizontal="true"
+                            android:layout_marginTop="180dp"
                             android:orientation="horizontal"
                             android:padding="10dp" />
 
@@ -328,16 +329,16 @@
                             android:layout_height="100dp"
                             android:layout_marginTop="2dp"
                             android:scaleType="fitXY"
-                            android:visibility="gone"
-                            android:src="@drawable/diskon_batammall" />
+                            android:src="@drawable/diskon_batammall"
+                            android:visibility="gone" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/card_filter"
                             android:layout_width="150dp"
                             android:layout_height="40dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="5dp"
                             app:cardCornerRadius="30dp"
                             app:cardElevation="6dp">
 
@@ -349,36 +350,71 @@
 
                         </androidx.cardview.widget.CardView>
 
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_produk"
+                        <androidx.core.widget.NestedScrollView
+                            android:id="@+id/scroll_view"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="4dp" />
+                            android:layout_height="wrap_content">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_produk_terlaris"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:visibility="gone"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="4dp" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_produk_terfavorit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:visibility="gone"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="4dp" />
+
+                                <TextView
+                                    android:id="@+id/text_data_kosong_home"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:fontFamily="@font/nuunito_bold"
+                                    android:text="BELUM ADA DATA"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp"
+                                    android:visibility="gone" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_produk"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/white" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_produk_terlaris"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/white"
+                                    android:visibility="gone" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_produk_terfavorit"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/white"
+                                    android:visibility="gone" />
+
+                                <ProgressBar
+                                    android:id="@+id/progressBar_dashboard"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="50dp"
+                                    android:minWidth="50dp"
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"/>
+
+                            </LinearLayout>
+
+
+                        </androidx.core.widget.NestedScrollView>
 
                     </LinearLayout>
 
@@ -800,6 +836,7 @@
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>

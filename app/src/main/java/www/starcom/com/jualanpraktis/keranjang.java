@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -109,7 +110,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
     int grandTotal = 0;
     Pref pref;
 
-    String status_user;
+    public String status_user;
 
     TextView txtKosong;
 
@@ -182,6 +183,7 @@ public class keranjang extends Fragment implements View.OnClickListener {
         if(bundle!=null) {
             String value = bundle.getString("key");
         }
+
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-message"));
@@ -333,56 +335,73 @@ public class keranjang extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn() &&
-                !Objects.equals(total.getText().toString(), "Rp. 0")
-                && status_user.equals("1")) {
-            if (Integer.parseInt(totalbelanja) < 5000) {
-                new AlertDialog.Builder(getActivity())
-                        // .setTitle("Tidak bisa melanjutkan pemesanan")
-                        .setMessage("Minimal pemesanan sejumlah Rp. 5000")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+        Log.d("statusUser", "onClick: "+status_user);
 
-                            }
-                        }).show();
-            } else {
-                if (pref.getLoginMethod().equals("coorperate")) {
-                    if (Integer.parseInt(totalbelanja) > Integer.parseInt(pref.getLimitBelanja())) {
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("Perhatian")
-                                .setMessage("Limit Belanja anda tidak cukup")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+        if (status_user.equals("0")){
+            Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), EditAkunActivity.class));
+        }else {
 
-                                    }
-                                }).show();
-                    }else if(dataHarga.size() < 1) {
+            if (SharedPrefManager.getInstance(getActivity()).isLoggedIn() &&
+                    !Objects.equals(total.getText().toString(), "Rp. 0")
+                    && status_user.equals("1")) {
+                if (Integer.parseInt(totalbelanja) < 5000) {
+                    new AlertDialog.Builder(getActivity())
+                            // .setTitle("Tidak bisa melanjutkan pemesanan")
+                            .setMessage("Minimal pemesanan sejumlah Rp. 5000")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+                } else {
+                    if (pref.getLoginMethod().equals("coorperate")) {
+                        if (Integer.parseInt(totalbelanja) > Integer.parseInt(pref.getLimitBelanja())) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Perhatian")
+                                    .setMessage("Limit Belanja anda tidak cukup")
+                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    }).show();
+                        } else if (dataHarga.size() < 1) {
+                            Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+
+                        } else if (status_user.equals("0")) {
+                            Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getActivity(), EditAkunActivity.class));
+                        } else {
+                            Log.d("statusUser", "onClick: " + status_user);
+                            proccess();
+                        }
+                    } else if (dataHarga.size() < 1) {
                         Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
 
-                    }else {
+                    } else if (status_user.equals("0")) {
+                        Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity(), EditAkunActivity.class));
+                    } else {
+                        Log.d("statusUser", "onClick: " + status_user);
                         proccess();
                     }
-                }else if(dataHarga.size() < 1) {
-                    Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    proccess();
                 }
+
+            } else if (Objects.equals(total.getText().toString(), "Rp. 0")) {
+                Toast.makeText(getActivity(), "Anda Belum Belanja", Toast.LENGTH_SHORT).show();
+            } else if (status_user.equals("0")) {
+                Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EditAkunActivity.class));
+            } else if (dataHarga.size() < 1) {
+                Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+
+            } else {
+                startActivity(new Intent(getActivity(), login.class));
+                Toast.makeText(getActivity(), "Harap masuk terlebih dahulu", Toast.LENGTH_SHORT).show();
             }
 
-        } else if (Objects.equals(total.getText().toString(), "Rp. 0")) {
-            Toast.makeText(getActivity(), "Anda Belum Belanja", Toast.LENGTH_SHORT).show();
-        }else if(status_user.equals("0")){
-            Toast.makeText(getActivity(), "Anda Belum Melengkapi Data Diri, Silahkan lengkapi data diri anda", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), EditAkunActivity.class));
-        }else if(dataHarga.size() < 1) {
-            Toast.makeText(getActivity(), "Harga Jual Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
-
-        } else{
-            startActivity(new Intent(getActivity(), login.class));
-            Toast.makeText(getActivity(), "Harap masuk terlebih dahulu", Toast.LENGTH_SHORT).show();
         }
     }
 

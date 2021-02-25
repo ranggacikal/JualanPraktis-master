@@ -49,7 +49,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Checko
         String url = "https://jualanpraktis.net/img/"+gambar;
 
         Glide.with(context)
-                .load(url)
+                .load(gambar)
                 .error(R.drawable.logo_jualan_merah)
                 .into(holder.imgProdukCheckout);
 

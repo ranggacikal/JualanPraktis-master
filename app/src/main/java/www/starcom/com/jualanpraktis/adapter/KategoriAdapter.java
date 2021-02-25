@@ -57,8 +57,7 @@ public class KategoriAdapter extends RecyclerView.Adapter<KategoriAdapter.ViewHo
         Random rnd = new Random();
         int currentColor = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
-        String hexColor = item.get("color");
-        int color = Color.parseColor(hexColor);
+        String hexColor = item.get("color").toUpperCase();
 
         viewHolder.linear_item_kategori.setBackgroundColor(Color.parseColor(hexColor));
 

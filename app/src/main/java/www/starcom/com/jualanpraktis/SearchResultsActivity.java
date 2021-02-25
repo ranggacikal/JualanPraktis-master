@@ -75,7 +75,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchVi
         recyclerView.setHasFixedSize(true);
 
 
-        gridLayoutManager = new GridLayoutManager(context,3);
+        gridLayoutManager = new GridLayoutManager(context,2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
@@ -160,7 +160,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchVi
     }
 
     private void getAllProduk(){
-        String url = "https://trading.my.id/android/allproduct.php";
+        String url = "http://jualanpraktis.net/android/cari.php";
         AndroidNetworking.get(url)
                 .setTag(SearchResultsActivity.this)
                 .setPriority(Priority.LOW)
@@ -293,7 +293,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchVi
         progressBar.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest
-                (Request.Method.GET, "https://trading.my.id/android/cari.php?nama_produk="+produk,
+                (Request.Method.GET, "http://jualanpraktis.net/android/cari.php?nama_produk="+produk,
                         new Response.Listener<String>() {;
             @Override
             public void onResponse(String response) {

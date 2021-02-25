@@ -74,6 +74,12 @@ public class DipesanFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDataDipesan();
+    }
+
     private void loadDataDipesan() {
 
         rvDipesan.setVisibility(View.GONE);

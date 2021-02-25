@@ -65,7 +65,7 @@ public class StatusBelumDibayarAdapter extends RecyclerView.Adapter<StatusBelumD
 
 
         Glide.with(context)
-                .load(url)
+                .load(image)
                 .into(holder.imgBarang);
 
 

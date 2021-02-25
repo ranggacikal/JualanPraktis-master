@@ -86,6 +86,7 @@ import www.starcom.com.jualanpraktis.Login.Pref;
 import www.starcom.com.jualanpraktis.Login.SharedPrefManager;
 import www.starcom.com.jualanpraktis.Login.VolleySingleton;
 import www.starcom.com.jualanpraktis.Login.loginuser;
+import www.starcom.com.jualanpraktis.MainActivity;
 import www.starcom.com.jualanpraktis.R;
 import www.starcom.com.jualanpraktis.Spinner.Kecamatan;
 import www.starcom.com.jualanpraktis.Spinner.KotaKabupaten;
@@ -310,43 +311,27 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
-                    btn_logout.setVisibility(View.GONE);
-                    btn_ubah_password.setVisibility(View.GONE);
-                    btn_login.setVisibility(View.GONE);
-                    btn_update_photo.setVisibility(View.GONE);
-                    SharedPrefManager.getInstance(getContext()).logout();
-                    pref.setLoginMethod("");
-                    LoginManager.getInstance().logOut();
-                    googleSignInClient.signOut();
-                    nama.setText("");
-                    nama2.setText("");
-                    //jk.setText("");
-                    alamat.setText("");
-                    email.setText("");
-                    nohp.setText("");
-                    noktp.setText("");
-                    nonpwp.setText("");
-                    atasnama.setText("");
-                    norek.setText("");
-                    namabank.setText("");
-                    imageProfile2.setClickable(false);
-                    imageProfile2.setImageResource(R.drawable.icon_profile_grey);
-                    Intent intent = new Intent(getActivity(), login.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    getActivity().finish();
-//                    getActivity().finish();
-//                    getActivity().overridePendingTransition(0, 0);
-//                    getActivity().startActivity(getActivity().getIntent().setFlags(getActivity().getIntent().FLAG_ACTIVITY_NO_ANIMATION));
-//                    getActivity().overridePendingTransition(0, 0);
-                    Toast.makeText(getContext(), "Anda Telah Logout", Toast.LENGTH_LONG).show();
 
-                }else {
-                    Toast.makeText(getContext(), "Anda Belum Login", Toast.LENGTH_SHORT).show();
-                }
+
+                new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle("Keluar Akun?")
+                        .setMessage("Anda yakin ingin keluar dari akun ini?")
+
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                keluarAkun();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                
+                            }
+                        })
+                        .show();
+
+
             }
         });
 
@@ -354,6 +339,48 @@ public class AkunFragment extends Fragment implements View.OnClickListener{
 
 
         return rootView;
+    }
+
+    private void keluarAkun() {
+
+        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
+            btn_logout.setVisibility(View.GONE);
+            btn_ubah_password.setVisibility(View.GONE);
+            btn_login.setVisibility(View.GONE);
+            btn_update_photo.setVisibility(View.GONE);
+            SharedPrefManager.getInstance(getContext()).logout();
+            pref.setLoginMethod("");
+            LoginManager.getInstance().logOut();
+            googleSignInClient.signOut();
+            nama.setText("");
+            nama2.setText("");
+            //jk.setText("");
+            alamat.setText("");
+            email.setText("");
+            nohp.setText("");
+            noktp.setText("");
+            nonpwp.setText("");
+            atasnama.setText("");
+            norek.setText("");
+            namabank.setText("");
+            imageProfile2.setClickable(false);
+            imageProfile2.setImageResource(R.drawable.icon_profile_grey);
+            Intent intent = new Intent(getActivity(), login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            getActivity().finish();
+//                    getActivity().finish();
+//                    getActivity().overridePendingTransition(0, 0);
+//                    getActivity().startActivity(getActivity().getIntent().setFlags(getActivity().getIntent().FLAG_ACTIVITY_NO_ANIMATION));
+//                    getActivity().overridePendingTransition(0, 0);
+            Toast.makeText(getContext(), "Anda Telah Logout", Toast.LENGTH_LONG).show();
+
+        }else {
+            Toast.makeText(getContext(), "Anda Belum Login", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void getPenghasilanSaya() {
